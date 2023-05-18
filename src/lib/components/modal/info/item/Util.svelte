@@ -2,7 +2,7 @@
 <script>
 
     // @ts-nocheck
-    import {  Button ,Modal, Label, Select, Input, Checkbox} from 'flowbite-svelte'
+    import { Hr,P, Span,Button ,Modal, Label, Select, Input, Checkbox} from 'flowbite-svelte'
     
     import * as Icon from 'svelte-awesome-icons';
     
@@ -39,8 +39,6 @@
           <Label class="space-y-2">
             <span>제조사</span>
             <Select id="countries" class="mt-2" bind:value={$info_item_form_state['maker']} placeholder="">
-                <!-- <option selected value="한스텍">한스텍</option> -->
-              
                 {#each info_item_maker_array as item}
                   <option {item}>{item}</option>
                 {/each}
@@ -48,8 +46,22 @@
           </Label>
           <Label class="space-y-2">
             <span>품번</span>
-            <Input disabled readOnly type="text" id="last_name" placeholder="코드를 입력하세요" required bind:value={$info_item_form_state['code']}/>
+            
+            {#if title === 'add'}
+              
+              {#if $info_item_form_state['maker'] === '한스텍'}
+
+                 <!-- 한스텍일때만 코드 자동부여함, 나머지는 고객사이기 때문에 직접 입력 -->
+                <Input type="text" id="code" placeholder="코드는 자동부여됩니다" required bind:value={$info_item_form_state['code']}/>
+              {:else }
+                <Input type="text" id="code" placeholder="코드를 입력하세요" required bind:value={$info_item_form_state['code']}/>
+              {/if}
+
+             {:else if title === 'update'}
+              <Input type="text" disabled readOnly id="last_name" placeholder="코드를 입력하세요" required bind:value={$info_item_form_state['code']}/>
+            {/if}
            
+
           </Label>
     
           <Label class="space-y-2">
@@ -79,6 +91,21 @@
                 {/each}
               </Select>
           </Label>
+
+          <Label class="space-y-2">
+            <P>BOM 리스트</P>
+            <Hr class="my-8 bg-slate-300 "  height="h-1"></Hr>
+          </Label>
+
+          
+        
+          
+   
+
+
+
+
+
             {:else }
               {#if title === 'delete'}
               <div>삭제하시겠습니까?</div>

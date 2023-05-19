@@ -119,6 +119,7 @@ const info_item_data : any = writable([
     name : '',
     unit : 'BOX',
     type : '완제품',
+    child : [],
     expand : false,
     check : false,
     select : false,

@@ -20,10 +20,12 @@ const menu_state = writable({
 
 
 const cookie_state = getCookie('my-cookie');
+const load_state = writable(false);
+
 const url_state : any = writable({ path : '', query : ''});
 
 
-  const common_alert_state : any = writable(false);
+  const common_alert_state : any = writable({type : 'save', value : false });
   const common_search_state : any = writable({
 
     start_date : moment().format('YYYY-MM-DD'),
@@ -54,4 +56,4 @@ const url_state : any = writable({ path : '', query : ''});
 
 
 
-  export {menu_state,cookie_state,common_alert_state,common_search_state,login_state,url_state };
+  export {menu_state,cookie_state,load_state,common_alert_state,common_search_state,login_state,url_state };

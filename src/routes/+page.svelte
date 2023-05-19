@@ -1,32 +1,35 @@
 <script lang="ts">
-	import { Button, Modal, Label, Input, Checkbox, Card} from 'flowbite-svelte'
+	
+	import { Button, Label, Input, Checkbox, Card, Spinner} from 'flowbite-svelte'
 	import axios from 'axios'
 	import Alert from '$lib/components/alert/Alert.svelte';
+	import Loading from '$lib/components/button/Loading.svelte';
+	
 	import {LOGIN_ALERT} from '$lib/module/common/constants';
 	import src_url from '$lib/images/sea.jpeg';
-	import {common_alert_state,login_state} from '$lib/store/common/state';
+	import {common_alert_state,login_state, load_state} from '$lib/store/common/state';
 
-	import {onChangeHandler} from '$lib/store/common/function';
+	import {onChangeHandler,loadChange} from '$lib/store/common/function';
 
 
 	import { setCookie, getCookie, removeCookie } from '$lib/cookies';
 
-	const login = (e : any) => {
-
-		
-		
+	const login = async(e : any) => {
+		loadChange(true);
 
 		const url = '/api/user/auth/login'
 		try {
+			await performAsyncTask();
 
 			let params = $login_state;
 		axios.get(url,{
 			params,
 		}).then(res => {
 
-			console.log('res : ', res)
+		
 			if(res.data === ''){
-				$common_alert_state = true;
+			
+				$common_alert_state = {type : 'login', value : false};
 			}else {
 				
 
@@ -35,23 +38,37 @@
 			setCookie('my-cookie', $login_state['user_id'], { expires: 3600 });
 
 		
-		
 				window.location.href = '/home';
+				
+
 			}		
 		}
 			
 	)
 		
-	
-
 		}catch (e : any){
 			alert(`다음과 같은 에러가 발생했습니다 : ${e.name} : ${e.message}`);
+		} finally {
+			loadChange(false);
+			$common_alert_state = {type : 'login', value : false};
 		}
-
-		$common_alert_state = false;
 	}
 
 
+
+	const performAsyncTask = () => {
+    return new Promise((resolve : any, reject : any) => {
+      // 비동기 작업을 수행하는 함수를 정의합니다.
+      // 실제 작업을 수행하는 로직을 여기에 추가합니다.
+      // 예시로 2초 후에 작업이 완료되었다고 가정합니다.
+      setTimeout(() => {
+        // 비동기 작업이 완료되면 resolve를 호출하여 성공을 알립니다.
+        resolve();
+        // 예시로 강제로 예외를 발생시킵니다.
+        // reject(new Error("비동기 작업 중 예외 발생"));
+      }, 2000);
+    });
+  }
 
 	
   
@@ -73,14 +90,26 @@
 					<Checkbox>자동 저장</Checkbox>
 					
 				</div>
-				<Button  type="submit" class="w-full" on:click={(e) => login(e)} >Login</Button>	
+				{#if $load_state === false}
+					<Button  type="submit" class="w-full" on:click={(e) => login(e)} >Login</Button>
+				{:else if $load_state === true}
+					<Loading />
+				
+				
+				{/if}
+				
+				
+				
+				
 			
 			</form>
-		{#if $common_alert_state === true}
+		{#if $common_alert_state['type'] === 'login' && $common_alert_state['value'] === false}
 			<div class="mt-12">
 				<Alert  color='red' title={LOGIN_ALERT.title} content={LOGIN_ALERT.content}/>
 			</div>
 		{/if}
+
+
 	</Card>
 </div>
 

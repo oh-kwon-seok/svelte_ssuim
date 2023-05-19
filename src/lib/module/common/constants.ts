@@ -31,8 +31,13 @@ const DATA_FAIL_ALERT = {
     delete : {title : '삭제', content : '데이터 삭제에 실패했습니다.'},
     check_delete : {title : '선택 삭제', content : '데이터 선택 삭제에 실패했습니다.'},
     
+}
 
+const DATA_SELECT_ALERT = {
+    color : 'red',
+    select : {title : '실패', content : '데이터를 1개 이상 선택해주세요.'},
 
+   
 }
 
 const MENU = {
@@ -71,6 +76,7 @@ const MENU = {
 
 export {
     LOGIN_ALERT,
+    DATA_SELECT_ALERT,
     DATA_SUCCESS_ALERT,
     DATA_FAIL_ALERT,
     MENU,

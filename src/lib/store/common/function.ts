@@ -2,14 +2,14 @@
 
 
 import { writable } from 'svelte/store';
-import {menu_state,url_state, common_search_state,login_state} from './state';
+import {menu_state,url_state,load_state,common_search_state,login_state} from './state';
 import {info_item_data} from '$lib/store/info/item/state';
 
 import {v4 as uuid} from 'uuid';
 import Excel from 'exceljs';
 import moment from 'moment';
 
-
+let load_data : any;
 let menu_data : any;
 let search_data : any;
 let list_data : any;
@@ -21,6 +21,10 @@ let url_data : any;
 
 const workbook = new Excel.Workbook();
 
+
+load_state.subscribe((data : any) => {
+  load_data = data;
+})
 
 menu_state.subscribe((data : any) => {
   menu_data = data;
@@ -86,10 +90,11 @@ const onChangeHandler = (e) => {
     }
 
 
-
-
-
-
+    const loadChange = (param) => {
+      load_data = param;
+      load_state.update(()=> load_data);
+      
+    }
 const onSearchHandler = (e : any) => { 
 
     search_data['search_text'] = e.target.value;
@@ -340,4 +345,5 @@ export {handleToggle,
   cellClick, 
   rowClick, 
   check_delete, 
-  changeUrl}
+  changeUrl,
+  loadChange}

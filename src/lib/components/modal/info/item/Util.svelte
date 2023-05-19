@@ -2,7 +2,7 @@
 <script>
 
     // @ts-nocheck
-    import { Hr,P, Span,Button ,Modal, Label, Select, Input, Checkbox} from 'flowbite-svelte'
+    import {Indicator, Hr,P, Span,Button ,Modal, Label, Select, Input, Checkbox} from 'flowbite-svelte'
     
     import * as Icon from 'svelte-awesome-icons';
     
@@ -10,8 +10,8 @@
     import {info_item_modal_state, info_item_form_state, info_item_type_array, info_item_unit_array, info_item_maker_array} from '$lib/store/info/item/state';
     import {common_alert_state} from '$lib/store/common/state';
     
-    import {save} from '$lib/store/info/item/function';
-    import {DATA_FAIL_ALERT} from '$lib/module/common/constants';
+    import {save,bomRowUtil,bomRowCellClick} from '$lib/store/info/item/function';
+    import {DATA_FAIL_ALERT,DATA_SELECT_ALERT} from '$lib/module/common/constants';
     export let title; 
 
     let label_title = '';
@@ -29,13 +29,17 @@
     let color = title === 'add' || title === 'update' ? 'blue' : 'red'; 
 
 
-
+    console.log('$common_alert_state',$common_alert_state);
+    
+    
     </script>
     
-    <Modal title={`품목 ${label_title}`} color={color} bind:open={$info_item_modal_state[title]['use']} size="xs" placement={title === 'add' || title === 'check_delete'  ? 'center' : 'center-right'}   autoclose={false} class="w-full">
-        <form class="flex flex-col space-y-6" action="#">
-        
+    <Modal title={`품목 ${label_title}`} color={color} bind:open={$info_item_modal_state[title]['use']} size="xl" placement={title === 'add' || title === 'check_delete'  ? 'center' : 'center-right'}   autoclose={false} class="w-full">
+        <form  action="#">
+          <!-- grid grid-cols-2 gap-4 -->
+
           {#if title === 'add' || title === 'update'}
+       <div class="grid grid-cols-2 gap-4">
           <Label class="space-y-2">
             <span>제조사</span>
             <Select id="countries" class="mt-2" bind:value={$info_item_form_state['maker']} placeholder="">
@@ -63,7 +67,8 @@
            
 
           </Label>
-    
+        </div>
+        <div class="grid grid-cols-2 gap-4">
           <Label class="space-y-2">
             <span>품명</span>
             <Input type="text" id="last_name" placeholder="품명을 입력하세요" required bind:value={$info_item_form_state['name']}/>
@@ -80,7 +85,8 @@
                 {/each}
               </Select>
           </Label>
-    
+          </div>
+          <div class="grid grid-cols-2 gap-4">
           <Label class="space-y-2">
             <span>구분</span>
             <Select id="countries" class="mt-2" bind:value={$info_item_form_state['type']} placeholder="">
@@ -91,12 +97,96 @@
                 {/each}
               </Select>
           </Label>
+          </div>
 
-          <Label class="space-y-2">
-            <P>BOM 리스트</P>
-            <Hr class="my-8 bg-slate-300 "  height="h-1"></Hr>
-          </Label>
+          <div class="grid grid-cols-1 gap-4">
+                <Hr class="my-8 bg-slate-300 "  height="h-1"></Hr>
+         
+          </div>
 
+          <div class="grid grid-cols-6 gap-4">
+            <P class="col-span-3 text-bold" align='center'>BOM 리스트</P>
+            <Button color="blue" class="gap-4" on:click={() => bomRowUtil('add')}>
+              행추가
+              
+              
+              <Indicator color="none" class="bg-red-500 text-xs text-primary-800 font-semibold" size="lg">{$info_item_form_state['child'].length > 0 ? $info_item_form_state['child'].length : 0}</Indicator>
+            
+            </Button>
+            <Button color="red" class="gap-4" on:click={() => bomRowUtil('check_delete')}>
+              선택삭제
+             </Button>
+             <Button color="red" class="gap-4" on:click={() => bomRowUtil('delete')}>
+              행삭제
+             </Button>
+          </div>
+
+
+          
+          {#if $common_alert_state['type'] === 'select' && $common_alert_state['value'] === true}
+            
+            <Alert  color={DATA_SELECT_ALERT.color} title={DATA_SELECT_ALERT['select'].title} content={DATA_SELECT_ALERT['select'].content}/>
+
+          {/if}
+          
+
+
+
+
+          {#if $info_item_form_state['child'].length > 0}
+            {#each $info_item_form_state['child'] as item,i}
+              <div class="grid grid-cols-6 gap-4">
+                <Label class="space-y-2">
+                  <span>품번</span>
+                  <Checkbox 
+                  on:click={bomRowCellClick('check',item.id)}
+                   
+                  checked={item.check}/>
+                  <Input type="text" placeholder="Small input" size="sm" bind:value={item.code} />
+                </Label>
+                <Label class="space-y-2">
+                  <span>품명</span>
+                  <Input type="email" placeholder="Small input" size="sm" bind:value={item.name}/>
+                </Label>
+                <Label class="space-y-2">
+                  <span>구분</span>
+                  <Select id="countries" class="mt-2" bind:value={item.unit} placeholder="">
+                
+                    
+                      {#each info_item_type_array as item}
+                        <option {item}>{item}</option>
+                      {/each}
+                    </Select>
+                </Label>
+                
+              </div>
+            
+            {/each}
+
+          {/if}
+
+
+
+       
+
+
+
+
+
+
+
+
+          <div class="grid grid-cols-6 gap-4">
+           
+          </div>
+
+
+
+       
+
+
+
+          
           
         
           
@@ -118,7 +208,7 @@
     
           
           <Button color={title === 'add' || title === 'update'  ? 'blue' : 'red'}   type="submit" class="w-full" on:click={save($info_item_form_state,title)}>{label_title}</Button>
-          {#if $common_alert_state === true}
+          {#if $common_alert_state['type'] === 'save' && $common_alert_state['value'] === true}
           <div class="mt-12">
             
             

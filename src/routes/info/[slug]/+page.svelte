@@ -132,42 +132,7 @@
                       <Pagination />
                     </div>
                     </TabItem>
-                    <TabItem>
-                      <span slot="title">BOM관리</span>
-                      <div class='m-5'>
-                         
-                        <Button on:click={(e) => modalOpen('','add')}>
-                          <Icon.FloppyDiskSolid class='mr-2' size="20" />
-                          추가
-                        </Button>
-                        <Button color='green' on:click={excelDownload($common_search_state['filteredItems'],'info_item',EXCEL_INFO_ITEM_CONFIG)}>
-                          <Icon.DownloadSolid class='mr-2' size="20" />
-                          Download
-                      </Button>
-                      <Button color='green' on:click={(e)=> fileButtonClick('upload')}>
-                        <Icon.UploadSolid class='mr-2' size="20" />
-                          Upload
-                        <input 
-                        hidden  
-                        id = 'upload' 
-                        type='file' 
-                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
-                        on:change={(e)=> excelUpload(e,EXCEL_INFO_ITEM_CONFIG)}
-
-                        />
-                    </Button>
-                    <Button color='red' on:click={(e) => modalOpen($common_search_state['filteredItems'],'check_delete')}>
-                      <Icon.TrashSolid class='mr-2' size="20" />
-                      선택삭제
-                    </Button>
-
-                      </div>
-                 
-                    <Table color='default' filteredItems={$common_search_state['filteredItems']}/>
-                    <div class="flex justify-center mt-10">
-                      <Pagination />
-                    </div>
-                    </TabItem>
+          
                   </Tabs>
                 <Footer />
             </div>

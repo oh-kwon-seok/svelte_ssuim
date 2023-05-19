@@ -23,6 +23,7 @@ let init_form_data = {
   name : '',
   unit : 'BOX',
   type : '완제품',
+  child : [],
   expand : false,
   check : false,
 
@@ -52,9 +53,8 @@ common_search_state.subscribe((data) => {
 
 
 const modalOpen = (data : any, title : any) => {
- 
-
-  common_alert_state.update(() => false);
+  alert['type'] = 'save';
+  common_alert_state.update(() => alert);
     update_modal['title'] = title;
     update_modal[title]['use'] = !update_modal[title]['use'];
     info_item_modal_state.update(() => update_modal);
@@ -84,7 +84,8 @@ const modalOpen = (data : any, title : any) => {
       }
 
       if(check_data.length === 0){
-        common_alert_state.update(() => true);
+        alert['value'] = true;
+        common_alert_state.update(() => alert);
 
       }else{
        
@@ -94,8 +95,6 @@ const modalOpen = (data : any, title : any) => {
 }
 
 const save = (param,title) => {
-    console.log('list_data : ',list_data);
- 
     if(title === 'add'){
       
       param['id'] = uuid();
@@ -134,7 +133,8 @@ const save = (param,title) => {
         info_item_form_state.update(()=> init_form_data);
 
       }else{
-        common_alert_state.update(() => !alert);
+        alert = {type : 'save', value : true}
+        common_alert_state.update(() => alert);
 
       }
 
@@ -223,11 +223,76 @@ const save = (param,title) => {
     }
 
 
+
+
   
+  }
+  const bomRowUtil = (title) => {
+    if(title === 'add'){
+      let new_id = update_form['child'].length + 1;
+      let new_bom_data = {
+       
+        id : new_id,
+        maker : update_form['maker'],
+        code : '',
+        name : '',
+        unit : 'BOX',
+        type : '완제품',
+        check : false,
+      };
+  
+      update_form['child'].push(new_bom_data);
+    }else if(title === 'check_delete'){
+      alert = {type : 'select', value : false}
+      
+      console.log('alert : ', alert);
+      let delete_count = update_form['child'].filter(data => data.check === true).length;
+      update_form['child'] = update_form['child'].filter(data => data.check === false) 
+
+
+
+      console.log('child : ',delete_count);
+      if(delete_count === 0 || delete_count === undefined){
+        alert = {type : 'select', value : true}
+
+        common_alert_state.update(() => alert);
+       
+
+      }
+
+      
+      
+
+    }else {
+      update_form['child'].pop();
+    }
+  
+    info_item_form_state.update(() => update_form);
+    
+  }
+
+
+  const bomRowCellClick = (title,id) => {
+    if(title === 'check' ){
+      for(let i =0; i<update_form['child'].length; i++){
+        if(id === update_form['child'][i]['id']){
+          
+          update_form['child'][i][title] = !update_form['child'][i][title];
+          break;
+        }
+      }
+  
+    }
+    
+    info_item_form_state.update(() => update_form);
+    
+
+
   }
 
 
 
 
 
-export {modalOpen,save}
+
+export {modalOpen,save,bomRowUtil,bomRowCellClick}

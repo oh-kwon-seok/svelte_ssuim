@@ -6,7 +6,7 @@ import { writable } from 'svelte/store';
 import {info_item_modal_state,info_item_form_state,info_item_data} from './state';
 
 import {v4 as uuid} from 'uuid';
-
+import axios from 'axios'
 import {common_alert_state, common_search_state} from '$lib/store/common/state';
 import { listen } from 'svelte/internal';
 
@@ -97,8 +97,38 @@ const modalOpen = (data : any, title : any) => {
 const save = (param,title) => {
     if(title === 'add'){
       
-      param['id'] = uuid();
+      const url = '/api/user/auth/login'
+      try {
   
+        let params = {
+          user_idx : '',
+          user_id : '1234',
+          user_name : '111',
+          user_password : '1111',
+          status : false,
+          
+        };
+      axios.get(url,{
+        params,
+      }).then(res => {
+        return console.log('gg',res.data);
+  
+      
+     	
+      })
+    }catch (e:any){
+      return console.log('에러 : ',e);
+    };
+
+
+
+      param['id'] = uuid();
+      
+
+
+
+
+
       let empty_array = [];
       Object.keys(param).map((item)=>{
         if(param[item] === '' || param[item] === undefined){
@@ -239,6 +269,8 @@ const save = (param,title) => {
         unit : 'BOX',
         type : '완제품',
         check : false,
+        use_qty : 0,
+
       };
   
       update_form['child'].push(new_bom_data);
@@ -246,6 +278,8 @@ const save = (param,title) => {
       alert = {type : 'select', value : false}
       
       console.log('alert : ', alert);
+
+ 
       let delete_count = update_form['child'].filter(data => data.check === true).length;
       update_form['child'] = update_form['child'].filter(data => data.check === false) 
 

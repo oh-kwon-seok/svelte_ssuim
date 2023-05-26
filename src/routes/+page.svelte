@@ -29,7 +29,7 @@
 		
 			if(res.data === ''){
 			
-				$common_alert_state = {type : 'login', value : false};
+				$common_alert_state = {type : 'login', value : true};
 			}else {
 				
 
@@ -50,7 +50,7 @@
 			alert(`다음과 같은 에러가 발생했습니다 : ${e.name} : ${e.message}`);
 		} finally {
 			loadChange(false);
-			$common_alert_state = {type : 'login', value : false};
+			$common_alert_state = {type : 'login', value : true};
 		}
 	}
 
@@ -103,9 +103,9 @@
 				
 			
 			</form>
-		{#if $common_alert_state['type'] === 'login' && $common_alert_state['value'] === false}
+		{#if $common_alert_state['type'] === 'login' && $common_alert_state['value'] === true}
 			<div class="mt-12">
-				<Alert  color='red' title={LOGIN_ALERT.title} content={LOGIN_ALERT.content}/>
+				<Alert state={'login'} color='red' title={LOGIN_ALERT.title} content={LOGIN_ALERT.content} />
 			</div>
 		{/if}
 

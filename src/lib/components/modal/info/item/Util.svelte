@@ -125,7 +125,7 @@
           
           {#if $common_alert_state['type'] === 'select' && $common_alert_state['value'] === true}
             
-            <Alert  color={DATA_SELECT_ALERT.color} title={DATA_SELECT_ALERT['select'].title} content={DATA_SELECT_ALERT['select'].content}/>
+            <Alert  state={'select'} color={DATA_SELECT_ALERT.color} title={DATA_SELECT_ALERT['select'].title} content={DATA_SELECT_ALERT['select'].content} />
 
           {/if}
           
@@ -135,22 +135,38 @@
 
           {#if $info_item_form_state['child'].length > 0}
             {#each $info_item_form_state['child'] as item,i}
-              <div class="grid grid-cols-6 gap-4">
+              <div class="grid grid-cols-5 gap-4">
+             
+
                 <Label class="space-y-2">
-                  <span>품번</span>
+                  
+                  
+                  <span >품번</span>
+                  <div class="flex flex-row gap-2">
                   <Checkbox 
                   on:click={bomRowCellClick('check',item.id)}
                    
                   checked={item.check}/>
-                  <Input type="text" placeholder="Small input" size="sm" bind:value={item.code} />
+                  <Input type="text" placeholder="품번을 입력하세요" size="sm" bind:value={item.code} />
+                </div>
                 </Label>
                 <Label class="space-y-2">
                   <span>품명</span>
-                  <Input type="email" placeholder="Small input" size="sm" bind:value={item.name}/>
+                  <Input type="text" placeholder="품명을 입력하세요" size="sm" bind:value={item.name}/>
+                </Label>
+                <Label class="space-y-2">
+                  <span>단위</span>
+                  <Select id="countries" class="mt-2" bind:value={item.unit} placeholder="">
+                
+                    
+                      {#each info_item_unit_array as item}
+                        <option {item}>{item}</option>
+                      {/each}
+                    </Select>
                 </Label>
                 <Label class="space-y-2">
                   <span>구분</span>
-                  <Select id="countries" class="mt-2" bind:value={item.unit} placeholder="">
+                  <Select id="countries" class="mt-2" bind:value={item.type} placeholder="">
                 
                     
                       {#each info_item_type_array as item}
@@ -158,6 +174,11 @@
                       {/each}
                     </Select>
                 </Label>
+                <Label class="space-y-2">
+                  <span>투입수량</span>
+                  <Input type="text" placeholder="수량을 입력하세요" size="sm" bind:value={item.use_qty} />
+                </Label>
+
                 
               </div>
             
@@ -206,8 +227,11 @@
           {/if}
     
     
-          
-          <Button color={title === 'add' || title === 'update'  ? 'blue' : 'red'}   type="submit" class="w-full" on:click={save($info_item_form_state,title)}>{label_title}</Button>
+      
+      
+        </form>
+        <svelte:fragment slot='footer'>
+          <Button   color={title === 'add' || title === 'update'  ? 'blue' : 'red'}   type="submit" class="w-full" on:click={save($info_item_form_state,title)}>{label_title}</Button>
           {#if $common_alert_state['type'] === 'save' && $common_alert_state['value'] === true}
           <div class="mt-12">
             
@@ -217,8 +241,8 @@
 
             </div>
         {/if}
-        </form>
-       
+        
+        </svelte:fragment>
       </Modal>
 
     

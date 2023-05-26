@@ -2,13 +2,13 @@
 
 
 import { writable } from 'svelte/store';
-import {menu_state,url_state,load_state,common_search_state,login_state} from './state';
+import {common_alert_state, menu_state,url_state,load_state,common_search_state,login_state} from './state';
 import {info_item_data} from '$lib/store/info/item/state';
 
 import {v4 as uuid} from 'uuid';
 import Excel from 'exceljs';
 import moment from 'moment';
-
+let alert_data : any;
 let load_data : any;
 let menu_data : any;
 let search_data : any;
@@ -20,6 +20,10 @@ let url_data : any;
 
 
 const workbook = new Excel.Workbook();
+
+common_alert_state.subscribe((data : any) => {
+  alert_data = data;
+})
 
 
 load_state.subscribe((data : any) => {
@@ -64,6 +68,16 @@ const changeUrl = (obj) => {
 
   }
 
+
+
+  const commonCloseAlert = (state) => {
+   
+    alert_data = {type : state, value : false} 
+
+    
+    common_alert_state.update(()=> alert_data);
+  
+    }
 
 
 
@@ -346,4 +360,6 @@ export {handleToggle,
   rowClick, 
   check_delete, 
   changeUrl,
-  loadChange}
+  loadChange,
+  commonCloseAlert
+}

@@ -1,20 +1,17 @@
 import { Column, Entity, PrimaryGeneratedColumn,OneToMany } from 'typeorm';
-import { item } from 'src/item/item.entity';
-@Entity()
-export class maker {
-  @PrimaryGeneratedColumn()
-  maker_index: number;
+import {item} from '../item/item.entity';
 
+@Entity('maker')
+export class maker {
+ 
   @Column({ unique: true })
-  maker_id: string;
+  maker_code: string;
 
   @Column()
   maker_name: string;
-
- 
-  @OneToMany(() => item, item => item.item_maker)
-  items: item[];
-
+  @OneToMany(()=> item, item => item.item_maker)
+  items : item[];
 }
+
 
 

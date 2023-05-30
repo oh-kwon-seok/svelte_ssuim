@@ -1,15 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn,ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne,JoinColumn } from 'typeorm';
 import { maker } from '../maker/maker.entity';
+import { unit } from '../unit/unit.entity';
+import { type } from '../type/type.entity';
 
-@Entity()
+
+@Entity('item')
 export class item {
-  @PrimaryGeneratedColumn()
-  item_index: number;
-
-
-  @ManyToOne(() => maker, maker => maker.items)
-  item_maker: maker;
-
 
   @Column({ unique: true })
   item_code: string;
@@ -17,6 +13,21 @@ export class item {
   @Column()
   item_name: string;
 
-  @Column()
-  item_password: string;
+
+  @ManyToOne(() => maker)
+  @JoinColumn({ name: 'item_maker' }) 
+  item_maker: maker;
+
+  
+  @ManyToOne(() => unit)
+  @JoinColumn({ name: 'item_unit' }) 
+  item_unit: unit;
+
+  @ManyToOne(() => type)
+  @JoinColumn({ name: 'item_type' }) 
+  item_type: type;
+
+
+  
+
 }

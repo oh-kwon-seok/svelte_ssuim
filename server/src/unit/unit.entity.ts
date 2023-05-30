@@ -1,14 +1,14 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
-export class user {
-
+@Entity('unit')
+export class unit {
+  
   @Column({ unique: true })
-  user_id: string;
+  unit_code: string;
 
   @Column()
-  user_name: string;
+  unit_name: string;
 
-  @Column()
-  user_password: string;
 }
+
+

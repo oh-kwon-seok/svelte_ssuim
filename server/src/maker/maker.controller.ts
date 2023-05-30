@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Param, Body,Query } from '@nestjs/common';
 import { MakerService } from './maker.service';
 import { maker } from './maker.entity';
+import { AnyNsRecord } from 'dns';
 
 @Controller('maker')
 export class MakerController {
@@ -12,9 +13,9 @@ export class MakerController {
   }
 
   @Get('auth/login')
-  async findOne(@Query('maker_id') maker_id:any, @Query('maker_password') maker_password : any): Promise<maker> {
+  async findOne(@Query('maker_code') maker_code:any): Promise<maker> {
     
-    return this.makerService.findOne(maker_id, maker_password);
+    return this.makerService.findOne(maker_code);
   }
 
   @Post()

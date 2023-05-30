@@ -11,10 +11,10 @@ export class ItemController {
     return this.itemService.findAll();
   }
 
-  @Get('auth/login')
-  async findOne(@Query('item_id') item_id:any, @Query('item_password') item_password : any): Promise<item> {
+  @Get('item/save')
+  async findOne(@Query('item_code') item_code:any): Promise<item> {
     
-    return this.itemService.findOne(item_id, item_password);
+    return this.itemService.findOne(item_code);
   }
 
   @Post()

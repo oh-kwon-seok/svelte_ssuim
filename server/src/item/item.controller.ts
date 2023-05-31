@@ -11,7 +11,7 @@ export class ItemController {
     return this.itemService.findAll();
   }
 
-  @Get('item/save')
+  @Get('/save')
   async findOne(@Query('item_code') item_code:any): Promise<item> {
     
     return this.itemService.findOne(item_code);

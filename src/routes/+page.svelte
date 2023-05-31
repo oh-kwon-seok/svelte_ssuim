@@ -18,6 +18,8 @@
 		loadChange(true);
 
 		const url = '/api/user/auth/login'
+
+		console.log('url : ',url);
 		try {
 			await performAsyncTask();
 
@@ -52,6 +54,15 @@
 			loadChange(false);
 			$common_alert_state = {type : 'login', value : true};
 		}
+
+
+	
+
+
+	
+
+
+
 	}
 
 

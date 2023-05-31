@@ -8,7 +8,7 @@ const dbconfig : any = {
   "entities": ["dist/src/**/*.entity{.ts,.js}"],
 
 
-   "synchronize": true,
+   "synchronize": false, // 난 DB에 스키마 정의할거라 연동 필요없음
   "autoLoadEntities": true, // 윈도우에서 개발환경을 시작할때 설정함
 
 }

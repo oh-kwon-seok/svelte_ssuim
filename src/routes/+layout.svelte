@@ -4,6 +4,7 @@
 	import { onMount,beforeUpdate } from 'svelte';
 
 	import {changeUrl} from '$lib/store/common/function';
+	import axios from 'axios';
 
 
 
@@ -19,10 +20,18 @@
 		let url_obj = {path : pathname, query : search }
 		
 		changeUrl(url_obj);
-		
 
 
-
+		const maker_url = '/api/maker/select';
+		try {
+			 axios.get(maker_url).then(res=>{
+				console.log('res : ',res);
+			})
+		}catch(e){
+			console.log('e',e);
+		} finally {
+			console.log('final : ');
+		}
 	});
 
 

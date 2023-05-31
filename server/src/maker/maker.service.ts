@@ -11,8 +11,9 @@ export class MakerService {
     private makerRepository: Repository<maker>,
   ) {}
 
-  async findAll(): Promise<maker[]> {
-    return await this.makerRepository.find();
+  async findAll(){
+  const query = `SELECT maker_code,maker_name FROM maker`;
+  return this.makerRepository.query(query);
   }
 
   async findOne(maker_code: any ): Promise<maker> {

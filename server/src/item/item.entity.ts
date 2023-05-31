@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne,JoinColumn } from 'typeorm';
+import { Column, Entity, ManyToOne,JoinColumn,PrimaryColumn,CreateDateColumn,UpdateDateColumn,DeleteDateColumn } from 'typeorm';
 import { maker } from '../maker/maker.entity';
 import { unit } from '../unit/unit.entity';
 import { type } from '../type/type.entity';
@@ -7,7 +7,7 @@ import { type } from '../type/type.entity';
 @Entity('item')
 export class item {
 
-  @Column({ unique: true })
+  @PrimaryColumn({ unique: true })
   item_code: string;
 
   @Column()
@@ -27,7 +27,15 @@ export class item {
   @JoinColumn({ name: 'item_type' }) 
   item_type: type;
 
+  @CreateDateColumn()
+  item_created: Date;
 
+  @UpdateDateColumn()
+  item_updated: Date;
+
+  @DeleteDateColumn()
+  item_deleted: Date;
   
-
+  @Column({ type: 'boolean', default: false })
+  item_use: boolean;
 }

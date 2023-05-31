@@ -24,7 +24,8 @@
     import {info_item_data, info_item_header,info_item_form_state,info_item_modal_state} from '$lib/store/info/item/state';
     import {common_search_state} from '$lib/store/common/state';
     import {EXCEL_INFO_ITEM_CONFIG} from '$lib/module/info/constants';
-
+    import Item from './components/item.svelte'
+  
 
 
 
@@ -35,12 +36,11 @@
     }
    
 
-    import Item from './components/item.svelte'
    
   
-
-   
-
+    export let data;
+    
+    console.log('data : ', data);
 
     </script>
     

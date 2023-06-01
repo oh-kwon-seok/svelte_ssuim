@@ -7,8 +7,8 @@
     import * as Icon from 'svelte-awesome-icons';
     
     import Alert from '$lib/components/alert/Alert.svelte';
-    import {info_item_modal_state, info_item_form_state, info_item_type_array, info_item_unit_array, info_item_maker_array} from '$lib/store/info/item/state';
-    import {common_alert_state} from '$lib/store/common/state';
+    import {info_item_modal_state, info_item_form_state} from '$lib/store/info/item/state';
+    import {common_alert_state,common_type_state, common_unit_state, common_maker_state} from '$lib/store/common/state';
     
     import {save,bomRowUtil,bomRowCellClick} from '$lib/store/info/item/function';
     import {DATA_FAIL_ALERT,DATA_SELECT_ALERT} from '$lib/module/common/constants';
@@ -43,8 +43,8 @@
           <Label class="space-y-2">
             <span>제조사</span>
             <Select id="countries" class="mt-2" bind:value={$info_item_form_state['maker']} placeholder="">
-                {#each info_item_maker_array as item}
-                  <option {item}>{item}</option>
+                {#each $common_maker_state as item}
+                  <option value={item.maker_code}>{item.maker_name}</option>
                 {/each}
               </Select>
           </Label>
@@ -80,8 +80,8 @@
             <Select id="countries" class="mt-2" bind:value={$info_item_form_state['unit']} placeholder="">
               
               
-                {#each info_item_unit_array as item}
-                  <option {item}>{item}</option>
+                {#each $common_unit_state as item}
+                  <option value={item.unit_code}>{item.unit_name}</option>
                 {/each}
               </Select>
           </Label>
@@ -92,8 +92,8 @@
             <Select id="countries" class="mt-2" bind:value={$info_item_form_state['type']} placeholder="">
            
               
-                {#each info_item_type_array as item}
-                  <option {item}>{item}</option>
+                {#each $common_type_state as item}
+                  <option value={item.type_code}>{item.type_name}</option>
                 {/each}
               </Select>
           </Label>
@@ -159,8 +159,8 @@
                   <Select id="countries" class="mt-2" bind:value={item.unit} placeholder="">
                 
                     
-                      {#each info_item_unit_array as item}
-                        <option {item}>{item}</option>
+                      {#each $common_unit_state as item}
+                        <option value={item.unit_code}>{item.unit_name}</option>
                       {/each}
                     </Select>
                 </Label>
@@ -169,8 +169,8 @@
                   <Select id="countries" class="mt-2" bind:value={item.type} placeholder="">
                 
                     
-                      {#each info_item_type_array as item}
-                        <option {item}>{item}</option>
+                      {#each $common_type_state as item}
+                        <option value={item.type_code}>{item.type_name}</option>
                       {/each}
                     </Select>
                 </Label>

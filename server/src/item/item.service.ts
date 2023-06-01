@@ -22,8 +22,16 @@ export class ItemService {
   }
 
   async create(item: item): Promise<item> {
-    return await this.itemRepository.save(item);
+    let test = this.itemRepository.findOne({ where : {item_code : item.item_code }}); 
+    
+    console.log('item : ', item);
+    console.log('test : ', test);
+    return test;
+
+    // return await this.itemRepository.save(item);
   }
+
+
 
   async update(item_code: any, item: item): Promise<item> {
     await this.itemRepository.update(item_code, item);

@@ -11,14 +11,10 @@ export class ItemController {
     return this.itemService.findAll();
   }
 
-  @Get('/save')
-  async findOne(@Query('item_code') item_code:any): Promise<item> {
-    
-    return this.itemService.findOne(item_code);
-  }
 
-  @Post()
+  @Post('save')
   async create(@Body() item: item): Promise<item> {
+    console.log('item : ', item);
     return this.itemService.create(item);
   }
 

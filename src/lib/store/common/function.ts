@@ -2,9 +2,9 @@
 
 
 import { writable } from 'svelte/store';
-import {common_alert_state, menu_state,url_state,load_state,common_search_state,login_state} from './state';
+import {common_alert_state, menu_state,url_state,load_state,common_search_state,login_state,common_maker_state, common_type_state, common_unit_state } from './state';
 import {info_item_data} from '$lib/store/info/item/state';
-
+import axios from 'axios';
 import {v4 as uuid} from 'uuid';
 import Excel from 'exceljs';
 import moment from 'moment';
@@ -14,17 +14,21 @@ let menu_data : any;
 let search_data : any;
 let list_data : any;
 let login_data : any;
-
 let url_data : any;
+
+let maker_data : any;
+let type_data : any;
+let unit_data : any;
 
 
 
 const workbook = new Excel.Workbook();
 
+
+
 common_alert_state.subscribe((data : any) => {
   alert_data = data;
 })
-
 
 load_state.subscribe((data : any) => {
   load_data = data;
@@ -52,6 +56,52 @@ login_state.subscribe((data) => {
   login_data = data;
 
 })
+
+common_maker_state.subscribe((data : any) => {
+  maker_data = data;
+})
+
+common_type_state.subscribe((data : any) => {
+  type_data = data;
+})
+
+common_unit_state.subscribe((data : any) => {
+  unit_data = data;
+})
+
+
+const infoCallApi = (title) => {
+  
+  const url = `/api/${title}/select`; 
+  try {
+    axios.get(url).then(res=>{
+      if(res.data.length > 0){
+        if(title === 'maker'){
+          maker_data = res.data;
+          console.log('maker_data : ', maker_data);
+          common_maker_state.update(()=> maker_data);
+        }else if(title === 'unit'){
+          unit_data = res.data;
+          console.log('unit_data : ',unit_data);
+          common_unit_state.update(()=> unit_data);
+        }else if(title === 'type'){
+          type_data = res.data;
+          console.log('type_data : ',type_data);
+          common_type_state.update(()=> type_data);
+
+        }
+      }else {
+      
+      }
+   })
+  }catch(e){
+    console.log('e',e);
+  } finally {
+    console.log('final : ');
+  }
+  }
+
+
 
 
 const changeUrl = (obj) => {
@@ -361,5 +411,6 @@ export {handleToggle,
   check_delete, 
   changeUrl,
   loadChange,
-  commonCloseAlert
+  commonCloseAlert,
+  infoCallApi
 }

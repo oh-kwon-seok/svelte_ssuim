@@ -93,12 +93,7 @@ const info_item_data : any = writable([
   
 
 
-  const info_item_maker_array : any = ['한스텍','애경'];
-  const info_item_type_array : any = ['완제품','원자재','부자재','부분품'];
- 
 
-  const info_item_unit_array : any = ['EA','BOX']
-  
 
 
 
@@ -128,4 +123,4 @@ const info_item_data : any = writable([
   
 
 
-  export {info_item_data,info_item_header,info_item_sub_header,info_item_modal_state,info_item_form_state, info_item_type_array,info_item_unit_array,info_item_maker_array};
+  export {info_item_data,info_item_header,info_item_sub_header,info_item_modal_state,info_item_form_state};

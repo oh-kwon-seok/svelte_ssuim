@@ -8,7 +8,7 @@ import {info_item_modal_state,info_item_form_state,info_item_data} from './state
 import {v4 as uuid} from 'uuid';
 import axios from 'axios'
 import {common_alert_state, common_search_state} from '$lib/store/common/state';
-import { listen } from 'svelte/internal';
+
 
 let update_modal : any;
 let update_form : any;
@@ -96,25 +96,24 @@ const modalOpen = (data : any, title : any) => {
 
 const save = (param,title) => {
     if(title === 'add'){
-      
-      const url = '/api/user/auth/login'
+
+      const url = '/api/item/save'
       try {
   
         let params = {
-          user_idx : '',
-          user_id : '1234',
-          user_name : '111',
-          user_password : '1111',
-          status : false,
+          item_code : param.code,
+          item_name : param.name,
+          item_maker : param.maker,
+          item_type : param.type,
+          item_unit : param.unit,
           
+          item_bom : JSON.stringify(param.child),    
         };
-      axios.get(url,{
+      axios.post(url,
         params,
-      }).then(res => {
-        return console.log('gg',res.data);
+      ).then(res => {
+        return console.log('데이터등록',res.data);
   
-      
-     	
       })
     }catch (e:any){
       return console.log('에러 : ',e);

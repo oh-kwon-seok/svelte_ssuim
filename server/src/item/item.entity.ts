@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne,JoinColumn,PrimaryColumn,CreateDateColumn,UpdateDateColumn,DeleteDateColumn } from 'typeorm';
+import { Column, Entity, ManyToOne,JoinColumn,PrimaryColumn,CreateDateColumn,UpdateDateColumn,DeleteDateColumn,BeforeInsert } from 'typeorm';
 import { maker } from '../maker/maker.entity';
 import { unit } from '../unit/unit.entity';
 import { type } from '../type/type.entity';
@@ -27,15 +27,27 @@ export class item {
   @JoinColumn({ name: 'item_type' }) 
   item_type: type;
 
-  @CreateDateColumn()
+  @Column()
+  item_bom: string;
+
+  @CreateDateColumn({type : 'datetime', nullable : true })
   item_created: Date;
 
-  @UpdateDateColumn()
+  @BeforeInsert()
+  setCreatedDate() {
+    this.item_created = new Date();
+  }
+
+
+  @UpdateDateColumn({ nullable: true, default: null })
   item_updated: Date;
 
-  @DeleteDateColumn()
+  @DeleteDateColumn({ nullable: true, default: null })
   item_deleted: Date;
   
   @Column({ type: 'boolean', default: false })
   item_use: boolean;
+
+  
+
 }

@@ -1,6 +1,6 @@
 import { Injectable, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository  } from 'typeorm';
 import { item } from './item.entity';
 
 // @ts-nocheck
@@ -22,13 +22,14 @@ export class ItemService {
   }
 
   async create(item: item): Promise<item> {
-    let test = this.itemRepository.findOne({ where : {item_code : item.item_code }}); 
     
-    console.log('item : ', item);
-    console.log('test : ', test);
+    let test = this.itemRepository.findOne({ where : {item_code : item.item_code }}); 
+
+   
+    
     return test;
 
-    // return await this.itemRepository.save(item);
+    return await this.itemRepository.save(item);
   }
 
 

@@ -112,7 +112,13 @@ const save = (param,title) => {
       axios.post(url,
         params,
       ).then(res => {
-        return console.log('데이터등록',res.data);
+        console.log(res);
+        if(res.data.length === 0){
+          return console.log('데이터등록실패',res.data);
+        }else{
+          return console.log('데이터등록성공',res.data);
+        }
+        
   
       })
     }catch (e:any){

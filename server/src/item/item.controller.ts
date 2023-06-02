@@ -14,7 +14,7 @@ export class ItemController {
 
   @Post('save')
   async create(@Body() item: item): Promise<item> {
-    console.log('item : ', item);
+  
     return this.itemService.create(item);
   }
 

@@ -1,6 +1,6 @@
 import { Injectable, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository  } from 'typeorm';
+import { Repository,QueryBuilder,DataSource  } from 'typeorm';
 import { item } from './item.entity';
 
 // @ts-nocheck
@@ -17,22 +17,26 @@ export class ItemService {
   }
 
   async findOne(item_code: any): Promise<item> {
-   
-    return await this.itemRepository.findOne({ where : {item_code : item_code }});
+    const query = `SELECT * FROM item where item_code = ?`;
+    const param : any = [item_code];
+    let items = await this.itemRepository.query(query,param);
+    return items;
   }
 
   async create(item: item): Promise<item> {
-    
-    let test = this.itemRepository.findOne({ where : {item_code : item.item_code }}); 
 
-   
+    const query = `SELECT * FROM item where item_code = ? AND item_maker = ? `;
+    const param : any = [item.item_code,item.item_maker];
+    let items = await this.itemRepository.query(query,param);
     
-    return test;
+    if(items.length === 0){
+      return await this.itemRepository.save(item);
 
-    return await this.itemRepository.save(item);
+    }else {
+    
+   }
+
   }
-
-
 
   async update(item_code: any, item: item): Promise<item> {
     await this.itemRepository.update(item_code, item);

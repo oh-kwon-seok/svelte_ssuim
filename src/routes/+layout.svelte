@@ -5,7 +5,8 @@
 
 	import {changeUrl,infoCallApi} from '$lib/store/common/function';
 	import axios from 'axios';
-
+	import Toast from '$lib/components/toast/Toast.svelte';
+	import {common_toast_state} from '$lib/store/common/state';
 
 
 	beforeUpdate(() => {
@@ -24,16 +25,7 @@
 		infoCallApi('unit');
 		infoCallApi('type');
 
-		// const maker_url = '/api/maker/select';
-		// try {
-		// 	 axios.get(maker_url).then(res=>{
-		// 		console.log('res : ',res);
-		// 	})
-		// }catch(e){
-		// 	console.log('e',e);
-		// } finally {
-		// 	console.log('final : ');
-		// }
+	
 	});
 
 
@@ -43,6 +35,7 @@
 
 <div class='app '>
 	<main>
+		
 		<slot />
 	</main>
 

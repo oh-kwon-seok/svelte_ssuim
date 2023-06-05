@@ -2,13 +2,15 @@
 
 
 import { writable } from 'svelte/store';
-import {common_alert_state, menu_state,url_state,load_state,common_search_state,login_state,common_maker_state, common_type_state, common_unit_state } from './state';
+import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_maker_state, common_type_state, common_unit_state } from './state';
 import {info_item_data} from '$lib/store/info/item/state';
 import axios from 'axios';
 import {v4 as uuid} from 'uuid';
 import Excel from 'exceljs';
 import moment from 'moment';
 let alert_data : any;
+let toast_data : any;
+
 let load_data : any;
 let menu_data : any;
 let search_data : any;
@@ -19,7 +21,7 @@ let url_data : any;
 let maker_data : any;
 let type_data : any;
 let unit_data : any;
-
+let counter = 6;
 
 
 const workbook = new Excel.Workbook();
@@ -28,6 +30,10 @@ const workbook = new Excel.Workbook();
 
 common_alert_state.subscribe((data : any) => {
   alert_data = data;
+})
+
+common_toast_state.subscribe((data : any) => {
+  toast_data = data;
 })
 
 load_state.subscribe((data : any) => {
@@ -128,6 +134,15 @@ const changeUrl = (obj) => {
     common_alert_state.update(()=> alert_data);
   
     }
+
+    const commonCloseToast = (state) => {
+   
+      toast_data = {type : state, value : false} 
+  
+      
+      common_toast_state.update(()=> toast_data);
+    
+      }
 
 
 
@@ -398,6 +413,17 @@ const excelDownload = (data,title,config) => {
 
 
 
+   const timeout = () => {
+  
+
+      if (--counter > 0)
+        return setTimeout(timeout, 1000);
+        toast_data = {type : 'success', value : false}
+        common_toast_state.update(()=> toast_data);
+    }
+
+
+
 
 export {handleToggle, 
   onChangeHandler, 
@@ -412,5 +438,7 @@ export {handleToggle,
   changeUrl,
   loadChange,
   commonCloseAlert,
-  infoCallApi
+  commonCloseToast,
+  infoCallApi,
+  timeout
 }

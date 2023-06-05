@@ -7,13 +7,14 @@ import {info_item_modal_state,info_item_form_state,info_item_data} from './state
 
 import {v4 as uuid} from 'uuid';
 import axios from 'axios'
-import {common_alert_state, common_search_state} from '$lib/store/common/state';
+import {common_alert_state, common_toast_state,common_search_state} from '$lib/store/common/state';
 
 
 let update_modal : any;
 let update_form : any;
 let list_data : any;
 let alert : any;
+let toast : any;
 let search_state : any;
 
 let init_form_data = {
@@ -45,6 +46,9 @@ info_item_data.subscribe((data) => {
 common_alert_state.subscribe((data) => {
   alert = data;
 })
+common_toast_state.subscribe((data) => {
+  toast = data;
+})
 
 common_search_state.subscribe((data) => {
   search_state = data;
@@ -53,6 +57,7 @@ common_search_state.subscribe((data) => {
 
 
 const modalOpen = (data : any, title : any) => {
+  console.log('alert : ', alert);
   alert['type'] = 'save';
   common_alert_state.update(() => alert);
     update_modal['title'] = title;
@@ -106,7 +111,6 @@ const save = (param,title) => {
           item_maker : param.maker,
           item_type : param.type,
           item_unit : param.unit,
-          
           item_bom : JSON.stringify(param.child),    
         };
       axios.post(url,
@@ -118,8 +122,6 @@ const save = (param,title) => {
         }else{
           return console.log('데이터등록성공',res.data);
         }
-        
-  
       })
     }catch (e:any){
       return console.log('에러 : ',e);
@@ -164,7 +166,12 @@ const save = (param,title) => {
        
         
 
-        common_alert_state.update(() => false);
+        alert = {type : 'save', value : false}
+        toast = {type : 'success', value : true}
+
+        common_alert_state.update(() => alert);
+        common_toast_state.update(() => toast);
+        
         info_item_form_state.update(()=> init_form_data);
 
       }else{

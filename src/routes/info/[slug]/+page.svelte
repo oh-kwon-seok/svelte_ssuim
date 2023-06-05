@@ -22,9 +22,11 @@
     import {modalOpen} from '$lib/store/info/item/function';
     import {excelDownload, excelUpload, fileButtonClick} from '$lib/store/common/function';
     import {info_item_data, info_item_header,info_item_form_state,info_item_modal_state} from '$lib/store/info/item/state';
-    import {common_search_state} from '$lib/store/common/state';
+    import {common_search_state,common_toast_state} from '$lib/store/common/state';
     import {EXCEL_INFO_ITEM_CONFIG} from '$lib/module/info/constants';
     import Item from './components/item.svelte'
+    import Toast from '$lib/components/toast/Toast.svelte'
+    
   
 
 
@@ -36,14 +38,16 @@
     }
    
 
-   
+ 
   
     export let data;
     
     console.log('data : ', data);
 
     </script>
-    
+         {#if $common_toast_state['value'] === true}
+         <Toast />
+         {/if}
     
         <Header />
 

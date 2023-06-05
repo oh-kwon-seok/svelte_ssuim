@@ -26,6 +26,10 @@ const url_state : any = writable({ path : '', query : ''});
 
 
   const common_alert_state : any = writable({type : 'save', value : false });
+
+  const common_toast_state : any = writable({type : 'success', value : false });
+
+  
   const common_search_state : any = writable({
 
     start_date : moment().format('YYYY-MM-DD'),
@@ -58,4 +62,4 @@ const url_state : any = writable({ path : '', query : ''});
   const common_unit_state : any = writable([]);
   
   
-  export {menu_state,cookie_state,load_state,common_alert_state,common_search_state,login_state,url_state,common_maker_state, common_type_state,common_unit_state};
+  export {menu_state,cookie_state,load_state,common_alert_state,common_search_state,login_state,url_state,common_maker_state, common_type_state,common_unit_state,common_toast_state};

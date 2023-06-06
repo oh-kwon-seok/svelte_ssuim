@@ -1,6 +1,6 @@
 import { Injectable, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository} from 'typeorm';
 import {maker} from './maker.entity';
 // @ts-nocheck
 

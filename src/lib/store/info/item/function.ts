@@ -100,6 +100,12 @@ const modalOpen = (data : any, title : any) => {
 }
 
 const save = (param,title) => {
+
+    console.log('param : ', param);
+    if(param['code'] === ''){
+      return alert('코드가 비엇슴');
+
+    }
     if(title === 'add'){
 
       const url = '/api/item/save'
@@ -117,70 +123,22 @@ const save = (param,title) => {
         params,
       ).then(res => {
         console.log(res);
-        if(res.data.length === 0){
-          return console.log('데이터등록실패',res.data);
+        if(res.data.length !== 0){
+          alert = {type : 'save', value : false}
+          toast = {type : 'success', value : true}
+          common_alert_state.update(() => alert);
+          common_toast_state.update(() => toast);
+        
         }else{
-          return console.log('데이터등록성공',res.data);
+          alert = {type : 'save', value : true}
+          toast = {type : 'fail', value : true}
+          common_alert_state.update(() => alert);
+          common_toast_state.update(() => toast);
         }
       })
     }catch (e:any){
       return console.log('에러 : ',e);
     };
-
-
-
-      param['id'] = uuid();
-      
-
-
-
-
-
-      let empty_array = [];
-      Object.keys(param).map((item)=>{
-        if(param[item] === '' || param[item] === undefined){
-          empty_array.push(item);
-        
-        }
-      });
-      if(empty_array.length === 0){
-        
-        info_item_data.update(
-          datas => {
-          
-              
-              const setData = [...datas, param];
-              datas = setData;
-              search_state['filteredItems'] = datas;
-              common_search_state.update(() => search_state);
-              return datas
-
-             
-
-          }
-      )
-
-        update_modal[title]['use'] = !update_modal[title]['use'];
-        info_item_modal_state.update(() => update_modal);
-
-       
-        
-
-        alert = {type : 'save', value : false}
-        toast = {type : 'success', value : true}
-
-        common_alert_state.update(() => alert);
-        common_toast_state.update(() => toast);
-        
-        info_item_form_state.update(()=> init_form_data);
-
-      }else{
-        alert = {type : 'save', value : true}
-        common_alert_state.update(() => alert);
-
-      }
-
-     
     }
     
     else if(title === 'update'){

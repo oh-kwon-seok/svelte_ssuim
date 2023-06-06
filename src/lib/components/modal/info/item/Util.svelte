@@ -2,7 +2,7 @@
 <script>
 
     // @ts-nocheck
-    import {Indicator, Hr,P, Span,Button ,Modal, Label, Select, Input, Checkbox} from 'flowbite-svelte'
+    import {Indicator, Hr,P, Span,Button ,Modal, Label, Select, Input, Checkbox,Helper} from 'flowbite-svelte'
     
     import * as Icon from 'svelte-awesome-icons';
     
@@ -64,6 +64,10 @@
              {:else if title === 'update'}
               <Input type="text" disabled readOnly id="last_name" placeholder="코드를 입력하세요" required bind:value={$info_item_form_state['code']}/>
             {/if}
+
+            {#if $info_item_form_state['code'] === '' && $common_alert_state['value'] === true}
+            <Helper class="mt-2" color="red"><span class="font-medium">데이터를 입력해주세요</span></Helper>
+            {/if}
            
 
           </Label>
@@ -72,7 +76,10 @@
           <Label class="space-y-2">
             <span>품명</span>
             <Input type="text" id="last_name" placeholder="품명을 입력하세요" required bind:value={$info_item_form_state['name']}/>
-           
+            
+            {#if $info_item_form_state['name'] === '' && $common_alert_state['value'] === true}
+            <Helper class="mt-2" color="red"><span class="font-medium">데이터를 입력해주세요</span></Helper>
+            {/if}
           </Label>
     
           <Label class="space-y-2">
@@ -232,17 +239,15 @@
         </form>
         <svelte:fragment slot='footer'>
           <Button   color={title === 'add' || title === 'update'  ? 'blue' : 'red'}   type="submit" class="w-full" on:click={save($info_item_form_state,title)}>{label_title}</Button>
-          {#if $common_alert_state['type'] === 'save' && $common_alert_state['value'] === true}
-          <div class="mt-12">
-            
-            
-         
-               <Alert  color={DATA_FAIL_ALERT.color} title={DATA_FAIL_ALERT[title].title} content={DATA_FAIL_ALERT[title].content}/>
-
-            </div>
-        {/if}
+          
         
         </svelte:fragment>
+        {#if $common_alert_state['type'] === 'save' && $common_alert_state['value'] === true}
+          <div class="mt-12">
+               <Alert  color={DATA_FAIL_ALERT.color} title={DATA_FAIL_ALERT[title].title} content={DATA_FAIL_ALERT[title].content}/>
+           </div>
+        {/if}
+
       </Modal>
 
     

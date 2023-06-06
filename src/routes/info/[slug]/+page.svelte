@@ -45,9 +45,11 @@
     console.log('data : ', data);
 
     </script>
-         {#if $common_toast_state['value'] === true}
+        
+        {#if $common_toast_state['value'] === true}
          <Toast />
-         {/if}
+        {/if}
+       
     
         <Header />
 

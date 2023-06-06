@@ -3,14 +3,15 @@
 
 import { writable } from 'svelte/store';
 import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_maker_state, common_type_state, common_unit_state } from './state';
-import {info_item_data} from '$lib/store/info/item/state';
+import {info_item_data,info_item_form_state} from '$lib/store/info/item/state';
 import axios from 'axios';
 import {v4 as uuid} from 'uuid';
 import Excel from 'exceljs';
 import moment from 'moment';
+
 let alert_data : any;
 let toast_data : any;
-
+let info_item_form_data : any;
 let load_data : any;
 let menu_data : any;
 let search_data : any;
@@ -21,7 +22,7 @@ let url_data : any;
 let maker_data : any;
 let type_data : any;
 let unit_data : any;
-let counter = 6;
+let toast_counter = 4;
 
 
 const workbook = new Excel.Workbook();
@@ -58,6 +59,12 @@ info_item_data.subscribe((data) => {
 
 })
 
+info_item_form_state.subscribe((data) => {
+  info_item_form_data = data;
+
+})
+
+
 login_state.subscribe((data) => {
   login_data = data;
 
@@ -84,18 +91,19 @@ const infoCallApi = (title) => {
       if(res.data.length > 0){
         if(title === 'maker'){
           maker_data = res.data;
-          console.log('maker_data : ', maker_data);
           common_maker_state.update(()=> maker_data);
+          info_item_form_data['maker'] = maker_data[0]['maker_code'];
         }else if(title === 'unit'){
           unit_data = res.data;
-          console.log('unit_data : ',unit_data);
           common_unit_state.update(()=> unit_data);
+          info_item_form_data['unit'] = maker_data[0]['unit_code'];
         }else if(title === 'type'){
           type_data = res.data;
-          console.log('type_data : ',type_data);
           common_type_state.update(()=> type_data);
-
+          info_item_form_data['type'] = maker_data[0]['type_code'];
         }
+        info_item_form_state.update(()=> info_item_form_data);
+
       }else {
       
       }
@@ -416,10 +424,11 @@ const excelDownload = (data,title,config) => {
    const timeout = () => {
   
 
-      if (--counter > 0)
+      if (--toast_counter > 0)
         return setTimeout(timeout, 1000);
         toast_data = {type : 'success', value : false}
         common_toast_state.update(()=> toast_data);
+        toast_counter = 4;
     }
 
 

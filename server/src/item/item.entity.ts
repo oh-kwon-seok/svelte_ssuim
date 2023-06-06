@@ -7,7 +7,7 @@ import { type } from '../type/type.entity';
 @Entity('item')
 export class item {
 
-  @PrimaryColumn({ unique: true })
+  @PrimaryColumn()
   item_code: string;
 
   @Column()

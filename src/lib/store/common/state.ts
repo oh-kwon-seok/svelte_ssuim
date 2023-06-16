@@ -27,9 +27,8 @@ const url_state : any = writable({ path : '', query : ''});
 
   const common_alert_state : any = writable({type : 'save', value : false });
 
-  const common_toast_state : any = writable({type : 'success', value : false });
+  const common_toast_state : any = writable({type : 'success', value : false, counter : 4 });
 
-  
   const common_search_state : any = writable({
 
     start_date : moment().format('YYYY-MM-DD'),

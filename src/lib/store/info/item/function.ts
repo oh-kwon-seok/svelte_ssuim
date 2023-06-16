@@ -101,44 +101,71 @@ const modalOpen = (data : any, title : any) => {
 
 const save = (param,title) => {
 
-    console.log('param : ', param);
-    if(param['code'] === ''){
-      return alert('코드가 비엇슴');
-
-    }
+  console.log('common_toast_state',toast);
+  console.log('param : ',param);
+   
     if(title === 'add'){
-
-      const url = '/api/item/save'
-      try {
+      if(param['code'] === ''){
+        toast = {type : 'fail', value : true, counter : 4}
   
-        let params = {
-          item_code : param.code,
-          item_name : param.name,
-          item_maker : param.maker,
-          item_type : param.type,
-          item_unit : param.unit,
-          item_bom : JSON.stringify(param.child),    
+        return common_toast_state.update(() => toast);
+  
+      }else {
+        const url = '/api/item/save'
+        try {
+  
+          
+    
+          let params = {
+            item_code : param.code,
+            item_name : param.name,
+            item_maker : param.maker,
+            item_type : param.type,
+            item_unit : param.unit,
+            item_bom : JSON.stringify(param.child),    
+          };
+        axios.post(url,
+          params,
+        ).then(res => {
+          console.log(res);
+          if(res.data.length !== 0){
+  
+            if(param.child.length > 0){
+  
+              for(let i=0; i<param.child.length; i++){
+                if(param.child[i]['code'] === '' || param.child[i]['name'] === '' || (param.child[i]['use_qty'] === '' || param.child[i]['use_qty'] === 0)){
+  
+                  
+                  toast = {type : 'fail', value : true,counter : 4}
+                 
+                  return common_toast_state.update(() => toast);
+                }
+              }
+  
+  
+            }else {
+             
+              toast = {type : 'success', value : true, counter : 4}
+             
+              return common_toast_state.update(() => toast);
+  
+            }
+          
+          
+          }else{
+          
+            toast = {type : 'fail', value : true, counter : 4}
+          
+            return common_toast_state.update(() => toast);
+          }
+        })
+        }catch (e:any){
+          return console.log('에러 : ',e);
         };
-      axios.post(url,
-        params,
-      ).then(res => {
-        console.log(res);
-        if(res.data.length !== 0){
-          alert = {type : 'save', value : false}
-          toast = {type : 'success', value : true}
-          common_alert_state.update(() => alert);
-          common_toast_state.update(() => toast);
-        
-        }else{
-          alert = {type : 'save', value : true}
-          toast = {type : 'fail', value : true}
-          common_alert_state.update(() => alert);
-          common_toast_state.update(() => toast);
-        }
-      })
-    }catch (e:any){
-      return console.log('에러 : ',e);
-    };
+      }
+
+
+    
     }
     
     else if(title === 'update'){

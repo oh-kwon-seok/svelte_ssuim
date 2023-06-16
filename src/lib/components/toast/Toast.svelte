@@ -8,12 +8,13 @@
   
   
 
-    // @ts-ignore
-  
- 
+    
+    
+
+    
     onMount(() => {
         timeout();
-    	
+    	console.log('실행됌');
 	});
   </script>
   

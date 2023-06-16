@@ -6,9 +6,9 @@
     
     import * as Icon from 'svelte-awesome-icons';
     
-    import Alert from '$lib/components/alert/Alert.svelte';
+    import Toast from '$lib/components/toast/Toast.svelte';
     import {info_item_modal_state, info_item_form_state} from '$lib/store/info/item/state';
-    import {common_alert_state,common_type_state, common_unit_state, common_maker_state} from '$lib/store/common/state';
+    import {common_alert_state, common_toast_state,common_type_state, common_unit_state, common_maker_state} from '$lib/store/common/state';
     
     import {save,bomRowUtil,bomRowCellClick} from '$lib/store/info/item/function';
     import {DATA_FAIL_ALERT,DATA_SELECT_ALERT} from '$lib/module/common/constants';
@@ -129,13 +129,19 @@
           </div>
 
 
+
+          {#if $common_toast_state['value'] === true}
+          <Toast />
+         {/if}
+       
+         
           
-          {#if $common_alert_state['type'] === 'select' && $common_alert_state['value'] === true}
+          <!-- {#if $common_alert_state['type'] === 'select' && $common_alert_state['value'] === true}
             
             <Alert  state={'select'} color={DATA_SELECT_ALERT.color} title={DATA_SELECT_ALERT['select'].title} content={DATA_SELECT_ALERT['select'].content} />
 
           {/if}
-          
+           -->
 
 
 
@@ -195,35 +201,9 @@
 
 
 
-       
-
-
-
-
-
-
-
-
           <div class="grid grid-cols-6 gap-4">
            
           </div>
-
-
-
-       
-
-
-
-          
-          
-        
-          
-   
-
-
-
-
-
             {:else }
               {#if title === 'delete'}
               <div>삭제하시겠습니까?</div>
@@ -243,9 +223,11 @@
         
         </svelte:fragment>
         {#if $common_alert_state['type'] === 'save' && $common_alert_state['value'] === true}
-          <div class="mt-12">
+     
+        
+        <!-- <div class="mt-12">
                <Alert  color={DATA_FAIL_ALERT.color} title={DATA_FAIL_ALERT[title].title} content={DATA_FAIL_ALERT[title].content}/>
-           </div>
+           </div> -->
         {/if}
 
       </Modal>

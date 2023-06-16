@@ -22,7 +22,6 @@ let url_data : any;
 let maker_data : any;
 let type_data : any;
 let unit_data : any;
-let toast_counter = 4;
 
 
 const workbook = new Excel.Workbook();
@@ -145,7 +144,7 @@ const changeUrl = (obj) => {
 
     const commonCloseToast = (state) => {
    
-      toast_data = {type : state, value : false} 
+      toast_data = {type : state, value : false, counter : 4} 
   
       
       common_toast_state.update(()=> toast_data);
@@ -422,16 +421,16 @@ const excelDownload = (data,title,config) => {
 
 
    const timeout = () => {
-  
+    console.log('con : ', toast_data);
 
-      if (--toast_counter > 0)
+      if (--toast_data['counter'] > 0)
         return setTimeout(timeout, 1000);
-        toast_data = {type : 'success', value : false}
-        common_toast_state.update(()=> toast_data);
-        toast_counter = 4;
+        
+      
+          toast_data = {type : 'success', value : false, counter : 4}
+          common_toast_state.update(()=> toast_data);
+      
     }
-
-
 
 
 export {handleToggle, 

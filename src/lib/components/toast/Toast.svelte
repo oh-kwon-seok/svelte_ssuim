@@ -1,21 +1,32 @@
-<script>
+<script >
+    // @ts-ignore
     import { Toast, Button } from 'flowbite-svelte';
-    import { slide,fly } from 'svelte/transition';
-    import {onMount, beforeUpdate} from 'svelte';
+    // @ts-ignore
+    import { fly } from 'svelte/transition';
+    // @ts-ignore
+    import {onMount, } from 'svelte';
     import {common_toast_state} from '$lib/store/common/state';
-    import {timeout} from '$lib/store/common/function';
+    import {TOAST_SAMPLE} from '$lib/module/common/constants'
 
   
   
+    $: counter = 2;
+    
+    // @ts-ignore
+    const timeout = () => {
+        if (--counter > 0)
+      return setTimeout(timeout, 1000);
+      
+        common_toast_state.update(()=> TOAST_SAMPLE['success']);
 
-    
-    
+    }
 
-    
     onMount(() => {
-        timeout();
-    	console.log('실행됌');
+      timeout();
 	});
+
+
+    
   </script>
   
     {#if $common_toast_state['type'] === 'success' && $common_toast_state['value'] === true}
@@ -37,3 +48,8 @@
               데이터 등록에 실패했습니다.
         </Toast>
     {/if}
+
+
+
+
+

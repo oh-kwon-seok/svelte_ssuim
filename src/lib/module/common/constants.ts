@@ -72,6 +72,17 @@ const MENU = {
 }
 
 
+const TOAST_SAMPLE = {
+   
+    success : {type : 'success', value : false, counter : 2},
+    fail : {type : 'fail', value : false, counter : 2}
+  
+    
+}
+
+
+
+
 
 
 export {
@@ -80,5 +91,5 @@ export {
     DATA_SUCCESS_ALERT,
     DATA_FAIL_ALERT,
     MENU,
-   
+    TOAST_SAMPLE
 }

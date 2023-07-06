@@ -106,9 +106,9 @@ const save = (param,title) => {
    
     if(title === 'add'){
       if(param['code'] === ''){
-        toast = {type : 'fail', value : true, counter : 4}
+     
   
-        return common_toast_state.update(() => toast);
+        return common_toast_state.update(() => TOAST_SAMPLE['fail']);
   
       }else {
         const url = '/api/item/save'
@@ -127,36 +127,43 @@ const save = (param,title) => {
         axios.post(url,
           params,
         ).then(res => {
-          console.log(res);
+          console.log('res',res);
           if(res.data.length !== 0){
   
             if(param.child.length > 0){
-  
+              let empty_data = [];
               for(let i=0; i<param.child.length; i++){
                 if(param.child[i]['code'] === '' || param.child[i]['name'] === '' || (param.child[i]['use_qty'] === '' || param.child[i]['use_qty'] === 0)){
   
-                  
-                  toast = {type : 'fail', value : true,counter : 4}
-                 
-                  return common_toast_state.update(() => toast);
+                  empty_data.push(param.child[i]);
+
+              
                 }
               }
-  
-  
+              if(empty_data.length > 0){
+             
+                return common_toast_state.update(() => TOAST_SAMPLE['fail']);
+              }else{
+
+                return common_toast_state.update(() => TOAST_SAMPLE['success']);
+              }
             }else {
              
-              toast = {type : 'success', value : true, counter : 4}
+           
              
-              return common_toast_state.update(() => toast);
+              return common_toast_state.update(() => TOAST_SAMPLE['success']);
   
             }
+
+
+
           
           
           }else{
           
-            toast = {type : 'fail', value : true, counter : 4}
+            
           
-            return common_toast_state.update(() => toast);
+            return common_toast_state.update(() => TOAST_SAMPLE['fail']);
           }
         })
         }catch (e:any){

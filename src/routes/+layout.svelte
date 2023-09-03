@@ -8,6 +8,7 @@
 	import Toast from '$lib/components/toast/Toast.svelte';
 	import {common_toast_state} from '$lib/store/common/state';
 
+	const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 	beforeUpdate(() => {
     // 현재 URL을 가져와 currentUrl 변수에 저장합니다.
@@ -22,9 +23,12 @@
 		changeUrl(url_obj);
 
 		// 기준정보 select용 데이터들을 호출한다.
-		infoCallApi('maker');
-		infoCallApi('unit');
-		infoCallApi('type');
+
+	
+
+		// infoCallApi('maker');
+		// infoCallApi('unit');
+		// infoCallApi('type');
 
 	
 	});

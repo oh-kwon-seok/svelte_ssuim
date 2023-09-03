@@ -57,6 +57,8 @@
 		"svelte-kit-cookie-session": "^3.3.2",
 		"svelte-sheets": "^1.0.0",
 		"svelte-spa-router": "^3.3.0",
-		"uuid": "^9.0.0"
+		"tabulator-tables": "5.5.2",
+		"uuid": "^9.0.0",
+		"vite-plugin-style-import": "2.0.0"
 	}
 }

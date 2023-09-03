@@ -3,6 +3,7 @@
 <script lang="ts">
     // @ts-nocheck
     import '../../app.postcss';
+    
 
     import Header from '$lib/components/layout/Header.svelte';
     import SideBar from '$lib/components/layout/SideBar.svelte';
@@ -20,17 +21,45 @@
     import ServerError from '$lib/components/error/500.svelte';
 
     import {url_state,cookie_state} from '$lib/store/common/state';
+    import {minMaxFilterFunction,minMaxFilterEditor,makeTable} from '$lib/store/common/function';
+
 	import { afterUpdate, onMount } from 'svelte';
+
+
+
+    // import {TabulatorFull as Tabulator} from 'tabulator-tables';
+
+    
+    // import 'tabulator-tables-css'; // CSS 파일이 import됩니다.
+
 
     export let data;
 
 
-   
-
 
     let status;
 
-    
+    let tableComponent;
+    let table;
+    let test_data = [
+        {name : '파',standard : '1바구니', created_at : '2023-08-31 10:23:46.872977'},
+        {name : '귤',standard : '1바구니',created_at : '2023-08-31 09:23:46.872977'},
+        {name : '파',standard : '1바구니',created_at : '2023-08-31 10:23:46.872977'},
+        {name : '귤',standard : '1바구니',created_at : '2023-08-31 09:23:46.872977'} ,{name : '파',standard : '1단',created_at : '2023-08-31 10:23:46.872977'},
+        {name : '귤',standard : '1바구니',created_at : '2023-08-31 09:23:46.872977'} ,{name : '파',standard : '1단',created_at : '2023-08-31 10:23:46.872977'},
+        {name : '귤',standard : '1바구니',created_at : '2023-08-31 09:23:46.872977'} ,{name : '파',standard : '1단',created_at : '2023-08-31 10:23:46.872977'},
+        {name : '귤',standard : '1단',created_at : '2023-08-31 09:23:46.872977'} ,{name : '파',standard : '1단',created_at : '2023-08-31 10:23:46.872977'},
+        {name : '귤',standard : '1단',created_at : '2023-08-31 09:23:46.872977'}
+    ]
+   
+
+   
+    onMount(()=>{
+       
+        makeTable(tableComponent,test_data);
+
+    });
+   
     afterUpdate(()=> {
 
         if(data.title === 'redirect'){
@@ -40,30 +69,41 @@
             alert('잘못된 주소거나 요청시간이 만료되었습니다.');
         }else if($url_state['path'] === '/home'){
             status = 'on';
+          
+           
 
         }
         console.log('status : ', status);
 
     })
 
-
-
-
-  
     </script>
 
-        {#if status === 'on'}
+
         <Header />
+      
         <div class="grid grid-rows-1 grid-flow-col gap-2">
-            <div class="row-span-3 "> <SideBar /></div>
-            <!-- <div class="col-span-2 "> <Title title='DashBoard' subtitle='none'/></div> -->
-            <div class="col-span-1 "> 
+            <div class="row-span-3 "> <SideBar />
+              
+    
+            </div>
+          
+            
+            
+            
+            <div class="col-span-1 ">
+               
+
                 <Tabs style="full" defaultClass="mt-5 flex rounded-lg divide-x divide-gray-200 shadow dark:divide-gray-700">
                     <TabItem class="w-full" open>
                     <span slot="title">매출현황</span>
                     <p class="text-sm text-gray-500 dark:text-gray-400"><b>매출현황:</b> 전년대비 금년도 매출현황입니다.</p>
-                    <SaleChart />
+                        <!-- <SaleChart /> -->
+                     
+
                     </TabItem>
+                   
+
                     <TabItem class="w-full" >
                         <span slot="title">생산현황</span>
                         <p class="text-sm text-gray-500 dark:text-gray-400"><b>생산현황:</b>현재 생산현황입니다.</p>
@@ -75,16 +115,17 @@
                         <SaleChart />
                     </TabItem>
                 </Tabs>
+               
                 <Footer />
             </div>
+            <div bind:this={tableComponent}></div>
+                
+         
       </div>
 
-      {:else if status === '404'}
-        <NotFound />
-      {:else if status === '500'}
+     
 
-        <ServerError />
-    {/if}
+
 
 
        

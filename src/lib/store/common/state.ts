@@ -19,6 +19,7 @@ const menu_state = writable({
 
 
 
+
 const cookie_state = getCookie('my-cookie');
 const load_state = writable(false);
 
@@ -45,10 +46,10 @@ const url_state : any = writable({ path : '', query : ''});
 
 
   const login_state : any = writable({
-    user_idx : '',
-    user_id : '',
-    user_name : '',
-    user_password : '',
+    user_idx : "",
+    id : "",
+    name : "",
+    password : "",
     status : false,
     
   });

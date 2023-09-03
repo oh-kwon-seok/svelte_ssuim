@@ -4,7 +4,7 @@ import { writable } from 'svelte/store';
 import {v4 as uuid} from 'uuid';
 
 
-const info_item_data : any = writable([
+const item_data : any = writable([
     { id: uuid(), code: '1133286', name : '09케라시스비누실크모이 100g(EX)', maker: '애경', unit : 'BOX', type: '완제품', 
     check : false,
     expand : false,
@@ -86,10 +86,10 @@ const info_item_data : any = writable([
 
   ]);
 
-  const info_item_header : any = ['','번호','제조사','품번', '품명','단위','구분','기능'];
+  const item_header : any = ['','번호','제조사','품번', '품명','단위','구분','기능'];
  
  
-  const info_item_sub_header : any = ['','순서','제조사','품번', '품명','단위','구분','기능'];
+  const item_sub_header : any = ['','순서','제조사','품번', '품명','단위','구분','기능'];
   
 
 
@@ -97,7 +97,7 @@ const info_item_data : any = writable([
 
 
 
-  const info_item_modal_state : any = writable( {
+  const item_modal_state : any = writable( {
     title : '',
     add : { use : false, title: ''},
     update : { use : false, title: ''},
@@ -107,7 +107,7 @@ const info_item_data : any = writable([
      
    });
 
-  const info_item_form_state : any = writable({
+  const item_form_state : any = writable({
     id : 0,
     maker : '한스텍',
     code : '',
@@ -123,4 +123,4 @@ const info_item_data : any = writable([
   
 
 
-  export {info_item_data,info_item_header,info_item_sub_header,info_item_modal_state,info_item_form_state};
+  export {item_data,item_header,item_sub_header,item_modal_state,item_form_state};

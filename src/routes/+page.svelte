@@ -13,36 +13,48 @@
 
 
 	import { setCookie, getCookie, removeCookie } from '$lib/cookies';
+	
+	const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 	const login = async(e : any) => {
 		loadChange(true);
+		$common_alert_state = {type : 'login', value : false};
+		
+		// const url = `${apiBaseUrl}/sign-api/sign-in`
+		const url = `/api/sign-api/sign-in`
 
-		const url = '/api/user/auth/login'
-
-		console.log('url : ',url);
 		try {
 			await performAsyncTask();
 
 			let params = $login_state;
-		axios.get(url,{
-			params,
-		}).then(res => {
 
 		
-			if(res.data === ''){
-			
-				$common_alert_state = {type : 'login', value : true};
-			}else {
-				
+				const config = {
+				headers:{
+					"Content-Type": "application/json",
+					
+				}
+			}
 
 
-				// 쿠키 설정
-			setCookie('my-cookie', $login_state['user_id'], { expires: 3600 });
+		await axios.post(url,
+			params,config
+		).then(res => {
+			console.log('res  :', res);
+
+		
+			if(res.data['success'] === true){
+					// 	// 쿠키 설정
+				setCookie('my-cookie', $login_state['id'], { expires: 3600 });
 
 		
 				window.location.href = '/home';
+			
+			}else if(res.data['success'] === false){
 				
-
+				
+				console.log('언제?');
+				$common_alert_state = {type : 'login', value : true};
 			}		
 		}
 			
@@ -52,16 +64,8 @@
 			alert(`다음과 같은 에러가 발생했습니다 : ${e.name} : ${e.message}`);
 		} finally {
 			loadChange(false);
-			$common_alert_state = {type : 'login', value : true};
+			
 		}
-
-
-	
-
-
-	
-
-
 
 	}
 
@@ -91,11 +95,11 @@
 				<h3 class="text-xl font-medium text-gray-700 dark:text-white p-0 w-80">스마트공장 MES 시스템</h3>
 				<Label class="space-y-2">
 					<span>ID</span>
-					<Input   type="text" name="user_id" placeholder="ID를 입력하세요" required vind:value={$login_state.user_id} on:change={(e)=> onChangeHandler(e)} />
+					<Input   type="text" name="id" placeholder="ID를 입력하세요" required vind:value={$login_state.id} on:change={(e)=> onChangeHandler(e)} />
 				</Label>
 				<Label class="space-y-2 justify-center">
 					<span>Password</span>
-					<Input  type="password" name="user_password" placeholder="•••••" required vind:value={$login_state.user_password} on:change={(e)=> onChangeHandler(e)}/>
+					<Input  type="password" name="password" placeholder="•••••" required vind:value={$login_state.password} on:change={(e)=> onChangeHandler(e)}/>
 				</Label>
 				<div class="flex items-start">
 					<Checkbox>자동 저장</Checkbox>
@@ -105,14 +109,8 @@
 					<Button  type="submit" class="w-full" on:click={(e) => login(e)} >Login</Button>
 				{:else if $load_state === true}
 					<Loading />
-				
-				
 				{/if}
 				
-				
-				
-				
-			
 			</form>
 		{#if $common_alert_state['type'] === 'login' && $common_alert_state['value'] === true}
 			<div class="mt-12">

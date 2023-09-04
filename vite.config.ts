@@ -19,6 +19,8 @@ export default defineConfig({
 		alias: {
 		  // 사용할 모듈의 별칭을 설정합니다.
 		  'tabulator-tables-css': 'tabulator-tables/dist/css/tabulator_modern.min.css',
+		
+		  
 		},
 	  },
 

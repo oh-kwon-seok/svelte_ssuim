@@ -2,8 +2,10 @@
 
 
 import { writable } from 'svelte/store';
-import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_maker_state, common_type_state, common_unit_state } from './state';
+import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_maker_state, common_type_state, common_unit_state } from './state';
 import {item_data,item_form_state} from '$lib/store/info/item/state';
+import {TABLE_TOTAL_CONFIG,TABLE_HEADER_CONFIG} from '$lib/module/common/constants';
+
 import axios from 'axios';
 import {v4 as uuid} from 'uuid';
 import Excel from 'exceljs';
@@ -13,11 +15,6 @@ import moment from 'moment';
 import {TabulatorFull as Tabulator} from 'tabulator-tables';
 
     
-import 'tabulator-tables-css'; // CSS 파일이 import됩니다.
-
-
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-
 let alert_data : any;
 let toast_data : any;
 let item_form_data : any;
@@ -28,7 +25,11 @@ let list_data : any;
 let login_data : any;
 let url_data : any;
 
+
+let product_data : any;
+
 let maker_data : any;
+
 let type_data : any;
 let unit_data : any;
 
@@ -78,6 +79,10 @@ login_state.subscribe((data) => {
 
 })
 
+common_product_state.subscribe((data : any) => {
+  product_data = data;
+})
+
 common_maker_state.subscribe((data : any) => {
   maker_data = data;
 })
@@ -92,12 +97,30 @@ common_unit_state.subscribe((data : any) => {
 
 
 const infoCallApi = (title) => {
+  console.log('product 요청', title);
+  const url = `http://localhost:8081/${title}/select`; 
   
-  const url = `/api/${title}/select`; 
+  const config = {
+    headers:{
+      "Content-Type": "application/json",
+      
+    }
+  }
+
   try {
-    axios.get(url).then(res=>{
+    axios.get(url,config).then(res=>{
+     
+     
       if(res.data.length > 0){
-        if(title === 'maker'){
+        if(title === 'product'){
+
+          product_data = res.data;
+          common_product_state.update(()=> product_data);
+         
+          console.log('res시점 : ', res.data);
+        }
+        
+        else if(title === 'maker'){
           maker_data = res.data;
           common_maker_state.update(()=> maker_data);
           item_form_data['maker'] = maker_data[0]['maker_code'];
@@ -122,6 +145,11 @@ const infoCallApi = (title) => {
     console.log('final : ');
   }
   }
+
+
+
+ 
+
 
 
 
@@ -506,83 +534,41 @@ const excelDownload = (data,title,config) => {
 
 
 
-      const makeTable = (tableComponent,data) => {
-        let table;
+      const makeTable = (type,tableComponent) => {
 
-        table =   new Tabulator(tableComponent, {
-        // height:"311px",
-       
-        layout:"fitColumns",
-        pagination:"local",
-      
-        paginationSize:10,
-        paginationSizeSelector:[10, 50, 100,5000],
-
-        movableColumns:true,
-        paginationCounter:"rows",
-
-        locale: "ko-kr",
-        langs:{
-        "ko-kr":{
-            "columns":{
-                "name":"Name", //replace the title of column name with the value "Name"
-            },
-            "data":{
-                "loading":"Loading", //data loader text
-                "error":"Error", //data error text
-            },
-            "groups":{ //copy for the auto generated item count in group header
-                "item":"item", //the singular  for item
-                "items":"items", //the plural for items
-            },
-            "pagination":{
-            	"page_size":"행 개수", //label for the page size select element
-                "page_title":"Show Page",//tooltip text for the numeric page button, appears in front of the page number (eg. "Show Page" will result in a tool tip of "Show Page 1" on the page 1 button)
-                "first":"처음", //text for the first page button
-                "first_title":"첫 페이지", //tooltip text for the first page button
-                "last":"뒤 페이지",
-                "last_title":"뒤 페이지",
-                "prev":"이전",
-                "prev_title":"이전 페이지",
-                "next":"다음",
-                "next_title":"다음 페이지",
-                "all":"전체",
-                "counter":{
-                    "showing": "Showing",
-                    "of": "of",
-                    "rows": "rows",
-                    "pages": "pages",
-                }
-            },
-            "headerFilters":{
-                "default":"filter column...", //default header filter placeholder text
-                "columns":{
-                    "name":"filter name...", //replace default header filter text for column name
-                }
-            }
+        const url = `http://localhost:8081/${type}/select`; 
+        
+        const config = {
+          headers:{
+            "Content-Type": "application/json",
+            
+          }
         }
-    },
-
-    rowFormatter:function(row){
-          row.getElement().classList.add("table-primary"); //mark rows with age greater than or equal to 18 as successful;
-      
-    },
-
-        paginationAddRow:"table", //add rows relative to the table
-   
-    
-        data : data,
-        columns:[
-            {formatter:"rowSelection",width : 60, titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e, cell){
-                cell.getRow().toggleSelect();
-            }},
-
-            {title:"상품명", field:"name", width:150, headerFilter:"input",editor:true},
-            {title:"단위", field:"standard", editor:"list", editorParams:{values:{"1바구니":"1바구니", "1단":"1단", clearable:true}}, headerFilter:true, headerFilterParams:{values:{"1바구니":"1바구니", "1단":"1단", "":""}, clearable:true}},
-            {title:"등록일", field:"created_at", hozAlign:"center", sorter:"date",  headerFilter:"input"}],
-    });
-
-    
+          axios.get(url,config).then(res=>{
+           
+           
+            if(res.data.length > 0){
+              let table;
+              table =   new Tabulator(tableComponent, {
+              height:TABLE_TOTAL_CONFIG['height'],
+              layout:TABLE_TOTAL_CONFIG['layout'],
+              pagination:TABLE_TOTAL_CONFIG['pagination'],
+              paginationSize:TABLE_TOTAL_CONFIG['paginationSize'],
+              paginationSizeSelector:TABLE_TOTAL_CONFIG['paginationSizeSelector'],
+              movableColumns:TABLE_TOTAL_CONFIG['movableColumns'],
+              paginationCounter: TABLE_TOTAL_CONFIG['paginationCounter'],
+              paginationAddRow:TABLE_TOTAL_CONFIG['paginationAddRow'], //add rows relative to the table
+              locale: TABLE_TOTAL_CONFIG['locale'],
+              langs: TABLE_TOTAL_CONFIG['langs'],
+              rowFormatter:function(row){
+                    row.getElement().classList.add("table-primary"); //mark rows with age greater than or equal to 18 as successful;
+              },
+              data : res.data,
+              columns: TABLE_HEADER_CONFIG['product'],
+             
+              });
+        }
+         })
     }
 
 

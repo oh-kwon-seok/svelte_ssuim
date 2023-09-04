@@ -21,7 +21,8 @@
     import ServerError from '$lib/components/error/500.svelte';
 
     import {url_state,cookie_state} from '$lib/store/common/state';
-    import {minMaxFilterFunction,minMaxFilterEditor,makeTable} from '$lib/store/common/function';
+    import {makeTable,infoCallApi} from '$lib/store/common/function';
+    
 
 	import { afterUpdate, onMount } from 'svelte';
 
@@ -30,33 +31,23 @@
     // import {TabulatorFull as Tabulator} from 'tabulator-tables';
 
     
-    // import 'tabulator-tables-css'; // CSS 파일이 import됩니다.
+    import 'tabulator-tables-css'; // CSS 파일이 import됩니다.
 
-
+  
     export let data;
-
+  
 
 
     let status;
 
-    let tableComponent;
-    let table;
-    let test_data = [
-        {name : '파',standard : '1바구니', created_at : '2023-08-31 10:23:46.872977'},
-        {name : '귤',standard : '1바구니',created_at : '2023-08-31 09:23:46.872977'},
-        {name : '파',standard : '1바구니',created_at : '2023-08-31 10:23:46.872977'},
-        {name : '귤',standard : '1바구니',created_at : '2023-08-31 09:23:46.872977'} ,{name : '파',standard : '1단',created_at : '2023-08-31 10:23:46.872977'},
-        {name : '귤',standard : '1바구니',created_at : '2023-08-31 09:23:46.872977'} ,{name : '파',standard : '1단',created_at : '2023-08-31 10:23:46.872977'},
-        {name : '귤',standard : '1바구니',created_at : '2023-08-31 09:23:46.872977'} ,{name : '파',standard : '1단',created_at : '2023-08-31 10:23:46.872977'},
-        {name : '귤',standard : '1단',created_at : '2023-08-31 09:23:46.872977'} ,{name : '파',standard : '1단',created_at : '2023-08-31 10:23:46.872977'},
-        {name : '귤',standard : '1단',created_at : '2023-08-31 09:23:46.872977'}
-    ]
-   
+    let tableComponent = "example-table-theme";
+    
 
    
     onMount(()=>{
+        console.log('시점');
        
-        makeTable(tableComponent,test_data);
+        // makeTable("product",tableComponent);
 
     });
    
@@ -69,15 +60,17 @@
             alert('잘못된 주소거나 요청시간이 만료되었습니다.');
         }else if($url_state['path'] === '/home'){
             status = 'on';
-          
-           
-
+            makeTable("product",tableComponent);
+            
         }
         console.log('status : ', status);
 
     })
 
     </script>
+    
+
+   
 
 
         <Header />
@@ -118,7 +111,9 @@
                
                 <Footer />
             </div>
-            <div bind:this={tableComponent}></div>
+
+            <!-- <div id="example-table-theme"></div> -->
+            <div id="example-table-theme" bind:this={tableComponent}></div>
                 
          
       </div>

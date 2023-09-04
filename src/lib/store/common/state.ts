@@ -50,10 +50,15 @@ const url_state : any = writable({ path : '', query : ''});
     id : "",
     name : "",
     password : "",
+    token :"",
+
     status : false,
     
   });
 
+
+
+  const common_product_state : any = writable([]);
 
   const common_maker_state : any = writable([]);
   
@@ -62,4 +67,4 @@ const url_state : any = writable({ path : '', query : ''});
   const common_unit_state : any = writable([]);
   
   
-  export {menu_state,cookie_state,load_state,common_alert_state,common_search_state,login_state,url_state,common_maker_state, common_type_state,common_unit_state,common_toast_state};
+  export {menu_state,cookie_state,load_state,common_alert_state,common_search_state,login_state,url_state,common_product_state,common_maker_state, common_type_state,common_unit_state,common_toast_state};

@@ -14,13 +14,13 @@
 
 	import { setCookie, getCookie, removeCookie } from '$lib/cookies';
 	
-	const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
 
 	const login = async(e : any) => {
 		loadChange(true);
 		$common_alert_state = {type : 'login', value : false};
 		
-		// const url = `${apiBaseUrl}/sign-api/sign-in`
+	
 		const url = `/api/sign-api/sign-in`
 
 		try {
@@ -40,11 +40,15 @@
 		await axios.post(url,
 			params,config
 		).then(res => {
-			console.log('res  :', res);
+		
 
 		
 			if(res.data['success'] === true){
 					// 	// 쿠키 설정
+
+					
+
+				$login_state['token'] = res.data['token'];
 				setCookie('my-cookie', $login_state['id'], { expires: 3600 });
 
 		
@@ -53,7 +57,7 @@
 			}else if(res.data['success'] === false){
 				
 				
-				console.log('언제?');
+				
 				$common_alert_state = {type : 'login', value : true};
 			}		
 		}

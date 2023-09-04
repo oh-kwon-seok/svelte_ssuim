@@ -1,7 +1,7 @@
 <script>
 	// @ts-nocheck
 	import '../app.postcss';
-	import { onMount,beforeUpdate } from 'svelte';
+	import { onMount,beforeUpdate, afterUpdate } from 'svelte';
 
 	import {changeUrl,infoCallApi} from '$lib/store/common/function';
 	import axios from 'axios';
@@ -25,13 +25,12 @@
 		// 기준정보 select용 데이터들을 호출한다.
 
 	
-
-		// infoCallApi('maker');
 		// infoCallApi('unit');
 		// infoCallApi('type');
 
 	
 	});
+	
 
 
 

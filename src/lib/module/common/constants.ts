@@ -22,7 +22,6 @@ const DATA_SUCCESS_ALERT = {
 }
 
 
-
 const DATA_FAIL_ALERT = {
     color : 'red',
     add : {title : '추가', content : '데이터 저장에 실패했습니다.'},
@@ -81,6 +80,83 @@ const TOAST_SAMPLE = {
 }
 
 
+const TABLE_FILTER_CONFIG : any = {
+    product : {
+        "default":"filter column...", //default header filter placeholder text
+        "columns":{
+            "name":"filter name...", //replace default header filter text for column name
+        }
+    }
+}
+
+const TABLE_HEADER_CONFIG : any = {
+    product : [{formatter:"rowSelection",width : 60, titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e : any, cell:any){cell.getRow().toggleSelect();}},
+        {title:"ID", field:"uid", width:150, headerFilter:"input",editor:true},
+        {title:"상품명", field:"name", width:150, headerFilter:"input",editor:true},
+        {title:"등록일", field:"created_at", hozAlign:"center", sorter:"date",  headerFilter:"input"}],
+}
+
+
+
+const TABLE_TOTAL_CONFIG : any = {
+    layout:"fitColumns",
+    pagination:"local",
+  
+    paginationSize:10,
+    paginationSizeSelector:[10, 50, 100,5000],
+
+    movableColumns:true,
+    paginationCounter:"rows",
+    paginationAddRow:"table", //add rows relative to the table
+    height : "50vh",
+    locale: "ko-kr",
+    langs:{
+        "ko-kr":{
+            "columns":{
+                "name":"Name", //replace the title of column name with the value "Name"
+            },
+            "data":{
+                "loading":"Loading", //data loader text
+                "error":"Error", //data error text
+            },
+            "groups":{ //copy for the auto generated item count in group header
+                "item":"item", //the singular  for item
+                "items":"items", //the plural for items
+            },
+            "pagination":{
+            	"page_size":"행 개수", //label for the page size select element
+                "page_title":"Show Page",//tooltip text for the numeric page button, appears in front of the page number (eg. "Show Page" will result in a tool tip of "Show Page 1" on the page 1 button)
+                "first":"처음", //text for the first page button
+                "first_title":"첫 페이지", //tooltip text for the first page button
+                "last":"뒤 페이지",
+                "last_title":"뒤 페이지",
+                "prev":"이전",
+                "prev_title":"이전 페이지",
+                "next":"다음",
+                "next_title":"다음 페이지",
+                "all":"전체",
+                "counter":{
+                    "showing": "Showing",
+                    "of": "of",
+                    "rows": "rows",
+                    "pages": "pages",
+                }
+            },
+            
+        }
+    },
+    rowFormatter:function(row : any){
+        row.getElement().classList.add("table-primary"); //mark rows with age greater than or equal to 18 as successful;
+    
+  },
+
+   
+  
+  
+    
+}
+
+
 
 
 
@@ -91,5 +167,9 @@ export {
     DATA_SUCCESS_ALERT,
     DATA_FAIL_ALERT,
     MENU,
-    TOAST_SAMPLE
+    TOAST_SAMPLE,
+    TABLE_TOTAL_CONFIG,
+    TABLE_HEADER_CONFIG
+   
+
 }

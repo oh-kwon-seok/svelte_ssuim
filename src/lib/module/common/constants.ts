@@ -75,19 +75,10 @@ const TOAST_SAMPLE = {
    
     success : {type : 'success', value : false, counter : 2},
     fail : {type : 'fail', value : false, counter : 2}
-  
     
 }
 
 
-const TABLE_FILTER_CONFIG : any = {
-    product : {
-        "default":"filter column...", //default header filter placeholder text
-        "columns":{
-            "name":"filter name...", //replace default header filter text for column name
-        }
-    }
-}
 
 const TABLE_HEADER_CONFIG : any = {
     product : [{formatter:"rowSelection",width : 60, titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e : any, cell:any){cell.getRow().toggleSelect();}},
@@ -95,6 +86,8 @@ const TABLE_HEADER_CONFIG : any = {
         {title:"상품명", field:"name", width:150, headerFilter:"input",editor:true},
         {title:"등록일", field:"created_at", hozAlign:"center", sorter:"date",  headerFilter:"input"}],
 }
+
+
 
 
 

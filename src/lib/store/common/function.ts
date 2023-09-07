@@ -2,7 +2,7 @@
 
 
 import { writable } from 'svelte/store';
-import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_maker_state, common_type_state, common_unit_state } from './state';
+import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_maker_state, common_type_state, common_unit_state,table_state } from './state';
 import {item_data,item_form_state} from '$lib/store/info/item/state';
 import {TABLE_TOTAL_CONFIG,TABLE_HEADER_CONFIG} from '$lib/module/common/constants';
 
@@ -25,6 +25,7 @@ let list_data : any;
 let login_data : any;
 let url_data : any;
 
+let table_data : any;
 
 let product_data : any;
 
@@ -32,6 +33,7 @@ let maker_data : any;
 
 let type_data : any;
 let unit_data : any;
+
 
 
 const workbook = new Excel.Workbook();
@@ -78,6 +80,11 @@ login_state.subscribe((data) => {
   login_data = data;
 
 })
+
+table_state.subscribe((data : any) => {
+  table_data = data;
+})
+
 
 common_product_state.subscribe((data : any) => {
   product_data = data;
@@ -446,7 +453,7 @@ const excelDownload = (data,title,config) => {
           search_data['filteredItems'] = list_data;
           common_search_state.update(() => search_data);
           
-          console.log('change Data  :' , change_data);
+       
 
         })
       })
@@ -534,8 +541,10 @@ const excelDownload = (data,title,config) => {
 
 
 
-      const makeTable = (type,tableComponent) => {
+      const makeTable = (table_state,type,tableComponent) => {
 
+
+        
         const url = `http://localhost:8081/${type}/select`; 
         
         const config = {
@@ -548,8 +557,8 @@ const excelDownload = (data,title,config) => {
            
            
             if(res.data.length > 0){
-              let table;
-              table =   new Tabulator(tableComponent, {
+              
+              table_data[type] =   new Tabulator(tableComponent, {
               height:TABLE_TOTAL_CONFIG['height'],
               layout:TABLE_TOTAL_CONFIG['layout'],
               pagination:TABLE_TOTAL_CONFIG['pagination'],
@@ -567,8 +576,14 @@ const excelDownload = (data,title,config) => {
               columns: TABLE_HEADER_CONFIG['product'],
              
               });
+              console.log('table_data  :', table_data);
+
+              table_state.update(()=> table_data);
+              
         }
          })
+
+        
     }
 
 

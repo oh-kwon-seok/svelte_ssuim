@@ -20,16 +20,15 @@
 
     import ServerError from '$lib/components/error/500.svelte';
 
-    import {url_state,cookie_state} from '$lib/store/common/state';
+    import {url_state,cookie_state,common_product_state,table_state} from '$lib/store/common/state';
     import {makeTable,infoCallApi} from '$lib/store/common/function';
     
 
 	import { afterUpdate, onMount } from 'svelte';
 
-
-
+  
     // import {TabulatorFull as Tabulator} from 'tabulator-tables';
-
+    import * as Icon from 'svelte-awesome-icons';
     
     import 'tabulator-tables-css'; // CSS 파일이 import됩니다.
 
@@ -39,7 +38,7 @@
 
 
     let status;
-
+  
     let tableComponent = "example-table-theme";
     
 
@@ -47,7 +46,7 @@
     onMount(()=>{
         console.log('시점');
        
-        // makeTable("product",tableComponent);
+        makeTable(table_state,"product",tableComponent);
 
     });
    
@@ -60,7 +59,7 @@
             alert('잘못된 주소거나 요청시간이 만료되었습니다.');
         }else if($url_state['path'] === '/home'){
             status = 'on';
-            makeTable("product",tableComponent);
+          
             
         }
         console.log('status : ', status);
@@ -111,6 +110,20 @@
                
                 <Footer />
             </div>
+
+
+            <div class='m-5'>
+     
+                <Button on:click={(e) => $table_state['product'].addRow({uid:'333', name : '후훗', create_at : 'ㄷㄷ'})}>
+                  <Icon.FloppyDiskSolid class='mr-2' size="20" />
+                  추가
+                </Button>
+              
+              
+          
+          
+              </div>
+
 
             <!-- <div id="example-table-theme"></div> -->
             <div id="example-table-theme" bind:this={tableComponent}></div>

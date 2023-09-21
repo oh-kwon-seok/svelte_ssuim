@@ -547,7 +547,18 @@ const excelDownload = (data,title,config) => {
         
         const url = `http://localhost:8081/${type}/select`; 
         
+        let basic_date = moment();
+        let start_date = basic_date.format('YYYY-MM-DDTHH:mm:ss');
+        let end_date = basic_date.add(10,'days').format('YYYY-MM-DDTHH:mm:ss');
+
+
+        let params = 
+        {
+          start_date : start_date,
+          end_date  : end_date
+        };
         const config = {
+          params : params,
           headers:{
             "Content-Type": "application/json",
             
@@ -558,6 +569,10 @@ const excelDownload = (data,title,config) => {
            
             if(res.data.length > 0){
               
+
+              console.log('resDATA : ',res.data);
+              
+
               table_data[type] =   new Tabulator(tableComponent, {
               height:TABLE_TOTAL_CONFIG['height'],
               layout:TABLE_TOTAL_CONFIG['layout'],

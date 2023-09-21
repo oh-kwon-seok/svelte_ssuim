@@ -1,3 +1,7 @@
+
+import { DateTime } from 'luxon';
+
+
 const LOGIN_ALERT = {
     type : 'success',
     title : '로그인',
@@ -84,7 +88,20 @@ const TABLE_HEADER_CONFIG : any = {
     product : [{formatter:"rowSelection",width : 60, titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e : any, cell:any){cell.getRow().toggleSelect();}},
         {title:"ID", field:"uid", width:150, headerFilter:"input",editor:true},
         {title:"상품명", field:"name", width:150, headerFilter:"input",editor:true},
-        {title:"등록일", field:"created_at", hozAlign:"center", sorter:"date",  headerFilter:"input"}],
+
+
+        {title:"단위명", field:"unit.name", width:150, headerFilter:"input",editor:true},
+
+        {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
+        formatter: function(cell : any, formatterParams: any, onRendered: any) {
+            // Luxon을 사용하여 datetime 값을 date로 변환
+            const datetimeValue = cell.getValue();
+            const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
+            return date;
+        }
+    
+    
+    }],
 }
 
 
@@ -140,7 +157,7 @@ const TABLE_TOTAL_CONFIG : any = {
     },
     rowFormatter:function(row : any){
         row.getElement().classList.add("table-primary"); //mark rows with age greater than or equal to 18 as successful;
-    
+     
   },
 
    

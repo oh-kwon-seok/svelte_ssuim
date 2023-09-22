@@ -1,0 +1,128 @@
+
+
+<script>
+	
+    // @ts-nocheck
+    import '../../app.postcss';
+
+    import Header from '$lib/components/layout/Header.svelte';
+    import SideBar from '$lib/components/layout/SideBar.svelte';
+    import Footer from '$lib/components/layout/Footer.svelte';
+    import Title from '$lib/components/layout/Title.svelte';
+    
+
+    import { Tabs, TabItem, Timeline, TimelineItem, Button } from 'flowbite-svelte';
+
+    import Util from '$lib/components/modal/info/item/Util.svelte';
+    
+
+    import * as Icon from 'svelte-awesome-icons';
+
+    import {modalOpen} from '$lib/store/product/function';
+    import {excelDownload, excelUpload, fileButtonClick} from '$lib/store/common/function';
+    
+    import {product_form_state,product_modal_state} from '$lib/store/product/state';
+
+    import {url_state,cookie_state,common_product_state,table_state} from '$lib/store/common/state';
+    import {EXCEL_INFO_ITEM_CONFIG} from '$lib/module/info/constants';
+    import Item from './components/item.svelte'
+    import Toast from '$lib/components/toast/Toast.svelte'
+    
+    import {makeTable,infoCallApi} from '$lib/store/common/function';
+    
+
+	import { afterUpdate, onMount } from 'svelte';
+
+  
+    // import {TabulatorFull as Tabulator} from 'tabulator-tables';
+
+    import 'tabulator-tables-css'; // CSS 파일이 import됩니다.
+	import moment from 'moment';
+            
+  
+    export let data;
+
+
+    let tableComponent = "example-table-theme";
+
+
+    onMount(()=>{
+        console.log('시점');
+       
+        makeTable(table_state,"product",tableComponent);
+
+    });
+   
+    afterUpdate(()=> {
+
+        if(data.title === 'redirect'){
+            console.log('cookie_state',cookie_state);
+            console.log('data : ', data);
+            window.location.href = '/';
+            alert('잘못된 주소거나 요청시간이 만료되었습니다.');
+        }else if($url_state['path'] === '/product'){
+            status = 'on';
+            makeTable(table_state,"product",tableComponent);
+            
+        }
+        console.log('status : ', status);
+
+    })
+    </script>
+        
+        <!-- {#if $common_toast_state['value'] === true}
+         <Toast />
+        {/if} -->
+
+        
+     
+        <Header />
+
+        <div class="grid grid-rows-16 grid-flow-col gap-1">
+            <div class="row-span-16"> 
+              <SideBar />
+            </div>
+            <div class="col-span-1 row-span-1"> 
+              <Title title='기준정보 관리' subtitle='품목관리'/>
+            </div>
+
+           
+
+            
+            <div class="row-span-15 col-span-12 "> 
+                <Tabs  style="pill" defaultClass=" mt-5 overflow-auto  flex rounded-lg divide-x divide-gray-200 shadow dark:divide-gray-700" >
+                    <TabItem  open >
+                   
+
+                      <span slot="title">품목 관리</span>
+
+                      <div class='m-5'>
+                        <Button  on:click={(e) => modalOpen('','add')}>
+                          <Icon.FloppyDiskSolid class='mr-2' size="20" />
+                          추가
+                        </Button>
+
+                      </div>
+
+                      <Util title='add'/>
+                      <div id="example-table-theme" bind:this={tableComponent}></div>
+                      
+                  
+                    </TabItem>
+                   
+                    <TabItem >
+                      <span slot="title">단위 관리</span>
+                      
+                 
+                    </TabItem>
+          
+                  </Tabs>
+                <Footer />
+            </div>
+         
+          </div>
+       
+        
+        
+    
+    

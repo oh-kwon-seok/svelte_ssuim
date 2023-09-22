@@ -98,7 +98,10 @@ const TABLE_HEADER_CONFIG : any = {
             const datetimeValue = cell.getValue();
             const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
             return date;
-        }
+        },
+       
+
+        
     
     
     }],
@@ -109,7 +112,7 @@ const TABLE_HEADER_CONFIG : any = {
 
 
 const TABLE_TOTAL_CONFIG : any = {
-    layout:"fitColumns",
+    layout: "fitData",
     pagination:"local",
   
     paginationSize:10,

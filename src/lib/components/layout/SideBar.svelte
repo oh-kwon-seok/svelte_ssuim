@@ -65,7 +65,7 @@
                 <svelte:fragment slot="icon">
                     <Icon.DatabaseSolid size="20"/>
                 </svelte:fragment>
-              <SidebarDropdownItem class={text_style} label="품목 관리" href='/info/item' active={activeUrl === '/info/item'} on:click={handleToggle('info')} />
+              <SidebarDropdownItem class={text_style} label="품목 관리" href='/product' active={activeUrl === '/product'} on:click={handleToggle('product')} />
                 
             </SidebarDropdownWrapper>
  

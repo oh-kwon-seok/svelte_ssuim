@@ -3,7 +3,9 @@
 
 import { writable } from 'svelte/store';
 import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_maker_state, common_type_state, common_unit_state,table_state } from './state';
-import {item_data,item_form_state} from '$lib/store/info/item/state';
+
+// import {item_data,item_form_state} from '$lib/store/info/item/state';
+
 import {TABLE_TOTAL_CONFIG,TABLE_HEADER_CONFIG} from '$lib/module/common/constants';
 
 import axios from 'axios';
@@ -17,7 +19,7 @@ import {TabulatorFull as Tabulator} from 'tabulator-tables';
     
 let alert_data : any;
 let toast_data : any;
-let item_form_data : any;
+// let item_form_data : any;
 let load_data : any;
 let menu_data : any;
 let search_data : any;
@@ -65,15 +67,12 @@ common_search_state.subscribe((data : any) => {
     search_data = data;
 })
 
-item_data.subscribe((data) => {
-  list_data = data;
 
-})
 
-item_form_state.subscribe((data) => {
-  item_form_data = data;
+// item_form_state.subscribe((data) => {
+//   item_form_data = data;
 
-})
+// })
 
 
 login_state.subscribe((data) => {
@@ -130,17 +129,17 @@ const infoCallApi = (title) => {
         else if(title === 'maker'){
           maker_data = res.data;
           common_maker_state.update(()=> maker_data);
-          item_form_data['maker'] = maker_data[0]['maker_code'];
+          // item_form_data['maker'] = maker_data[0]['maker_code'];
         }else if(title === 'unit'){
           unit_data = res.data;
           common_unit_state.update(()=> unit_data);
-          item_form_data['unit'] = maker_data[0]['unit_code'];
+          // item_form_data['unit'] = maker_data[0]['unit_code'];
         }else if(title === 'type'){
           type_data = res.data;
           common_type_state.update(()=> type_data);
-          item_form_data['type'] = maker_data[0]['type_code'];
+          // item_form_data['type'] = maker_data[0]['type_code'];
         }
-        item_form_state.update(()=> item_form_data);
+        // item_form_state.update(()=> item_form_data);
 
       }else {
       
@@ -230,11 +229,11 @@ const onSearchHandler = (e : any) => {
     search_data['search_text'] = e.target.value;
     
     console.log('e.target.value',e.target.value);
-    if(search_data['type'] === 'all'){
-      search_data['filteredItems'] = list_data.filter((item) => item['maker'].indexOf(search_data['search_text'].toLowerCase()) !== -1 || item['name'].indexOf(search_data['search_text'].toLowerCase()) !== -1)
-    }else {
-      search_data['filteredItems'] = list_data.filter((item) => item[search_data['type']].indexOf(search_data['search_text'].toLowerCase()) !== -1);
-    }
+    // if(search_data['type'] === 'all'){
+    //   search_data['filteredItems'] = list_data.filter((item) => item['maker'].indexOf(search_data['search_text'].toLowerCase()) !== -1 || item['name'].indexOf(search_data['search_text'].toLowerCase()) !== -1)
+    // }else {
+    //   search_data['filteredItems'] = list_data.filter((item) => item[search_data['type']].indexOf(search_data['search_text'].toLowerCase()) !== -1);
+    // }
     
     
     common_search_state.update(()=> search_data);
@@ -372,7 +371,7 @@ const excelDownload = (data,title,config) => {
     });
     let text_title : any= '';
     switch(title){
-        case 'info_item': 
+        case 'product': 
             text_title = '품목 관리';
         break;
         
@@ -449,7 +448,7 @@ const excelDownload = (data,title,config) => {
 
           
           });
-          item_data.update(() => list_data);
+          // item_data.update(() => list_data);
           search_data['filteredItems'] = list_data;
           common_search_state.update(() => search_data);
           
@@ -589,6 +588,7 @@ const excelDownload = (data,title,config) => {
               },
               data : res.data,
               columns: TABLE_HEADER_CONFIG['product'],
+            
              
               });
               console.log('table_data  :', table_data);

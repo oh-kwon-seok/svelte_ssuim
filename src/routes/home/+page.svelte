@@ -31,6 +31,7 @@
     import * as Icon from 'svelte-awesome-icons';
     
     import 'tabulator-tables-css'; // CSS 파일이 import됩니다.
+	import moment from 'moment';
 
   
     export let data;
@@ -114,7 +115,7 @@
 
             <div class='m-5'>
      
-                <Button on:click={(e) => $table_state['product'].addRow({uid:'333', name : '후훗', create_at : 'ㄷㄷ'})}>
+                <Button on:click={(e) => $table_state['product'].addRow({uid:'333', name : '후훗', created : moment().format('YYYY-MM-DDTHH:mm:ss')})}>
                   <Icon.FloppyDiskSolid class='mr-2' size="20" />
                   추가
                 </Button>
@@ -124,8 +125,10 @@
           
               </div>
 
-
-            <!-- <div id="example-table-theme"></div> -->
+<!-- 
+              <div>
+                <button id="print-table">Print Table</button>
+            </div> -->
             <div id="example-table-theme" bind:this={tableComponent}></div>
                 
          

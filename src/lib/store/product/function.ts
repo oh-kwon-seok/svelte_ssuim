@@ -9,6 +9,10 @@ import {v4 as uuid} from 'uuid';
 import axios from 'axios'
 import {common_alert_state, common_toast_state,common_search_state} from '$lib/store/common/state';
 
+const api = import.meta.env.VITE_API_BASE_URL;
+
+
+
 
 let update_modal : any;
 let update_form : any;
@@ -94,25 +98,21 @@ const modalOpen = (data : any, title : any) => {
 }
 
 const save = (param,title) => {
-  return console.log(param,title);
 
+   
     if(title === 'add'){
-      if(param['code'] === ''){
+      if(param['name'] === '' || param['unit'] === ''){
         return common_toast_state.update(() => TOAST_SAMPLE['fail']);
   
       }else {
-        const url = '/api/item/save'
+        const url = `${api}/product/save`
         try {
   
           
-    
           let params = {
-            item_code : param.code,
-            item_name : param.name,
-            item_maker : param.maker,
-            item_type : param.type,
-            item_unit : param.unit,
-            item_bom : JSON.stringify(param.child),    
+            name : param.name,
+            unit_uid : param.unit,
+        
           };
         axios.post(url,
           params,
@@ -120,35 +120,7 @@ const save = (param,title) => {
           console.log('res',res);
           if(res.data.length !== 0){
   
-            if(param.child.length > 0){
-              let empty_data = [];
-              for(let i=0; i<param.child.length; i++){
-                if(param.child[i]['code'] === '' || param.child[i]['name'] === '' || (param.child[i]['use_qty'] === '' || param.child[i]['use_qty'] === 0)){
-  
-                  empty_data.push(param.child[i]);
-
-              
-                }
-              }
-              if(empty_data.length > 0){
-             
-                return common_toast_state.update(() => TOAST_SAMPLE['fail']);
-              }else{
-
-                return common_toast_state.update(() => TOAST_SAMPLE['success']);
-              }
-            }else {
-             
-           
-             
-              return common_toast_state.update(() => TOAST_SAMPLE['success']);
-  
-            }
-
-
-
-          
-          
+    
           }else{
           
             

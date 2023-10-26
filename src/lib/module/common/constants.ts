@@ -85,7 +85,8 @@ const TOAST_SAMPLE = {
 
 
 const TABLE_HEADER_CONFIG : any = {
-    product : [{formatter:"rowSelection",width : 60, titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e : any, cell:any){cell.getRow().toggleSelect();}},
+    product : [
+        {formatter:"rowSelection",width : 60, titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e : any, cell:any){cell.getRow().toggleSelect();}},
         {title:"ID", field:"uid", width:150, headerFilter:"input",editor:true},
         {title:"상품명", field:"name", width:150, headerFilter:"input",editor:true},
 
@@ -106,9 +107,6 @@ const TABLE_HEADER_CONFIG : any = {
     
     }],
 }
-
-
-
 
 
 const TABLE_TOTAL_CONFIG : any = {

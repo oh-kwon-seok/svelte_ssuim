@@ -16,6 +16,12 @@ import moment from 'moment';
 
 import {TabulatorFull as Tabulator} from 'tabulator-tables';
 
+
+const api = import.meta.env.VITE_API_BASE_URL;
+
+
+
+
     
 let alert_data : any;
 let toast_data : any;
@@ -103,9 +109,11 @@ common_unit_state.subscribe((data : any) => {
 
 
 const infoCallApi = (title) => {
-  console.log('product 요청', title);
-  const url = `http://localhost:8081/${title}/select`; 
+
+ 
+  const url = `${api}/${title}/select`; 
   
+
   const config = {
     headers:{
       "Content-Type": "application/json",
@@ -115,7 +123,7 @@ const infoCallApi = (title) => {
 
   try {
     axios.get(url,config).then(res=>{
-     
+     console.log('res : ',res);
      
       if(res.data.length > 0){
         if(title === 'product'){
@@ -544,9 +552,12 @@ const excelDownload = (data,title,config) => {
 
 
         
-        const url = `http://localhost:8081/${type}/select`; 
+        const url = `${api}/${type}/select`; 
         
         let basic_date = moment();
+        
+  
+        
         let start_date = basic_date.format('YYYY-MM-DDTHH:mm:ss');
         let end_date = basic_date.add(10,'days').format('YYYY-MM-DDTHH:mm:ss');
 
@@ -564,7 +575,10 @@ const excelDownload = (data,title,config) => {
           }
         }
           axios.get(url,config).then(res=>{
-           
+            
+            console.log('res : ',res);
+            console.log('start : ',start_date);
+            console.log('end : ',end_date);
            
             if(res.data.length > 0){
               
@@ -595,6 +609,9 @@ const excelDownload = (data,title,config) => {
 
               table_state.update(()=> table_data);
               
+        }else{
+          console.log("조회가 안됌");
+
         }
          })
 

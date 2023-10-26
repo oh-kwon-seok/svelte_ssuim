@@ -113,25 +113,11 @@
             </div>
 
 
-            <div class='m-5'>
-     
-                <Button on:click={(e) => $table_state['product'].addRow({uid:'333', name : '후훗', created : moment().format('YYYY-MM-DDTHH:mm:ss')})}>
-                  <Icon.FloppyDiskSolid class='mr-2' size="20" />
-                  추가
-                </Button>
-              
-              
-          
-          
-              </div>
+        
 
-<!-- 
-              <div>
-                <button id="print-table">Print Table</button>
-            </div> -->
-            <div id="example-table-theme" bind:this={tableComponent}></div>
+          
+       
                 
-         
       </div>
 
      

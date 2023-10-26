@@ -56,7 +56,7 @@
               
               
                 {#each $common_unit_state as item}
-                  <option value={item.unit_code}>{item.unit_name}</option>
+                  <option value={item.uid}>{item.name}</option>
                 {/each}
               </Select>
           </Label>

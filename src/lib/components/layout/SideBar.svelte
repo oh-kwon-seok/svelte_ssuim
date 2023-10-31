@@ -80,35 +80,9 @@
          
             </SidebarDropdownWrapper>
           </SidebarGroup>
-          <SidebarGroup border>
-            <SidebarDropdownWrapper class={text_style} label="공정 및 설비 관리" isOpen={mainPath ==='process_equipment' ? true : false}   transitionType="fly" {transitionParams} >
-              <svelte:fragment slot="icon">
-                <Icon.ScrewdriverWrenchSolid size="20"/>
-            </svelte:fragment>
-              <SidebarDropdownItem class={text_style} label="공정 관리" href='/process_equipment' active={activeUrl === '/process_equipment/process_equipment' } on:click={handleToggle('process_equipment')}/>
-         
-            </SidebarDropdownWrapper>
-          </SidebarGroup>
+    
 
-          <SidebarGroup border>
-            <SidebarDropdownWrapper class={text_style} label="생산 관리"  isOpen={mainPath ==='product' ? true : false}  transitionType="fly" {transitionParams} >
-              <svelte:fragment slot="icon">
-                <Icon.IndustrySolid size="20"/>
-            </svelte:fragment>
-              <SidebarDropdownItem class={text_style} label="작업지시 관리" href='/product/product_order' active={activeUrl === '/product/product_order'} on:click={handleToggle('product')}/>
-         
-            </SidebarDropdownWrapper>
-          </SidebarGroup>
-
-          <SidebarGroup border>
-            <SidebarDropdownWrapper class={text_style} label="출하 관리"  isOpen={mainPath ==='shipment' ? true : false}  transitionType="fly" {transitionParams} >
-              <svelte:fragment slot="icon">
-                <Icon.TruckFastSolid size="20"/>
-            </svelte:fragment>
-              <SidebarDropdownItem class={text_style} label="출하 지시 관리" href='/shipment/shipment_order' active={activeUrl === '/shipment/shipment_order'} on:click={handleToggle('shipment')}/>
-         
-            </SidebarDropdownWrapper>
-          </SidebarGroup>
+       
         </SidebarWrapper>
       </Sidebar>
 

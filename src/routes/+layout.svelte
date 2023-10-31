@@ -26,7 +26,10 @@
 
 	
 		infoCallApi('unit');
-		// infoCallApi('type');
+		infoCallApi('type');
+		infoCallApi('standard');
+		infoCallApi('origin');
+		
 
 	
 	});

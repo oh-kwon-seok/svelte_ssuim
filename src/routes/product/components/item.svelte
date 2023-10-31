@@ -14,7 +14,7 @@
     import { Tabs, TabItem, Timeline, TimelineItem, Button } from 'flowbite-svelte';
 
     
-    import Util from '$lib/components/modal/info/item/Util.svelte';
+    import Util from '$lib/components/modal/product/Util.svelte';
     
 
     import * as Icon from 'svelte-awesome-icons';

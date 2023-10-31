@@ -11,9 +11,11 @@
     import Title from '$lib/components/layout/Title.svelte';
     
 
-    import { Tabs, TabItem, Timeline, TimelineItem, Button } from 'flowbite-svelte';
+    import { Tabs, TabItem, Timeline, TimelineItem, Button,ButtonGroup,Dropdown,DropdownItem,Input,Label,Select,Search} from 'flowbite-svelte';
+    import { ChevronDownSolid, SearchOutline } from 'flowbite-svelte-icons';
 
-    import Util from '$lib/components/modal/info/item/Util.svelte';
+
+    import Util from '$lib/components/modal/product/Util.svelte';
     
 
     import * as Icon from 'svelte-awesome-icons';
@@ -23,9 +25,10 @@
     
     import {product_form_state,product_modal_state} from '$lib/store/product/state';
 
-    import {url_state,cookie_state,common_product_state,table_state} from '$lib/store/common/state';
-    import {EXCEL_INFO_ITEM_CONFIG} from '$lib/module/info/constants';
-    import Item from './components/item.svelte'
+    import {url_state,cookie_state,common_product_state,table_state,common_toast_state,common_search_state} from '$lib/store/common/state';
+    import {TABLE_COMPONENT} from '$lib/module/common/constants';
+
+    import SearchBar from '$lib/components/layout/SearchBar.svelte'
     import Toast from '$lib/components/toast/Toast.svelte'
     
     import {makeTable,infoCallApi} from '$lib/store/common/function';
@@ -42,7 +45,7 @@
   
     export let data;
 
-
+ 
     let tableComponent = "example-table-theme";
 
 
@@ -52,6 +55,9 @@
         makeTable(table_state,"product",tableComponent);
 
     });
+
+ 
+
    
     afterUpdate(()=> {
 
@@ -68,11 +74,14 @@
         console.log('status : ', status);
 
     })
+
+ 
+
     </script>
         
-        <!-- {#if $common_toast_state['value'] === true}
+        {#if $common_toast_state['value'] === true}
          <Toast />
-        {/if} -->
+        {/if}
 
         
      
@@ -96,25 +105,47 @@
 
                       <span slot="title">품목 관리</span>
 
+                
+                      <SearchBar title="product"/>
+
+
                       <div class='m-5'>
-                        <Button  on:click={(e) => modalOpen('','add')}>
+
+                        <Button  on:click={() => {modalOpen('','add')}}>
                           <Icon.FloppyDiskSolid class='mr-2' size="20" />
                           추가
                         </Button>
 
+                        <Button  color='red' on:click={(e) => modalOpen('','check_delete')}>
+                          <Icon.TrashSolid class='mr-2' size="20" />
+                          선택삭제
+                        </Button>
+
+                      
+
+                        {#if $product_modal_state['title'] === 'add'}
+                          <Util title="add" />
+                        {:else if $product_modal_state['title'] === 'update'}
+                          <Util  title="update"/>
+                          {:else if $product_modal_state['title'] === 'check_delete'}
+                          <Util  title="check_delete"/>
+                        {/if}
+                        
+
                       </div>
 
-                      <Util title='add'/>
-                      <div id="example-table-theme" bind:this={tableComponent}></div>
+                        
+              
+                      <!-- <div id="example-table-theme" bind:this={tableComponent}></div> -->
                       
-                  
+                      <div id="example-table-theme" bind:this={tableComponent}></div>
                     </TabItem>
                    
-                    <TabItem >
+                    <!-- <TabItem >
                       <span slot="title">단위 관리</span>
                       
                  
-                    </TabItem>
+                    </TabItem> -->
           
                   </Tabs>
                 <Footer />

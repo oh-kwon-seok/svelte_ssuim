@@ -1,6 +1,16 @@
 
 import { DateTime } from 'luxon';
+import {modalOpen} from '$lib/store/product/function';
+import {product_modal_state} from '$lib/store/product/state';
 
+import {table_state} from '$lib/store/common/state';
+
+
+let table_data : any;
+table_state.subscribe((data : any) => {
+    table_data = data;
+  })
+  
 
 const LOGIN_ALERT = {
     type : 'success',
@@ -53,25 +63,9 @@ const MENU = {
         {name: '창고 관리', help: "원자재,부자재,반제품,부분품,완제품 등을 관리하는 메뉴입니다."},
         {name: 'Excel 관리', help: "기준정보를 Excel에 작성하여 업로드하기 위한 메뉴입니다."},
       ],
-    project : [
-        {name : '거래처 원장', help : "내용을 채워주세요",},
-        {name : '수주 관리', help : "내용을 채워주세요",},
-        {name : '생산지시 현황', help : "내용을 채워주세요",},
-        {name : '납기 일정', help : "내용을 채워주세요",},
-    ],
-    process_equipment : [
-        {name: '공정 관리', help: "생산에 필요한 공정을 관리하는 메뉴입니다."},
-        {name: '설비 관리', help: "생산에 필요한 설비를 관리하는 메뉴입니다."},
-    ],
-    product : [
-        {name : '작업지시 관리', help: "생산에 필요한 공정을 관리하는 메뉴입니다."},
-        {name : '작업일보 현황', help: "생산에 필요한 공정을 관리하는 메뉴입니다."},
-    ],
-    shipment : [
-        {name : '출하지시 관리', help: "출하에 필요한 출하지시를 관리하는 메뉴입니다."},
-        {name : '출하 현황', help: "출하에 필요한 현황을 관리하는 메뉴입니다."},
-
-    ],
+    
+    
+  
 }
 
 
@@ -83,16 +77,62 @@ const TOAST_SAMPLE = {
 }
 
 
+const TABLE_FILTER : any = {
+    product : [
+    {value : "all",name : "전체"},
+    {value : "name", name : "상품명"},
+    {value : "type", name : "분류"},
+    {value : "origin", name : "원산지"},
+    {value : "standard", name : "규격"},
+    {value : "unit", name : "단위"},
+
+]
+}
+
 
 const TABLE_HEADER_CONFIG : any = {
     product : [
-        {formatter:"rowSelection",width : 60, titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e : any, cell:any){cell.getRow().toggleSelect();}},
-        {title:"ID", field:"uid", width:150, headerFilter:"input",editor:true},
-        {title:"상품명", field:"name", width:150, headerFilter:"input",editor:true},
+        {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
+        
+        cellClick:function(e : any, cell:any){
+
+            cell.getRow().toggleSelect()
+          
+          
+        },
+        
+        },
+       
 
 
-        {title:"단위명", field:"unit.name", width:150, headerFilter:"input",editor:true},
+        {title:"ID", field:"uid", width:150, headerFilter:"input"},
+        {title:"상품명", field:"name", width:150, headerFilter:"input", 
+        formatter:function(cell : any, formatterParams:any){
+            var value = cell.getValue();
+          
+        return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
+           
+           
+         },
 
+        cellClick:function(e : any, cell:any){
+            let row = cell.getRow();
+           if(row){
+
+            modalOpen(row.getData(),"update");
+           }else{
+            console.log('에러');
+           }
+        }
+    
+    
+    },
+        {title:"분류", field:"type.name", width:150, headerFilter:"list"},
+        
+        {title:"원산지", field:"origin.name", width:150, headerFilter:"input"},
+        {title:"규격", field:"standard.name", width:150, headerFilter:"input"},
+        {title:"단위", field:"unit.name", width:150, headerFilter:"input"},
+        
         {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
         formatter: function(cell : any, formatterParams: any, onRendered: any) {
             // Luxon을 사용하여 datetime 값을 date로 변환
@@ -107,6 +147,9 @@ const TABLE_HEADER_CONFIG : any = {
     
     }],
 }
+
+
+let TABLE_COMPONENT : any = "example-table-theme";
 
 
 const TABLE_TOTAL_CONFIG : any = {
@@ -180,7 +223,9 @@ export {
     MENU,
     TOAST_SAMPLE,
     TABLE_TOTAL_CONFIG,
-    TABLE_HEADER_CONFIG
+    TABLE_HEADER_CONFIG,
+    TABLE_COMPONENT,
+    TABLE_FILTER
    
 
 }

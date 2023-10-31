@@ -33,17 +33,11 @@ const url_state : any = writable({ path : '', query : ''});
   const common_toast_state : any = writable({type : 'success', value : false, counter : 4 });
 
   const common_search_state : any = writable({
-
     start_date : moment().format('YYYY-MM-DD'),
     end_date : moment().add(30, "day").format('YYYY-MM-DD'),
-    type : 'all',
     search_text : '',
-    all_check : false,
-    filteredItems : [],
-    
-    current_page : 0,
-    change_page : 0,
-    total_page : 0,
+    filter : [],
+    filter_title : "all",
   });
 
 
@@ -65,11 +59,14 @@ const url_state : any = writable({ path : '', query : ''});
 
   const common_product_state : any = writable([]);
 
-  const common_maker_state : any = writable([]);
-  
+  const common_origin_state : any = writable([]);
+
   const common_type_state : any = writable([]);
 
   const common_unit_state : any = writable([]);
-   
   
-  export {menu_state,cookie_state,load_state,common_alert_state,common_search_state,login_state,url_state,common_product_state,common_maker_state, common_type_state,common_unit_state,common_toast_state,table_state};
+  const common_standard_state : any = writable([]);
+  
+  const common_selected_state : any = writable([]); // 삭제용 데이터
+
+  export {menu_state,cookie_state,load_state,common_alert_state,common_search_state,login_state,url_state,common_product_state,common_origin_state, common_type_state,common_standard_state,common_unit_state,common_toast_state,table_state,common_selected_state};

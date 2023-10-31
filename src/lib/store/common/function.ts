@@ -2,11 +2,11 @@
 
 
 import { writable } from 'svelte/store';
-import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_maker_state, common_type_state, common_unit_state,table_state } from './state';
+import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_origin_state, common_type_state, common_unit_state,common_standard_state,table_state } from './state';
 
 // import {item_data,item_form_state} from '$lib/store/info/item/state';
 
-import {TABLE_TOTAL_CONFIG,TABLE_HEADER_CONFIG} from '$lib/module/common/constants';
+import {TABLE_TOTAL_CONFIG,TABLE_HEADER_CONFIG,TABLE_FILTER} from '$lib/module/common/constants';
 
 import axios from 'axios';
 import {v4 as uuid} from 'uuid';
@@ -37,10 +37,11 @@ let table_data : any;
 
 let product_data : any;
 
-let maker_data : any;
+let origin_data : any;
 
 let type_data : any;
 let unit_data : any;
+let standard_data : any;
 
 
 
@@ -95,8 +96,8 @@ common_product_state.subscribe((data : any) => {
   product_data = data;
 })
 
-common_maker_state.subscribe((data : any) => {
-  maker_data = data;
+common_origin_state.subscribe((data : any) => {
+  origin_data = data;
 })
 
 common_type_state.subscribe((data : any) => {
@@ -105,6 +106,9 @@ common_type_state.subscribe((data : any) => {
 
 common_unit_state.subscribe((data : any) => {
   unit_data = data;
+})
+common_standard_state.subscribe((data : any) => {
+  standard_data = data;
 })
 
 
@@ -123,6 +127,7 @@ const infoCallApi = (title) => {
 
   try {
     axios.get(url,config).then(res=>{
+      console.log('title : ',title);
      console.log('res : ',res);
      
       if(res.data.length > 0){
@@ -130,24 +135,29 @@ const infoCallApi = (title) => {
 
           product_data = res.data;
           common_product_state.update(()=> product_data);
-         
-          console.log('res시점 : ', res.data);
+        
         }
         
-        else if(title === 'maker'){
-          maker_data = res.data;
-          common_maker_state.update(()=> maker_data);
-          // item_form_data['maker'] = maker_data[0]['maker_code'];
+        else if(title === 'origin'){
+
+          origin_data = res.data;
+          console.log('res.data',res.data);
+          common_origin_state.update(()=> origin_data);
+          
         }else if(title === 'unit'){
           unit_data = res.data;
           common_unit_state.update(()=> unit_data);
-          // item_form_data['unit'] = maker_data[0]['unit_code'];
+        
         }else if(title === 'type'){
           type_data = res.data;
           common_type_state.update(()=> type_data);
-          // item_form_data['type'] = maker_data[0]['type_code'];
+        
+        }else if(title === 'standard'){
+          standard_data = res.data;
+          common_standard_state.update(()=> standard_data);
+        
         }
-        // item_form_state.update(()=> item_form_data);
+      
 
       }else {
       
@@ -207,13 +217,17 @@ const changeUrl = (obj) => {
 
 const onChangeHandler = (e) => {
   let title = e.target.name;
-  
-  
   login_data[title] = e.target.value;
   login_state.update(()=> login_data);
 
-  console.log(login_data);
   }
+  const tokenChange = (token) => {
+    
+    login_data['token'] = token;
+    login_state.update(()=> login_data);
+  
+    console.log(login_data);
+    }
 
 
   const handleToggle = (title) => {
@@ -548,19 +562,61 @@ const excelDownload = (data,title,config) => {
 
 
 
+      const select_query = (type) => {
+   
+        const url = `${api}/${type}/select`; 
+              
+        search_data['filter'] = TABLE_FILTER[type];
+        
+        common_search_state.update(() => search_data);
+
+        let start_date = moment(search_data['start_date']).format('YYYY-MM-DDTHH:mm:ss');
+
+        let end_date = moment(search_data['end_date']).format('YYYY-MM-DDTHH:mm:ss');
+        let search_text = search_data['search_text'];
+        let filter_title = search_data['filter_title'];
+        
+        let params = 
+        {
+          start_date : start_date,
+          end_date  : end_date,
+          search_text :    search_text,
+          filter_title : filter_title,   
+        };
+        const config = {
+          params : params,
+          headers:{
+            "Content-Type": "application/json",
+            
+          }
+        }
+          axios.get(url,config).then(res=>{
+            console.log('table_state : ', table_state['product']);
+            table_data[type].setData(res.data);
+            table_state.update(() => table_data);
+            console.log('table_data : ', table_data);
+         })
+      
+      }
+
+
+
+
       const makeTable = (table_state,type,tableComponent) => {
 
 
         
         const url = `${api}/${type}/select`; 
         
-        let basic_date = moment();
+        search_data['filter'] = TABLE_FILTER[type];
         
-  
-        
-        let start_date = basic_date.format('YYYY-MM-DDTHH:mm:ss');
-        let end_date = basic_date.add(10,'days').format('YYYY-MM-DDTHH:mm:ss');
+        common_search_state.update(() => search_data);
 
+        let start_date = moment(search_data['start_date']).format('YYYY-MM-DDTHH:mm:ss');
+
+        let end_date = moment(search_data['end_date']).format('YYYY-MM-DDTHH:mm:ss');
+
+      
 
         let params = 
         {
@@ -581,11 +637,12 @@ const excelDownload = (data,title,config) => {
             console.log('end : ',end_date);
            
             if(res.data.length > 0){
-              
+             
+              if(table_state[type]){
+                table_state[type].destory();
+              }
 
-              console.log('resDATA : ',res.data);
               
-
               table_data[type] =   new Tabulator(tableComponent, {
               height:TABLE_TOTAL_CONFIG['height'],
               layout:TABLE_TOTAL_CONFIG['layout'],
@@ -597,17 +654,32 @@ const excelDownload = (data,title,config) => {
               paginationAddRow:TABLE_TOTAL_CONFIG['paginationAddRow'], //add rows relative to the table
               locale: TABLE_TOTAL_CONFIG['locale'],
               langs: TABLE_TOTAL_CONFIG['langs'],
+              selectable: true,
+              rowClick:function(e, row){
+                //e - the click event object
+                //row - row component
+             
+                row.toggleSelect(); //toggle row selected state on row click
+            },
+
               rowFormatter:function(row){
                     row.getElement().classList.add("table-primary"); //mark rows with age greater than or equal to 18 as successful;
               },
+           
+
               data : res.data,
-              columns: TABLE_HEADER_CONFIG['product'],
             
+              columns: TABLE_HEADER_CONFIG['product'],
+              
+         
              
               });
               console.log('table_data  :', table_data);
 
               table_state.update(()=> table_data);
+
+          
+            
               
         }else{
           console.log("조회가 안됌");
@@ -645,5 +717,7 @@ export {handleToggle,
   minMaxFilterFunction,
   minMaxFilterEditor,
   makeTable,
+  tokenChange,
+  select_query,
 
 }

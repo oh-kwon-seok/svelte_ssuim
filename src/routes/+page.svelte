@@ -9,7 +9,7 @@
 	import src_url from '$lib/images/sea.jpeg';
 	import {common_alert_state,login_state, load_state} from '$lib/store/common/state';
 
-	import {onChangeHandler,loadChange} from '$lib/store/common/function';
+	import {onChangeHandler,loadChange,tokenChange} from '$lib/store/common/function';
 
 
 	import { setCookie, getCookie, removeCookie } from '$lib/cookies';
@@ -46,10 +46,8 @@
 			if(res.data['success'] === true){
 					// 	// 쿠키 설정
 
-					
-
-				$login_state['token'] = res.data['token'];
 				setCookie('my-cookie', $login_state['id'], { expires: 3600 });
+				tokenChange(res.data['token']);
 
 		
 				window.location.href = '/home';

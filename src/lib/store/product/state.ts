@@ -6,7 +6,7 @@ import {v4 as uuid} from 'uuid';
 
 
   const product_modal_state : any = writable( {
-    title : '',
+    title : 'add',
     add : { use : false, title: ''},
     update : { use : false, title: ''},
     delete : { use : false, title: ''},
@@ -16,16 +16,17 @@ import {v4 as uuid} from 'uuid';
    });
 
   const product_form_state : any = writable({
-    id : 0,
+    uid : 0,
     code : '',
     name : '',
-    unit : 'BOX',
-    expand : false,
-    check : false,
-    select : false,
+    unit : '',
+    standard : '',
+    type : '',
+    origin : '',
+    used : 1,
+
+
   })
-
   
-
 
   export {product_modal_state,product_form_state};

@@ -327,8 +327,26 @@ const check_delete = (data, key,value) => {
 
 
 
-const excelDownload = (data,title,config) => {
-    
+const excelDownload = (type,config) => {
+ 
+      let data =  table_data[type].getSelectedData();
+      
+      // 모든 객체에서 공통된 키(key) 이름을 찾기 위한 반복문
+      for (let i = 0; i <  data.length; i++) {
+        let currentObject =  data[i];
+
+        Object.keys(currentObject).map((key)=> {    
+        
+          if(typeof currentObject[key] === "object"){
+            data[i][key] = data[i][key]['name'];
+          }
+         
+      }); 
+
+      
+       
+      }
+
     try {
       // 엑셀 생성
 
@@ -348,21 +366,13 @@ const excelDownload = (data,title,config) => {
       // addWorksheet() 함수를 사용하여 엑셀 시트를 추가한다.
       // 엑셀 시트는 순차적으로 생성된다.
       workbook.addWorksheet('Sheet One');
-      workbook.addWorksheet('Sheet Two');
-      workbook.addWorksheet('Sheet Three');
+
      
       // 엑셀 시트를 접근하는 방법은 세 가지 방법이 존재한다.
       // 1. getWorksheet() 함수에서 시트 명칭 전달
       const sheetOne = workbook.getWorksheet('Sheet One');
-     
-      // 2. getWorksheet() 함수에서 시트 인덱스 전달
-      const sheetTwo = workbook.getWorksheet(1);
-     
-      // 3. 대괄호 표기법
-      const sheetThree = workbook.worksheets[2];
-     
-      // removeWorksheet() 함수를 사용하여 엑셀 시트를 제거한다.
-      workbook.removeWorksheet(sheetThree.id);
+  
+  
    
       // 컬럼 설정
       // header: 엑셀에 표기되는 이름
@@ -392,7 +402,7 @@ const excelDownload = (data,title,config) => {
       
     });
     let text_title : any= '';
-    switch(title){
+    switch(type){
         case 'product': 
             text_title = '품목 관리';
         break;
@@ -435,10 +445,6 @@ const excelDownload = (data,title,config) => {
 
     let file = e.target.files[0];
 
-
-    
-
-  
     reader.readAsArrayBuffer(file)
     reader.onload = () => {
       let change_data = [];
@@ -580,7 +586,7 @@ const excelDownload = (data,title,config) => {
         {
           start_date : start_date,
           end_date  : end_date,
-          search_text :    search_text,
+          search_text : search_text,
           filter_title : filter_title,   
         };
         const config = {
@@ -591,10 +597,10 @@ const excelDownload = (data,title,config) => {
           }
         }
           axios.get(url,config).then(res=>{
-            console.log('table_state : ', table_state['product']);
+            console.log('select_query : ',res);
             table_data[type].setData(res.data);
             table_state.update(() => table_data);
-            console.log('table_data : ', table_data);
+           
          })
       
       }
@@ -615,14 +621,19 @@ const excelDownload = (data,title,config) => {
         let start_date = moment(search_data['start_date']).format('YYYY-MM-DDTHH:mm:ss');
 
         let end_date = moment(search_data['end_date']).format('YYYY-MM-DDTHH:mm:ss');
-
+        let search_text = search_data['search_text'];
+        let filter_title = search_data['filter_title'];
       
 
         let params = 
         {
           start_date : start_date,
-          end_date  : end_date
+          end_date  : end_date,
+          search_text : search_text,
+          filter_title : filter_title,   
         };
+
+       
         const config = {
           params : params,
           headers:{
@@ -632,9 +643,8 @@ const excelDownload = (data,title,config) => {
         }
           axios.get(url,config).then(res=>{
             
-            console.log('res : ',res);
-            console.log('start : ',start_date);
-            console.log('end : ',end_date);
+            console.log('makeTable : ',res);
+         
            
             if(res.data.length > 0){
              

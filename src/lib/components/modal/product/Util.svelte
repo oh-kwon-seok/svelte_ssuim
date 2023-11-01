@@ -2,11 +2,12 @@
 <script>
 
     // @ts-nocheck
-    import {Indicator, Hr,P, Span,Button ,Modal, Label, Select, Input, Checkbox,Helper} from 'flowbite-svelte'
+    import { Hr, Button ,Modal, Label, Select, Input, Helper} from 'flowbite-svelte'
     
     import * as Icon from 'svelte-awesome-icons';
     
     import Toast from '$lib/components/toast/Toast.svelte';
+    import Alert from '$lib/components/alert/Alert.svelte';
     import {product_modal_state, product_form_state} from '$lib/store/product/state';
     import {common_alert_state, common_toast_state,common_type_state, common_unit_state, common_origin_state,common_standard_state} from '$lib/store/common/state';
     
@@ -142,18 +143,23 @@
 
 
 
-          {#if $common_toast_state['value'] === true}
+          <!-- {#if $common_toast_state['value'] === true}
           <Toast />
-         {/if}
+         {/if} -->
+
+         {#if $common_alert_state['type'] === 'save' && $common_alert_state['value'] === true}
+            
+         <Alert  state={'add'} color={DATA_FAIL_ALERT.color} title={DATA_FAIL_ALERT['add'].title} content={DATA_FAIL_ALERT['add'].content} />
+
+       {/if}
        
-         
-          
-          <!-- {#if $common_alert_state['type'] === 'select' && $common_alert_state['value'] === true}
+        
+          {#if $common_alert_state['type'] === 'select' && $common_alert_state['value'] === true}
             
             <Alert  state={'select'} color={DATA_SELECT_ALERT.color} title={DATA_SELECT_ALERT['select'].title} content={DATA_SELECT_ALERT['select'].content} />
 
           {/if}
-           -->
+          
 
           <div class="grid grid-cols-6 gap-4">
            
@@ -172,7 +178,7 @@
       
         </form>
         <svelte:fragment slot='footer'>
-          <Button   color={title === 'add' || title === 'update'  ? 'blue' : 'red'}   type="submit" class="w-full" on:click={save($product_form_state,title)}>{label_title}</Button>
+          <Button   color={title === 'add' || title === 'update'  ? 'blue' : 'red'}   class="w-full" on:click={()=> save(e,$product_form_state,title)}>{label_title}</Button>
           
         
         </svelte:fragment>

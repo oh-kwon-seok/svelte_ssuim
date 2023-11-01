@@ -165,15 +165,25 @@ const select_query = (type) => {
 
 }
 
-const save = (param,title) => {
+const save = (e,param,title) => {
 
+  e.preventDefault();
   
+  update_modal['title'] = 'add';
+  update_modal['add']['use'] = true;
+  // product_modal_state.update(() => update_modal);
+ 
     if(title === 'add'){
-      console.log('param : ', param);
+    
       if(param['name'] === '' || param['unit'] === '' || param['standard'] === '' || param['origin'] === '' || param['type'] === ''){
-        return common_toast_state.update(() => TOAST_SAMPLE['fail']);
+        //return common_toast_state.update(() => TOAST_SAMPLE['fail']);
+        alert['type'] = 'save';
+        alert['value'] = true;
+
+        return common_alert_state.update(() => alert);
   
       }else {
+      
         const url = `${api}/product/save`
         try {
   
@@ -220,7 +230,7 @@ const save = (param,title) => {
     
     }
     
-    else if(title === 'update'){
+    if(title === 'update'){
       const url = `${api}/product/update`
       try {
 
@@ -262,30 +272,7 @@ const save = (param,title) => {
 
 
      
-    }else if(title === 'delete'){
-     
-      product_data.update(
-        datas => {
-            let setData = datas.filter(data => data.code !== param['code']) 
-                
-       
-            
-            datas = setData
-
-            search_state['filteredItems'] = datas;
-            common_search_state.update(() => search_state);
-            
-            return datas
-        }
-    )
-        
-    
-        update_modal[title]['use'] = !update_modal[title]['use'];
-        product_modal_state.update(() => update_modal);
-        product_form_state.update(()=> init_form_data);
-    }
-
-    else if(title === 'check_delete'){
+    }if(title === 'check_delete'){
       let data =  selected_data;
       let uid_array = [];
 

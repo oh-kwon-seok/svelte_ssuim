@@ -54,6 +54,7 @@
 		"js-cookie": "^3.0.5",
 		"luxon": "3.4.3",
 		"moment": "^2.29.4",
+		"sheetjs": "2.0.0",
 		"svelte-awesome-icons": "^0.3.2",
 		"svelte-chartjs": "^3.1.2",
 		"svelte-frappe-charts": "^1.10.0",

@@ -26,7 +26,7 @@
     import {product_form_state,product_modal_state} from '$lib/store/product/state';
 
     import {url_state,cookie_state,common_product_state,table_state,common_toast_state,common_search_state} from '$lib/store/common/state';
-    import {TABLE_COMPONENT} from '$lib/module/common/constants';
+    import {TABLE_COMPONENT,EXCEL_CONFIG} from '$lib/module/common/constants';
 
     import SearchBar from '$lib/components/layout/SearchBar.svelte'
     import Toast from '$lib/components/toast/Toast.svelte'
@@ -62,16 +62,17 @@
     afterUpdate(()=> {
 
         if(data.title === 'redirect'){
-            console.log('cookie_state',cookie_state);
-            console.log('data : ', data);
+           
+            console.log('어딜까?111 : ', $product_modal_state);
             window.location.href = '/';
             alert('잘못된 주소거나 요청시간이 만료되었습니다.');
         }else if($url_state['path'] === '/product'){
             status = 'on';
-            makeTable(table_state,"product",tableComponent);
+            console.log('어딜까? : ', $product_modal_state);
+            // makeTable(table_state,"product",tableComponent);
             
         }
-        console.log('status : ', status);
+      
 
     })
 
@@ -116,10 +117,15 @@
                           추가
                         </Button>
 
-                        <Button  color='red' on:click={(e) => modalOpen('','check_delete')}>
-                          <Icon.TrashSolid class='mr-2' size="20" />
+                        <Button  color='red' on:click={() => modalOpen('','check_delete')}>
+                          <Icon.BanSolid class='mr-2' size="20" />
                           선택삭제
                         </Button>
+
+                        <Button  color='green' on:click={() =>excelDownload('product',EXCEL_CONFIG['product'])}>
+                          <Icon.FileCsvSolid class='mr-2' size="20" />
+                          엑셀다운
+                      </Button>
 
                       
 
@@ -134,18 +140,10 @@
 
                       </div>
 
-                        
-              
-                      <!-- <div id="example-table-theme" bind:this={tableComponent}></div> -->
-                      
                       <div id="example-table-theme" bind:this={tableComponent}></div>
                     </TabItem>
                    
-                    <!-- <TabItem >
-                      <span slot="title">단위 관리</span>
-                      
-                 
-                    </TabItem> -->
+                  
           
                   </Tabs>
                 <Footer />

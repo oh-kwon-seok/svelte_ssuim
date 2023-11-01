@@ -89,45 +89,44 @@ const TABLE_FILTER : any = {
 ]
 }
 
+const EXCEL_CONFIG : any = {
+    product : [
+    {header: '번호코드', key: 'uid', width: 30},
+    {header: '상품명', key: 'name', width: 30},
+    {header: '분류', key: "type", width: 30},
+    {header: '원산지', key: 'origin', width: 30},
+    {header: '규격', key: 'standard', width: 30},
+    {header: '단위', key: 'unit', width: 30},
+    {header: '등록일', key: 'created', width: 30},
+    ]
+
+
+}; 
+
 
 const TABLE_HEADER_CONFIG : any = {
     product : [
         {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
-        
         cellClick:function(e : any, cell:any){
-
             cell.getRow().toggleSelect()
-          
-          
-        },
-        
-        },
-       
-
-
+        }},
         {title:"ID", field:"uid", width:150, headerFilter:"input"},
         {title:"상품명", field:"name", width:150, headerFilter:"input", 
-        formatter:function(cell : any, formatterParams:any){
+        formatter:function(cell : any){
             var value = cell.getValue();
-          
         return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
-           
-           
          },
 
         cellClick:function(e : any, cell:any){
             let row = cell.getRow();
            if(row){
-
             modalOpen(row.getData(),"update");
            }else{
-            console.log('에러');
+          
            }
         }
-    
-    
     },
-        {title:"분류", field:"type.name", width:150, headerFilter:"list"},
+        {title:"분류", field:"type.name", width:150, headerFilter:"input"},
         
         {title:"원산지", field:"origin.name", width:150, headerFilter:"input"},
         {title:"규격", field:"standard.name", width:150, headerFilter:"input"},
@@ -190,9 +189,9 @@ const TABLE_TOTAL_CONFIG : any = {
                 "next_title":"다음 페이지",
                 "all":"전체",
                 "counter":{
-                    "showing": "Showing",
-                    "of": "of",
-                    "rows": "rows",
+                    "showing": "보여지기",
+                    "of": "중",
+                    "rows": "행",
                     "pages": "pages",
                 }
             },
@@ -225,7 +224,6 @@ export {
     TABLE_TOTAL_CONFIG,
     TABLE_HEADER_CONFIG,
     TABLE_COMPONENT,
-    TABLE_FILTER
-   
-
+    TABLE_FILTER,
+    EXCEL_CONFIG
 }

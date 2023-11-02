@@ -115,7 +115,7 @@ common_standard_state.subscribe((data : any) => {
 const infoCallApi = (title) => {
 
  
-  const url = `${api}/${title}/select`; 
+  const url = `${api}/${title}/total_select`; 
   
 
   const config = {
@@ -127,23 +127,12 @@ const infoCallApi = (title) => {
 
   try {
     axios.get(url,config).then(res=>{
-      console.log('title : ',title);
-     console.log('res : ',res);
-     
+   
+  
       if(res.data.length > 0){
-        if(title === 'product'){
-
-          product_data = res.data;
-          common_product_state.update(()=> product_data);
-        
-        }
-        
-        else if(title === 'origin'){
-
+        if(title === 'origin'){
           origin_data = res.data;
-          console.log('res.data',res.data);
           common_origin_state.update(()=> origin_data);
-          
         }else if(title === 'unit'){
           unit_data = res.data;
           common_unit_state.update(()=> unit_data);
@@ -328,104 +317,110 @@ const check_delete = (data, key,value) => {
 
 
 const excelDownload = (type,config) => {
- 
+  
       let data =  table_data[type].getSelectedData();
       
-      // 모든 객체에서 공통된 키(key) 이름을 찾기 위한 반복문
-      for (let i = 0; i <  data.length; i++) {
-        let currentObject =  data[i];
+      if(data.length > 0){
+        // 모든 객체에서 공통된 키(key) 이름을 찾기 위한 반복문
+        for (let i = 0; i <  data.length; i++) {
+          let currentObject =  data[i];
 
-        Object.keys(currentObject).map((key)=> {    
-        
-          if(typeof currentObject[key] === "object"){
-            data[i][key] = data[i][key]['name'];
-          }
-         
-      }); 
-
-      
-       
-      }
-
-    try {
-      // 엑셀 생성
-
-      // 생성자
-      workbook.creator = '작성자';
-     
-      // 최종 수정자
-      workbook.lastModifiedBy = '최종 수정자';
-     
-      // 생성일(현재 일자로 처리)
-      workbook.created = new Date();
-     
-      // 수정일(현재 일자로 처리)
-      workbook.modified = new Date();
-   
-   
-      // addWorksheet() 함수를 사용하여 엑셀 시트를 추가한다.
-      // 엑셀 시트는 순차적으로 생성된다.
-      workbook.addWorksheet('Sheet One');
-
-     
-      // 엑셀 시트를 접근하는 방법은 세 가지 방법이 존재한다.
-      // 1. getWorksheet() 함수에서 시트 명칭 전달
-      const sheetOne = workbook.getWorksheet('Sheet One');
-  
-  
-   
-      // 컬럼 설정
-      // header: 엑셀에 표기되는 이름
-      // key: 컬럼을 접근하기 위한 key
-      // hidden: 숨김 여부
-      // width: 컬럼 넓이
-      sheetOne.columns = config;
-   
-      const sampleData = data;
-      const borderStyle = {
-        top: { style: 'thin' },
-        left: { style: 'thin' },
-        bottom: { style: 'thin' },
-        right: { style: 'thin' }
-      };
-     
-      sampleData.map((item, index) => {
-        sheetOne.addRow(item);
-     
-        // 추가된 행의 컬럼 설정(헤더와 style이 다를 경우)
-        
-        for(let loop = 1; loop <= 6; loop++) {
-          const col = sheetOne.getRow(index + 2).getCell(loop);
-          col.border = borderStyle;
-          col.font = {name: 'Arial Black', size: 10};
+          Object.keys(currentObject).map((key)=> {    
+          
+            if(typeof currentObject[key] === "object"){
+              data[i][key] = data[i][key]['name'];
+            }
+          
+          }); 
         }
-      
-    });
-    let text_title : any= '';
-    switch(type){
-        case 'product': 
-            text_title = '품목 관리';
-        break;
-        
-        default:
-            text_title = '제목 없음';
-        break;
-  }
 
+        try {
+
+          let text_title : any= '';
+          switch(type){
+              case 'product': 
+                  text_title = '품목 관리';
+              break;
+              
+              default:
+                  text_title = '제목 없음';
+              break;
+        }
+
+        const workbook = new Excel.Workbook();
+          // 엑셀 생성
+    
+          // 생성자
+          workbook.creator = '작성자';
+         
+          // 최종 수정자
+          workbook.lastModifiedBy = '최종 수정자';
+         
+          // 생성일(현재 일자로 처리)
+          workbook.created = new Date();
+         
+          // 수정일(현재 일자로 처리)
+          workbook.modified = new Date();
+
+          let file_name = text_title + moment().format('YYYY-MM-DD HH:mm:ss') + '.xlsx';
+          let sheet_name = moment().format('YYYYMMDDHH:mm:ss');
+       
         
+          workbook.addWorksheet(text_title);
+             
+  
+          const sheetOne = workbook.getWorksheet(text_title);
+               
+               
+                
+          // 컬럼 설정
+          // header: 엑셀에 표기되는 이름
+          // key: 컬럼을 접근하기 위한 key
+          // hidden: 숨김 여부
+          // width: 컬럼 넓이
+          sheetOne.columns = config;
+       
+          const sampleData = data;
+          const borderStyle = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' }
+          };
+         
+          sampleData.map((item, index) => {
+            sheetOne.addRow(item);
+         
+            // 추가된 행의 컬럼 설정(헤더와 style이 다를 경우)
+            
+            for(let loop = 1; loop <= 6; loop++) {
+              const col = sheetOne.getRow(index + 2).getCell(loop);
+              col.border = borderStyle;
+              col.font = {name: 'Arial Black', size: 10};
+            }
+          
+        });
+    
+    
+            
+       
+          workbook.xlsx.writeBuffer().then((data) => {
+            const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+            const url = window.URL.createObjectURL(blob);
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.download = file_name;
+            anchor.click();
+            window.URL.revokeObjectURL(url);
+          })
+        } catch(error) {
+          console.error(error);
+        }
+
+      }else{
+        alert('데이터를 선택해주세요');
+      }
    
-      workbook.xlsx.writeBuffer().then((data) => {
-        const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-        const url = window.URL.createObjectURL(blob);
-        const anchor = document.createElement('a');
-        anchor.href = url;
-        anchor.download = text_title + moment().format('YYYY-MM-DD') + '.xlsx';
-        anchor.click();
-        window.URL.revokeObjectURL(url);
-      })
-    } catch(error) {
-      console.error(error);
-    }
   }
 
   const fileButtonClick = (id) => {
@@ -598,6 +593,8 @@ const excelDownload = (type,config) => {
         }
           axios.get(url,config).then(res=>{
             console.log('select_query : ',res);
+            console.log('table_data : ',table_data);
+            
             table_data[type].setData(res.data);
             table_state.update(() => table_data);
            
@@ -665,6 +662,8 @@ const excelDownload = (type,config) => {
               locale: TABLE_TOTAL_CONFIG['locale'],
               langs: TABLE_TOTAL_CONFIG['langs'],
               selectable: true,
+             
+
               rowClick:function(e, row){
                 //e - the click event object
                 //row - row component
@@ -692,8 +691,48 @@ const excelDownload = (type,config) => {
             
               
         }else{
-          console.log("조회가 안됌");
+          
+          if(table_state[type]){
+            table_state[type].destory();
+          }
 
+          table_data[type] =   new Tabulator(tableComponent, {
+            height:TABLE_TOTAL_CONFIG['height'],
+            layout:TABLE_TOTAL_CONFIG['layout'],
+            pagination:TABLE_TOTAL_CONFIG['pagination'],
+            paginationSize:TABLE_TOTAL_CONFIG['paginationSize'],
+            paginationSizeSelector:TABLE_TOTAL_CONFIG['paginationSizeSelector'],
+            movableColumns:TABLE_TOTAL_CONFIG['movableColumns'],
+            paginationCounter: TABLE_TOTAL_CONFIG['paginationCounter'],
+            paginationAddRow:TABLE_TOTAL_CONFIG['paginationAddRow'], //add rows relative to the table
+            locale: TABLE_TOTAL_CONFIG['locale'],
+            langs: TABLE_TOTAL_CONFIG['langs'],
+            selectable: true,
+            placeholder:"데이터 없음",
+            rowClick:function(e, row){
+              //e - the click event object
+              //row - row component
+           
+              row.toggleSelect(); //toggle row selected state on row click
+          },
+
+            rowFormatter:function(row){
+                  row.getElement().classList.add("table-primary"); //mark rows with age greater than or equal to 18 as successful;
+            },
+         
+
+            data : [],
+          
+            columns: TABLE_HEADER_CONFIG['product'],
+            
+      
+            });
+            console.log('table_data  :', table_data);
+
+            table_state.update(()=> table_data);
+
+
+       
         }
          })
 

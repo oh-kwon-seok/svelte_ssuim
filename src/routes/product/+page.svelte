@@ -56,25 +56,22 @@
 
     });
 
- 
-
-   
     afterUpdate(()=> {
 
         if(data.title === 'redirect'){
-           
-            console.log('어딜까?111 : ', $product_modal_state);
             window.location.href = '/';
             alert('잘못된 주소거나 요청시간이 만료되었습니다.');
         }else if($url_state['path'] === '/product'){
-            status = 'on';
-            console.log('어딜까? : ', $product_modal_state);
-            // makeTable(table_state,"product",tableComponent);
+         
+     
+            makeTable(table_state,"product",tableComponent);
             
         }
       
 
     })
+     
+ 
 
  
 

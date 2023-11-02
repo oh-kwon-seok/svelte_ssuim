@@ -16,7 +16,7 @@
     const timeout = () => {
         if (--counter > 0)
       return setTimeout(timeout, 1000);
-      
+        
         common_toast_state.update(()=> TOAST_SAMPLE['success']);
 
     }

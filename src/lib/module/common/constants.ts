@@ -139,11 +139,6 @@ const TABLE_HEADER_CONFIG : any = {
             const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
             return date;
         },
-       
-
-        
-    
-    
     }],
 }
 
@@ -152,7 +147,7 @@ let TABLE_COMPONENT : any = "example-table-theme";
 
 
 const TABLE_TOTAL_CONFIG : any = {
-    layout: "fitData",
+    layout: "fitDataTable",
     pagination:"local",
   
     paginationSize:10,

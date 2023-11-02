@@ -83,6 +83,8 @@ const modalOpen = (data : any, title : any) => {
   console.log('title : ', title);
   
     alert['type'] = 'save';
+    alert['value'] = false;
+    
     common_alert_state.update(() => alert);
     update_modal['title'] = title;
     update_modal[title]['use'] = true;
@@ -165,13 +167,11 @@ const select_query = (type) => {
 
 }
 
-const save = (e,param,title) => {
+const save = (param,title) => {
 
-  e.preventDefault();
-  
+
   update_modal['title'] = 'add';
   update_modal['add']['use'] = true;
-  // product_modal_state.update(() => update_modal);
  
     if(title === 'add'){
     
@@ -179,7 +179,8 @@ const save = (e,param,title) => {
         //return common_toast_state.update(() => TOAST_SAMPLE['fail']);
         alert['type'] = 'save';
         alert['value'] = true;
-
+        product_modal_state.update(() => update_modal);
+ 
         return common_alert_state.update(() => alert);
   
       }else {

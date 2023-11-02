@@ -35,17 +35,18 @@
     }
 
     let color = title === 'add' || title === 'update' ? 'blue' : 'red'; 
-    
-    
+
+
+  
 
     </script>
 
  
 
-    <Modal title={`품목 ${label_title}`} color={color} bind:open={$product_modal_state[title]['use']} size="xl" placement={title === 'add' || title === 'check_delete'  ? 'center' : 'center-right'}   autoclose class="w-full">
-        <form  action="#">
+    <Modal title={`품목 ${label_title}`} color={color} bind:open={$product_modal_state[title]['use']} size="xl" placement={title === 'add' || title === 'check_delete'  ? 'center' : 'center-right'}   class="w-full">
+       
           <!-- grid grid-cols-2 gap-4 -->
-
+        <form action="#">
           {#if title === 'add' || title === 'update'}
    
         <div class="grid grid-cols-2 gap-4">
@@ -177,11 +178,15 @@
       
       
         </form>
-        <svelte:fragment slot='footer'>
-          <Button   color={title === 'add' || title === 'update'  ? 'blue' : 'red'}   class="w-full" on:click={()=> save(e,$product_form_state,title)}>{label_title}</Button>
+        <!-- <svelte:fragment slot='footer'>
+          <Button  color={title === 'add' || title === 'update'  ? 'blue' : 'red'}   class="w-full" on:click={save($product_form_state,title)}>{label_title}</Button>
+       
           
         
-        </svelte:fragment>
+        </svelte:fragment> -->
+        <Button  color={title === 'add' || title === 'update'  ? 'blue' : 'red'}   class="w-full" on:click={save($product_form_state,title)}>{label_title}</Button>
+       
+       
         {#if $common_alert_state['type'] === 'save' && $common_alert_state['value'] === true}
      
         

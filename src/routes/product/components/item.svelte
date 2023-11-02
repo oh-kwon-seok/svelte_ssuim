@@ -36,7 +36,7 @@
         <Icon.FloppyDiskSolid class='mr-2' size="20" />
         추가
       </Button>
-      <Button  color='green' on:click={excelDownload($common_search_state['filteredItems'],'info_item',EXCEL_INFO_ITEM_CONFIG)}>
+    <Button  color='green' on:click={excelDownload($common_search_state['filteredItems'],'info_item',EXCEL_INFO_ITEM_CONFIG)}>
         <Icon.DownloadSolid class='mr-2' size="20" />
         Download
     </Button>

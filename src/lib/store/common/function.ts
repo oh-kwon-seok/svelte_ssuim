@@ -115,7 +115,7 @@ common_standard_state.subscribe((data : any) => {
 const infoCallApi = (title) => {
 
  
-  const url = `${api}/${title}/total_select`; 
+  const url = `${api}/${title}/info_select`; 
   
 
   const config = {

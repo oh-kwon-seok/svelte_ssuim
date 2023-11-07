@@ -73,7 +73,7 @@ common_selected_state.subscribe((data) => {
 
 
 
-const modalOpen = (data : any, title : any) => {
+const originModalOpen = ( data : any, title : any) => {
   console.log('data : ', data);
 
   console.log('title : ', title);
@@ -93,8 +93,14 @@ const modalOpen = (data : any, title : any) => {
      
     }
     if(title === 'update' ){
-       
-   
+        console.log('ㅎㅎ : ');
+
+        Object.keys(update_form).map((item)=> {    
+        
+            update_form[item] = data[item];
+         
+      }); 
+
             origin_form_state.update(() => update_form);
             origin_modal_state.update(() => update_modal);
         
@@ -104,7 +110,7 @@ const modalOpen = (data : any, title : any) => {
 
       common_selected_state.update(() => data);
       
-      console.log('modalOpen : ', data);
+      console.log('OriginModalOpen : ', data);
       let uid_array = [];
       if(data.length === 0){
         alert['value'] = true;
@@ -129,7 +135,7 @@ const save = (param,title) => {
  
     if(title === 'add'){
     
-      if(param['name'] === '' || param['unit'] === '' || param['standard'] === '' || param['origin'] === '' || param['type'] === ''){
+      if(param['name'] === ''){
         //return common_toast_state.update(() => TOAST_SAMPLE['fail']);
         alert['type'] = 'save';
         alert['value'] = true;
@@ -145,12 +151,7 @@ const save = (param,title) => {
           
           let params = {
             name : param.name,
-            unit_uid : param.unit,
-            standard_uid : param.standard,
-            origin_uid : param.origin,
-            type_uid : param.type,
             used : param.used,
-            
             token : login_data['token'],
           };
         axios.post(url,
@@ -192,13 +193,11 @@ const save = (param,title) => {
         let params = {
           uid : param.uid,
           name : param.name,
-          unit_uid : param.unit,
-          standard_uid : param.standard,
-          origin_uid : param.origin,
-          type_uid : param.type,
           used : param.used,
           token : login_data['token'],
         };
+
+        console.log('params : ', params);
       axios.post(url,
         params,
       ).then(res => {
@@ -370,4 +369,4 @@ const save = (param,title) => {
 
 
 
-export {modalOpen,save}
+export {originModalOpen,save}

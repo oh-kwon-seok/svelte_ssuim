@@ -29,6 +29,8 @@
 		infoCallApi('type');
 		infoCallApi('standard');
 		infoCallApi('origin');
+		infoCallApi('car');
+		
 		
 
 	

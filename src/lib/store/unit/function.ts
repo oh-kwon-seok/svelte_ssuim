@@ -73,7 +73,7 @@ common_selected_state.subscribe((data) => {
 
 
 
-const modalOpen = (data : any, title : any) => {
+const unitModalOpen = (data : any, title : any) => {
   console.log('data : ', data);
 
   console.log('title : ', title);
@@ -93,28 +93,21 @@ const modalOpen = (data : any, title : any) => {
      
     }
     if(title === 'update' ){
-       
-   
-        Object.keys(update_form).map((item)=> {    
-            if(item === 'unit' || item === 'standard' || item === 'type' || item === 'origin'){
-              update_form[item] = data[item]['uid'];
-            }else{
-              update_form[item] = data[item];
-            }
-           
-        }); 
-
+          Object.keys(update_form).map((item)=> {    
+            
+            update_form[item] = data[item];
+        
+          }); 
             unit_form_state.update(() => update_form);
             unit_modal_state.update(() => update_modal);
-            console.log('update_modal : ', update_modal);
-
+           
     }
     if(title === 'check_delete'){
       let data =  table_data['unit'].getSelectedData();
 
       common_selected_state.update(() => data);
       
-      console.log('modalOpen : ', data);
+      console.log('UnitModalOpen : ', data);
       let uid_array = [];
       if(data.length === 0){
         alert['value'] = true;
@@ -139,7 +132,7 @@ const save = (param,title) => {
  
     if(title === 'add'){
     
-      if(param['name'] === '' || param['unit'] === '' || param['standard'] === '' || param['origin'] === '' || param['type'] === ''){
+      if(param['name'] === '' ){
         //return common_toast_state.update(() => TOAST_SAMPLE['fail']);
         alert['type'] = 'save';
         alert['value'] = true;
@@ -155,10 +148,7 @@ const save = (param,title) => {
           
           let params = {
             name : param.name,
-            unit_uid : param.unit,
-            standard_uid : param.standard,
-            origin_uid : param.origin,
-            type_uid : param.type,
+          
             used : param.used,
             
             token : login_data['token'],
@@ -202,10 +192,7 @@ const save = (param,title) => {
         let params = {
           uid : param.uid,
           name : param.name,
-          unit_uid : param.unit,
-          standard_uid : param.standard,
-          origin_uid : param.origin,
-          type_uid : param.type,
+      
           used : param.used,
           token : login_data['token'],
         };
@@ -380,4 +367,4 @@ const save = (param,title) => {
 
 
 
-export {modalOpen,save}
+export {unitModalOpen,save}

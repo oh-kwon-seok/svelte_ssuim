@@ -2,7 +2,7 @@
 
 
 import { writable } from 'svelte/store';
-import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_origin_state, common_type_state, common_unit_state,common_standard_state,table_state } from './state';
+import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_origin_state, common_type_state, common_unit_state,common_standard_state,common_car_state,table_state } from './state';
 
 // import {item_data,item_form_state} from '$lib/store/info/item/state';
 
@@ -42,7 +42,7 @@ let origin_data : any;
 let type_data : any;
 let unit_data : any;
 let standard_data : any;
-
+let car_data : any;
 
 
 const workbook = new Excel.Workbook();
@@ -110,6 +110,9 @@ common_unit_state.subscribe((data : any) => {
 common_standard_state.subscribe((data : any) => {
   standard_data = data;
 })
+common_car_state.subscribe((data : any) => {
+  car_data = data;
+})
 
 
 const infoCallApi = (title) => {
@@ -144,6 +147,10 @@ const infoCallApi = (title) => {
         }else if(title === 'standard'){
           standard_data = res.data;
           common_standard_state.update(()=> standard_data);
+        
+        }else if(title === 'car'){
+          car_data = res.data;
+          common_car_state.update(()=> standard_data);
         
         }
       
@@ -608,6 +615,9 @@ const excelDownload = (type,config) => {
       const makeTable = (table_state,type,tableComponent) => {
 
 
+        console.log(table_state);
+        console.log(type);
+        console.log(tableComponent);
         
         const url = `${api}/${type}/select`; 
         
@@ -678,7 +688,7 @@ const excelDownload = (type,config) => {
 
               data : res.data,
             
-              columns: TABLE_HEADER_CONFIG['product'],
+              columns: TABLE_HEADER_CONFIG[type],
               
          
              
@@ -723,7 +733,7 @@ const excelDownload = (type,config) => {
 
             data : [],
           
-            columns: TABLE_HEADER_CONFIG['product'],
+            columns: TABLE_HEADER_CONFIG[type],
             
       
             });

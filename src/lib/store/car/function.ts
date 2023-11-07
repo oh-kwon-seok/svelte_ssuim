@@ -3,13 +3,13 @@
 //@ts-nocheck
 
 import { writable } from 'svelte/store';
-import {product_modal_state,product_form_state} from './state';
+import {car_modal_state,car_form_state} from './state';
 
 import {v4 as uuid} from 'uuid';
 import axios from 'axios'
 import {common_alert_state, common_toast_state,common_search_state,login_state,table_state,common_selected_state} from '$lib/store/common/state';
 import moment from 'moment';
-
+import {select_query} from '$lib/store/common/function';
 import {TOAST_SAMPLE} from '$lib/module/common/constants';
 
 const api = import.meta.env.VITE_API_BASE_URL;
@@ -33,20 +33,16 @@ let init_form_data = {
   uid : 0,
   code : '',
   name : '',
-  unit : '',
-  standard : '',
-  type : '',
-  origin : '',
   used : 1,
 
 }
 
 
-product_modal_state.subscribe((data) => {
+car_modal_state.subscribe((data) => {
     update_modal = data;
 })
 
-product_form_state.subscribe((data) => {
+car_form_state.subscribe((data) => {
     update_form = data;
 })
 
@@ -77,7 +73,7 @@ common_selected_state.subscribe((data) => {
 
 
 
-const productModalOpen = (data : any, title : any) => {
+const carModalOpen = (data : any, title : any) => {
   console.log('data : ', data);
 
   console.log('title : ', title);
@@ -88,37 +84,30 @@ const productModalOpen = (data : any, title : any) => {
     common_alert_state.update(() => alert);
     update_modal['title'] = title;
     update_modal[title]['use'] = true;
-    product_modal_state.update(() => update_modal);
+    car_modal_state.update(() => update_modal);
 
     console.log('update_modal : ', update_modal);
 
     if(title === 'add'){
-      product_form_state.update(() => init_form_data);
+      car_form_state.update(() => init_form_data);
      
     }
     if(title === 'update' ){
-       
-   
-        Object.keys(update_form).map((item)=> {    
-            if(item === 'unit' || item === 'standard' || item === 'type' || item === 'origin'){
-              update_form[item] = data[item]['uid'];
-            }else{
-              update_form[item] = data[item];
-            }
+          Object.keys(update_form).map((item)=> {    
+            
+            update_form[item] = data[item];
+        
+          }); 
+            car_form_state.update(() => update_form);
+            car_modal_state.update(() => update_modal);
            
-        }); 
-
-            product_form_state.update(() => update_form);
-            product_modal_state.update(() => update_modal);
-            console.log('update_modal : ', update_modal);
-
     }
     if(title === 'check_delete'){
-      let data =  table_data['product'].getSelectedData();
+      let data =  table_data['car'].getSelectedData();
 
       common_selected_state.update(() => data);
       
-      console.log('modalOpen : ', data);
+      console.log('carModalOpen : ', data);
       let uid_array = [];
       if(data.length === 0){
         alert['value'] = true;
@@ -134,38 +123,6 @@ const productModalOpen = (data : any, title : any) => {
 
 
 
-const select_query = (type) => {
-   
-  const url = `${api}/${type}/select`; 
-        
-  let basic_date = moment().subtract(90,'days');
-  
-
-  
-  let start_date = basic_date.format('YYYY-MM-DDTHH:mm:ss');
-  let end_date = basic_date.add(150,'days').format('YYYY-MM-DDTHH:mm:ss');
-
-
-  let params = 
-  {
-    start_date : start_date,
-    end_date  : end_date
-  };
-  const config = {
-    params : params,
-    headers:{
-      "Content-Type": "application/json",
-      
-    }
-  }
-    axios.get(url,config).then(res=>{
-      console.log('table_state : ', table_state['product']);
-      table_data[type].setData(res.data);
-      table_state.update(() => table_data);
-      console.log('table_data : ', table_data);
-   })
-
-}
 
 const save = (param,title) => {
 
@@ -175,26 +132,23 @@ const save = (param,title) => {
  
     if(title === 'add'){
     
-      if(param['name'] === '' || param['unit'] === '' || param['standard'] === '' || param['origin'] === '' || param['type'] === ''){
+      if(param['name'] === '' ){
         //return common_toast_state.update(() => TOAST_SAMPLE['fail']);
         alert['type'] = 'save';
         alert['value'] = true;
-        product_modal_state.update(() => update_modal);
+        car_modal_state.update(() => update_modal);
  
         return common_alert_state.update(() => alert);
   
       }else {
       
-        const url = `${api}/product/save`
+        const url = `${api}/car/save`
         try {
   
           
           let params = {
             name : param.name,
-            unit_uid : param.unit,
-            standard_uid : param.standard,
-            origin_uid : param.origin,
-            type_uid : param.type,
+          
             used : param.used,
             
             token : login_data['token'],
@@ -211,7 +165,7 @@ const save = (param,title) => {
             toast['value'] = true;
             update_modal['title'] = '';
             update_modal['add']['use'] = !update_modal['add']['use'];
-            product_modal_state.update(() => update_modal);
+            car_modal_state.update(() => update_modal);
 
             
 
@@ -232,16 +186,13 @@ const save = (param,title) => {
     }
     
     if(title === 'update'){
-      const url = `${api}/product/update`
+      const url = `${api}/car/update`
       try {
 
         let params = {
           uid : param.uid,
           name : param.name,
-          unit_uid : param.unit,
-          standard_uid : param.standard,
-          origin_uid : param.origin,
-          type_uid : param.type,
+      
           used : param.used,
           token : login_data['token'],
         };
@@ -257,9 +208,9 @@ const save = (param,title) => {
           toast['value'] = true;
           update_modal['title'] = '';
           update_modal['update']['use'] = false;
-          product_modal_state.update(() => update_modal);
-          product_form_state.update(()=> init_form_data);
-          select_query('product');
+          car_modal_state.update(() => update_modal);
+          car_form_state.update(()=> init_form_data);
+          select_query('car');
           return common_toast_state.update(() => toast);
 
         }else{
@@ -290,7 +241,7 @@ const save = (param,title) => {
 
         if(uid_array.length > 0){
 
-          const url = `${api}/product/delete`
+          const url = `${api}/car/delete`
           try {
     
             let params = {
@@ -308,10 +259,10 @@ const save = (param,title) => {
               toast['value'] = true;
               update_modal['title'] = '';
               update_modal['update']['use'] = false;
-              product_modal_state.update(() => update_modal);
-              product_form_state.update(()=> init_form_data);
+              car_modal_state.update(() => update_modal);
+              car_form_state.update(()=> init_form_data);
 
-              select_query('product');
+              select_query('car');
     
               return common_toast_state.update(() => toast);
     
@@ -335,8 +286,8 @@ const save = (param,title) => {
         
 
         update_modal[title]['use'] = !update_modal[title]['use'];
-        product_modal_state.update(() => update_modal);
-        product_form_state.update(()=> init_form_data);
+        car_modal_state.update(() => update_modal);
+        car_form_state.update(()=> init_form_data);
     }
 
 
@@ -353,7 +304,7 @@ const save = (param,title) => {
   //       maker : update_form['maker'],
   //       code : '',
   //       name : '',
-  //       unit : 'BOX',
+  //       car : 'BOX',
   //       type : '완제품',
   //       check : false,
   //       use_qty : 0,
@@ -388,7 +339,7 @@ const save = (param,title) => {
   //     update_form['child'].pop();
   //   }
   
-  //   product_form_state.update(() => update_form);
+  //   car_form_state.update(() => update_form);
     
   // }
 
@@ -405,7 +356,7 @@ const save = (param,title) => {
   
   //   }
     
-  //   product_form_state.update(() => update_form);
+  //   car_form_state.update(() => update_form);
     
 
 
@@ -416,4 +367,4 @@ const save = (param,title) => {
 
 
 
-export {productModalOpen,save}
+export {carModalOpen,save}

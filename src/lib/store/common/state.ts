@@ -67,6 +67,8 @@ const url_state : any = writable({ path : '', query : ''});
   
   const common_standard_state : any = writable([]);
   
+  const common_car_state : any = writable([]);
+  
   const common_selected_state : any = writable([]); // 삭제용 데이터
 
-  export {menu_state,cookie_state,load_state,common_alert_state,common_search_state,login_state,url_state,common_product_state,common_origin_state, common_type_state,common_standard_state,common_unit_state,common_toast_state,table_state,common_selected_state};
+  export {menu_state,cookie_state,load_state,common_alert_state,common_search_state,login_state,url_state,common_product_state,common_origin_state, common_type_state,common_standard_state,common_unit_state,common_toast_state,table_state,common_car_state,common_selected_state};

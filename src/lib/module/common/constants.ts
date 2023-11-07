@@ -1,9 +1,22 @@
 
 import { DateTime } from 'luxon';
-import {modalOpen} from '$lib/store/product/function';
+
+
 import {product_modal_state} from '$lib/store/product/state';
 
 import {table_state} from '$lib/store/common/state';
+
+
+
+import {productModalOpen} from '$lib/store/product/function';
+import { originModalOpen } from '$lib/store/origin/function';
+import { typeModalOpen } from '$lib/store/type/function';
+import { standardModalOpen } from '$lib/store/standard/function';
+import { unitModalOpen } from '$lib/store/unit/function';
+import { carModalOpen } from '$lib/store/car/function';
+
+
+
 
 
 let table_data : any;
@@ -85,8 +98,30 @@ const TABLE_FILTER : any = {
     {value : "origin", name : "원산지"},
     {value : "standard", name : "규격"},
     {value : "unit", name : "단위"},
+    ],
+    origin : [
+        {value : "all",name : "전체"},
+        {value : "name", name : "원산지"},
+    ],
+    type : [
+        {value : "all",name : "전체"},
+        {value : "name", name : "품목분류"},
+    ],
+    standard : [
+        {value : "all",name : "전체"},
+        {value : "name", name : "규격"},
+    ],
+    unit : [
+        {value : "all",name : "전체"},
+        {value : "name", name : "단위"},
+    ],
+    car : [
+        {value : "all",name : "전체"},
+        {value : "name", name : "차량번호"},
+    ],
 
-]
+
+
 }
 
 const EXCEL_CONFIG : any = {
@@ -98,7 +133,33 @@ const EXCEL_CONFIG : any = {
     {header: '규격', key: 'standard', width: 30},
     {header: '단위', key: 'unit', width: 30},
     {header: '등록일', key: 'created', width: 30},
-    ]
+    ],
+    origin : [
+        {header: '번호코드', key: 'uid', width: 30},
+        {header: '원산지', key: 'name', width: 30},
+        {header: '등록일', key: 'created', width: 30},
+    ],
+    type : [
+        {header: '번호코드', key: 'uid', width: 30},
+        {header: '품목분류', key: 'name', width: 30},
+        {header: '등록일', key: 'created', width: 30},
+    ],
+    standard : [
+        {header: '번호코드', key: 'uid', width: 30},
+        {header: '규격', key: 'name', width: 30},
+        {header: '등록일', key: 'created', width: 30},
+    ],
+    unit : [
+        {header: '번호코드', key: 'uid', width: 30},
+        {header: '단위', key: 'name', width: 30},
+        {header: '등록일', key: 'created', width: 30},
+    ],
+    car : [
+        {header: '번호코드', key: 'uid', width: 30},
+        {header: '차량번호', key: 'name', width: 30},
+        {header: '등록일', key: 'created', width: 30},
+    ],
+
 
 
 }; 
@@ -120,7 +181,7 @@ const TABLE_HEADER_CONFIG : any = {
         cellClick:function(e : any, cell:any){
             let row = cell.getRow();
            if(row){
-            modalOpen(row.getData(),"update");
+            productModalOpen(row.getData(),"update");
            }else{
           
            }
@@ -132,6 +193,154 @@ const TABLE_HEADER_CONFIG : any = {
         {title:"규격", field:"standard.name", width:150, headerFilter:"input"},
         {title:"단위", field:"unit.name", width:150, headerFilter:"input"},
         
+        {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
+        formatter: function(cell : any, formatterParams: any, onRendered: any) {
+            // Luxon을 사용하여 datetime 값을 date로 변환
+            const datetimeValue = cell.getValue();
+            const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
+            return date;
+        },
+    }],
+
+    origin : [
+        {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
+        cellClick:function(e : any, cell:any){
+            cell.getRow().toggleSelect()
+        }},
+        {title:"ID", field:"uid", width:150, headerFilter:"input"},
+        {title:"원산지", field:"name", width:150, headerFilter:"input", 
+        formatter:function(cell : any){
+            var value = cell.getValue();
+        return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
+         },
+
+        cellClick:function(e : any, cell:any){
+            let row = cell.getRow();
+           if(row){
+            originModalOpen(row.getData(),"update");
+           }else{
+          
+           }
+        }
+    },
+        {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
+        formatter: function(cell : any, formatterParams: any, onRendered: any) {
+            // Luxon을 사용하여 datetime 값을 date로 변환
+            const datetimeValue = cell.getValue();
+            const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
+            return date;
+        },
+    }],
+
+    type : [
+        {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
+        cellClick:function(e : any, cell:any){
+            cell.getRow().toggleSelect()
+        }},
+        {title:"ID", field:"uid", width:150, headerFilter:"input"},
+        {title:"품목분류", field:"name", width:150, headerFilter:"input", 
+        formatter:function(cell : any){
+            var value = cell.getValue();
+        return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
+         },
+
+        cellClick:function(e : any, cell:any){
+            let row = cell.getRow();
+           if(row){
+            typeModalOpen(row.getData(),"update");
+           }else{
+          
+           }
+        }
+    },
+        {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
+        formatter: function(cell : any, formatterParams: any, onRendered: any) {
+            // Luxon을 사용하여 datetime 값을 date로 변환
+            const datetimeValue = cell.getValue();
+            const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
+            return date;
+        },
+    }],
+
+    standard : [
+        {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
+        cellClick:function(e : any, cell:any){
+            cell.getRow().toggleSelect()
+        }},
+        {title:"ID", field:"uid", width:150, headerFilter:"input"},
+        {title:"규격", field:"name", width:150, headerFilter:"input", 
+        formatter:function(cell : any){
+            var value = cell.getValue();
+        return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
+         },
+
+        cellClick:function(e : any, cell:any){
+            let row = cell.getRow();
+           if(row){
+            standardModalOpen(row.getData(),"update");
+           }else{
+          
+           }
+        }
+    },
+        {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
+        formatter: function(cell : any, formatterParams: any, onRendered: any) {
+            // Luxon을 사용하여 datetime 값을 date로 변환
+            const datetimeValue = cell.getValue();
+            const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
+            return date;
+        },
+    }],
+    unit : [
+        {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
+        cellClick:function(e : any, cell:any){
+            cell.getRow().toggleSelect()
+        }},
+        {title:"ID", field:"uid", width:150, headerFilter:"input"},
+        {title:"단위", field:"name", width:150, headerFilter:"input", 
+        formatter:function(cell : any){
+            var value = cell.getValue();
+        return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
+         },
+
+        cellClick:function(e : any, cell:any){
+            let row = cell.getRow();
+           if(row){
+            unitModalOpen(row.getData(),"update");
+           }else{
+          
+           }
+        }
+    },
+        {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
+        formatter: function(cell : any, formatterParams: any, onRendered: any) {
+            // Luxon을 사용하여 datetime 값을 date로 변환
+            const datetimeValue = cell.getValue();
+            const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
+            return date;
+        },
+    }],
+    car : [
+        {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
+        cellClick:function(e : any, cell:any){
+            cell.getRow().toggleSelect()
+        }},
+        {title:"ID", field:"uid", width:150, headerFilter:"input"},
+        {title:"차량번호", field:"name", width:150, headerFilter:"input", 
+        formatter:function(cell : any){
+            var value = cell.getValue();
+        return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
+         },
+
+        cellClick:function(e : any, cell:any){
+            let row = cell.getRow();
+           if(row){
+            carModalOpen(row.getData(),"update");
+           }else{
+          
+           }
+        }
+    },
         {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
         formatter: function(cell : any, formatterParams: any, onRendered: any) {
             // Luxon을 사용하여 datetime 값을 date로 변환
@@ -222,3 +431,5 @@ export {
     TABLE_FILTER,
     EXCEL_CONFIG
 }
+
+

@@ -15,17 +15,17 @@
     import { ChevronDownSolid, SearchOutline } from 'flowbite-svelte-icons';
 
 
-    import Util from '$lib/components/modal/product/Util.svelte';
+    import Util from '$lib/components/modal/standard/Util.svelte';
     
 
     import * as Icon from 'svelte-awesome-icons';
 
-    import {productModalOpen} from '$lib/store/product/function';
+    import {standardModalOpen} from '$lib/store/standard/function';
     import {excelDownload, excelUpload, fileButtonClick} from '$lib/store/common/function';
     
-    import {product_form_state,product_modal_state} from '$lib/store/product/state';
+    import {standard_form_state,standard_modal_state} from '$lib/store/standard/state';
 
-    import {url_state,cookie_state,common_product_state,table_state,common_toast_state,common_search_state} from '$lib/store/common/state';
+    import {url_state,cookie_state,common_standard_state,table_state,common_toast_state,common_search_state} from '$lib/store/common/state';
     import {TABLE_COMPONENT,EXCEL_CONFIG} from '$lib/module/common/constants';
 
     import SearchBar from '$lib/components/layout/SearchBar.svelte'
@@ -52,7 +52,7 @@
     onMount(()=>{
         console.log('시점');
        
-        makeTable(table_state,"product",tableComponent);
+        makeTable(table_state,"standard",tableComponent);
 
     });
 
@@ -61,9 +61,9 @@
         if(data.title === 'redirect'){
             window.location.href = '/';
             alert('잘못된 주소거나 요청시간이 만료되었습니다.');
-        }else if($url_state['path'] === '/product'){
+        }else if($url_state['path'] === '/standard'){
          
-            makeTable(table_state,"product",tableComponent);
+            makeTable(table_state,"standard",tableComponent);
         }
       
     })
@@ -87,7 +87,7 @@
               <SideBar />
             </div>
             <div class="col-span-1 row-span-1"> 
-              <Title title='기준정보 관리' subtitle='품목관리'/>
+              <Title title='기준정보 관리' subtitle='규격관리'/>
             </div>
 
            
@@ -98,36 +98,36 @@
                     <TabItem  open >
                    
 
-                      <span slot="title">품목 관리</span>
+                      <span slot="title">규격 관리</span>
 
                 
-                      <SearchBar title="product"/>
+                      <SearchBar title="standard"/>
 
 
                       <div class='m-5'>
 
-                        <Button  on:click={() => {productModalOpen('','add')}}>
+                        <Button  on:click={() => {standardModalOpen('','add')}}>
                           <Icon.FloppyDiskSolid class='mr-2' size="20" />
                           추가
                         </Button>
 
-                        <Button  color='red' on:click={() => productModalOpen('','check_delete')}>
+                        <Button  color='red' on:click={() => standardModalOpen('','check_delete')}>
                           <Icon.BanSolid class='mr-2' size="20" />
                           선택삭제
                         </Button>
 
-                        <Button  color='green' on:click={() =>excelDownload('product',EXCEL_CONFIG['product'])}>
+                        <Button  color='green' on:click={() =>excelDownload('standard',EXCEL_CONFIG['standard'])}>
                           <Icon.FileCsvSolid class='mr-2' size="20" />
                           엑셀다운
                       </Button>
 
                       
 
-                        {#if $product_modal_state['title'] === 'add'}
+                        {#if $standard_modal_state['title'] === 'add'}
                           <Util title="add" />
-                        {:else if $product_modal_state['title'] === 'update'}
+                        {:else if $standard_modal_state['title'] === 'update'}
                           <Util  title="update"/>
-                          {:else if $product_modal_state['title'] === 'check_delete'}
+                          {:else if $standard_modal_state['title'] === 'check_delete'}
                           <Util  title="check_delete"/>
                         {/if}
                         

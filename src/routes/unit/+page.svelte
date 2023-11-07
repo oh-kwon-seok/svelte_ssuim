@@ -15,17 +15,17 @@
     import { ChevronDownSolid, SearchOutline } from 'flowbite-svelte-icons';
 
 
-    import Util from '$lib/components/modal/product/Util.svelte';
+    import Util from '$lib/components/modal/unit/Util.svelte';
     
 
     import * as Icon from 'svelte-awesome-icons';
 
-    import {productModalOpen} from '$lib/store/product/function';
+    import {unitModalOpen} from '$lib/store/unit/function';
     import {excelDownload, excelUpload, fileButtonClick} from '$lib/store/common/function';
     
-    import {product_form_state,product_modal_state} from '$lib/store/product/state';
+    import {unit_form_state,unit_modal_state} from '$lib/store/unit/state';
 
-    import {url_state,cookie_state,common_product_state,table_state,common_toast_state,common_search_state} from '$lib/store/common/state';
+    import {url_state,cookie_state,common_unit_state,table_state,common_toast_state,common_search_state} from '$lib/store/common/state';
     import {TABLE_COMPONENT,EXCEL_CONFIG} from '$lib/module/common/constants';
 
     import SearchBar from '$lib/components/layout/SearchBar.svelte'
@@ -52,7 +52,7 @@
     onMount(()=>{
         console.log('시점');
        
-        makeTable(table_state,"product",tableComponent);
+        makeTable(table_state,"unit",tableComponent);
 
     });
 
@@ -61,9 +61,9 @@
         if(data.title === 'redirect'){
             window.location.href = '/';
             alert('잘못된 주소거나 요청시간이 만료되었습니다.');
-        }else if($url_state['path'] === '/product'){
+        }else if($url_state['path'] === '/unit'){
          
-            makeTable(table_state,"product",tableComponent);
+            makeTable(table_state,"unit",tableComponent);
         }
       
     })
@@ -87,47 +87,46 @@
               <SideBar />
             </div>
             <div class="col-span-1 row-span-1"> 
-              <Title title='기준정보 관리' subtitle='품목관리'/>
+              <Title title='기준정보 관리' subtitle='단위관리'/>
             </div>
 
-           
-
+          
             
             <div class="row-span-15 col-span-12 "> 
                 <Tabs  style="pill" defaultClass=" mt-5 overflow-auto  flex rounded-lg divide-x divide-gray-200 shadow dark:divide-gray-700" >
                     <TabItem  open >
                    
 
-                      <span slot="title">품목 관리</span>
+                      <span slot="title">단위 관리</span>
 
                 
-                      <SearchBar title="product"/>
+                      <SearchBar title="unit"/>
 
 
                       <div class='m-5'>
 
-                        <Button  on:click={() => {productModalOpen('','add')}}>
+                        <Button  on:click={() => {unitModalOpen('','add')}}>
                           <Icon.FloppyDiskSolid class='mr-2' size="20" />
                           추가
                         </Button>
 
-                        <Button  color='red' on:click={() => productModalOpen('','check_delete')}>
+                        <Button  color='red' on:click={() => unitModalOpen('','check_delete')}>
                           <Icon.BanSolid class='mr-2' size="20" />
                           선택삭제
                         </Button>
 
-                        <Button  color='green' on:click={() =>excelDownload('product',EXCEL_CONFIG['product'])}>
+                        <Button  color='green' on:click={() =>excelDownload('unit',EXCEL_CONFIG['unit'])}>
                           <Icon.FileCsvSolid class='mr-2' size="20" />
                           엑셀다운
                       </Button>
 
                       
 
-                        {#if $product_modal_state['title'] === 'add'}
+                        {#if $unit_modal_state['title'] === 'add'}
                           <Util title="add" />
-                        {:else if $product_modal_state['title'] === 'update'}
+                        {:else if $unit_modal_state['title'] === 'update'}
                           <Util  title="update"/>
-                          {:else if $product_modal_state['title'] === 'check_delete'}
+                          {:else if $unit_modal_state['title'] === 'check_delete'}
                           <Util  title="check_delete"/>
                         {/if}
                         

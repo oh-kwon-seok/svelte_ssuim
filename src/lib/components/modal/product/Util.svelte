@@ -11,7 +11,7 @@
     import {product_modal_state, product_form_state} from '$lib/store/product/state';
     import {common_alert_state, common_toast_state,common_type_state, common_unit_state, common_origin_state,common_standard_state} from '$lib/store/common/state';
     
-    import {save,modalOpen} from '$lib/store/product/function';
+    import {save} from '$lib/store/product/function';
     import {DATA_FAIL_ALERT,DATA_SELECT_ALERT} from '$lib/module/common/constants';
     
     export let title;

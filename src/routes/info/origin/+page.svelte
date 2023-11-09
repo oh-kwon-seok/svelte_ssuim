@@ -3,7 +3,7 @@
 <script>
 	
     // @ts-nocheck
-    import '../../app.postcss';
+    import '../../../app.postcss';
 
     import Header from '$lib/components/layout/Header.svelte';
     import SideBar from '$lib/components/layout/SideBar.svelte';
@@ -15,17 +15,17 @@
     import { ChevronDownSolid, SearchOutline } from 'flowbite-svelte-icons';
 
 
-    import Util from '$lib/components/modal/standard/Util.svelte';
+    import Util from '$lib/components/modal/origin/Util.svelte';
     
 
     import * as Icon from 'svelte-awesome-icons';
 
-    import {standardModalOpen} from '$lib/store/standard/function';
+    import {originModalOpen} from '$lib/store/origin/function';
     import {excelDownload, excelUpload, fileButtonClick} from '$lib/store/common/function';
     
-    import {standard_form_state,standard_modal_state} from '$lib/store/standard/state';
+    import {origin_form_state,origin_modal_state} from '$lib/store/origin/state';
 
-    import {url_state,cookie_state,common_standard_state,table_state,common_toast_state,common_search_state} from '$lib/store/common/state';
+    import {url_state,cookie_state,common_origin_state,table_state,common_toast_state,common_search_state} from '$lib/store/common/state';
     import {TABLE_COMPONENT,EXCEL_CONFIG} from '$lib/module/common/constants';
 
     import SearchBar from '$lib/components/layout/SearchBar.svelte'
@@ -52,7 +52,7 @@
     onMount(()=>{
         console.log('시점');
        
-        makeTable(table_state,"standard",tableComponent);
+        makeTable(table_state,"origin",tableComponent);
 
     });
 
@@ -61,9 +61,9 @@
         if(data.title === 'redirect'){
             window.location.href = '/';
             alert('잘못된 주소거나 요청시간이 만료되었습니다.');
-        }else if($url_state['path'] === '/standard'){
+        }else if($url_state['path'] === '/origin'){
          
-            makeTable(table_state,"standard",tableComponent);
+            makeTable(table_state,"origin",tableComponent);
         }
       
     })
@@ -87,7 +87,7 @@
               <SideBar />
             </div>
             <div class="col-span-1 row-span-1"> 
-              <Title title='기준정보 관리' subtitle='규격관리'/>
+              <Title title='기준정보 관리' subtitle='원산지관리'/>
             </div>
 
            
@@ -98,36 +98,36 @@
                     <TabItem  open >
                    
 
-                      <span slot="title">규격 관리</span>
+                      <span slot="title">원산지 관리</span>
 
                 
-                      <SearchBar title="standard"/>
+                      <SearchBar title="origin"/>
 
 
                       <div class='m-5'>
 
-                        <Button  on:click={() => {standardModalOpen('','add')}}>
+                        <Button  on:click={() => {originModalOpen('','add')}}>
                           <Icon.FloppyDiskSolid class='mr-2' size="20" />
                           추가
                         </Button>
 
-                        <Button  color='red' on:click={() => standardModalOpen('','check_delete')}>
+                        <Button  color='red' on:click={() => originModalOpen('','check_delete')}>
                           <Icon.BanSolid class='mr-2' size="20" />
                           선택삭제
                         </Button>
 
-                        <Button  color='green' on:click={() =>excelDownload('standard',EXCEL_CONFIG['standard'])}>
+                        <Button  color='green' on:click={() =>excelDownload('origin',EXCEL_CONFIG['origin'])}>
                           <Icon.FileCsvSolid class='mr-2' size="20" />
                           엑셀다운
                       </Button>
 
                       
 
-                        {#if $standard_modal_state['title'] === 'add'}
+                        {#if $origin_modal_state['title'] === 'add'}
                           <Util title="add" />
-                        {:else if $standard_modal_state['title'] === 'update'}
+                        {:else if $origin_modal_state['title'] === 'update'}
                           <Util  title="update"/>
-                          {:else if $standard_modal_state['title'] === 'check_delete'}
+                          {:else if $origin_modal_state['title'] === 'check_delete'}
                           <Util  title="check_delete"/>
                         {/if}
                         

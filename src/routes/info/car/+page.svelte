@@ -3,7 +3,7 @@
 <script>
 	
     // @ts-nocheck
-    import '../../app.postcss';
+    import '../../../app.postcss';
 
     import Header from '$lib/components/layout/Header.svelte';
     import SideBar from '$lib/components/layout/SideBar.svelte';
@@ -15,17 +15,17 @@
     import { ChevronDownSolid, SearchOutline } from 'flowbite-svelte-icons';
 
 
-    import Util from '$lib/components/modal/type/Util.svelte';
+    import Util from '$lib/components/modal/car/Util.svelte';
     
 
     import * as Icon from 'svelte-awesome-icons';
 
-    import {TypeModalOpen} from '$lib/store/type/function';
+    import {carModalOpen} from '$lib/store/car/function';
     import {excelDownload, excelUpload, fileButtonClick} from '$lib/store/common/function';
     
-    import {type_form_state,type_modal_state} from '$lib/store/type/state';
+    import {car_form_state,car_modal_state} from '$lib/store/car/state';
 
-    import {url_state,cookie_state,common_type_state,table_state,common_toast_state,common_search_state} from '$lib/store/common/state';
+    import {url_state,cookie_state,common_car_state,table_state,common_toast_state,common_search_state} from '$lib/store/common/state';
     import {TABLE_COMPONENT,EXCEL_CONFIG} from '$lib/module/common/constants';
 
     import SearchBar from '$lib/components/layout/SearchBar.svelte'
@@ -52,7 +52,7 @@
     onMount(()=>{
         console.log('시점');
        
-        makeTable(table_state,"type",tableComponent);
+        makeTable(table_state,"car",tableComponent);
 
     });
 
@@ -61,9 +61,9 @@
         if(data.title === 'redirect'){
             window.location.href = '/';
             alert('잘못된 주소거나 요청시간이 만료되었습니다.');
-        }else if($url_state['path'] === '/type'){
+        }else if($url_state['path'] === '/car'){
          
-            makeTable(table_state,"type",tableComponent);
+            makeTable(table_state,"car",tableComponent);
         }
       
     })
@@ -87,7 +87,7 @@
               <SideBar />
             </div>
             <div class="col-span-1 row-span-1"> 
-              <Title title='기준정보 관리' subtitle='품목분류관리'/>
+              <Title title='기준정보 관리' subtitle='차량관리'/>
             </div>
 
            
@@ -98,36 +98,36 @@
                     <TabItem  open >
                    
 
-                      <span slot="title">품목분류 관리</span>
+                      <span slot="title">차량 관리</span>
 
                 
-                      <SearchBar title="type"/>
+                      <SearchBar title="car"/>
 
 
                       <div class='m-5'>
 
-                        <Button  on:click={() => {TypeModalOpen('','add')}}>
+                        <Button  on:click={() => {carModalOpen('','add')}}>
                           <Icon.FloppyDiskSolid class='mr-2' size="20" />
                           추가
                         </Button>
 
-                        <Button  color='red' on:click={() => TypeModalOpen('','check_delete')}>
+                        <Button  color='red' on:click={() => carModalOpen('','check_delete')}>
                           <Icon.BanSolid class='mr-2' size="20" />
                           선택삭제
                         </Button>
 
-                        <Button  color='green' on:click={() =>excelDownload('type',EXCEL_CONFIG['type'])}>
+                        <Button  color='green' on:click={() =>excelDownload('car',EXCEL_CONFIG['car'])}>
                           <Icon.FileCsvSolid class='mr-2' size="20" />
                           엑셀다운
                       </Button>
 
                       
 
-                        {#if $type_modal_state['title'] === 'add'}
+                        {#if $car_modal_state['title'] === 'add'}
                           <Util title="add" />
-                        {:else if $type_modal_state['title'] === 'update'}
+                        {:else if $car_modal_state['title'] === 'update'}
                           <Util  title="update"/>
-                          {:else if $type_modal_state['title'] === 'check_delete'}
+                          {:else if $car_modal_state['title'] === 'check_delete'}
                           <Util  title="check_delete"/>
                         {/if}
                         

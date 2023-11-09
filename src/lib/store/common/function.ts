@@ -2,7 +2,7 @@
 
 
 import { writable } from 'svelte/store';
-import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_origin_state, common_type_state, common_unit_state,common_standard_state,common_car_state,table_state } from './state';
+import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_origin_state, common_type_state, common_unit_state,common_standard_state,common_car_state,common_company_state,table_state } from './state';
 
 // import {item_data,item_form_state} from '$lib/store/info/item/state';
 
@@ -44,6 +44,8 @@ let unit_data : any;
 let standard_data : any;
 let car_data : any;
 
+let company_data : any;
+
 
 const workbook = new Excel.Workbook();
 
@@ -73,14 +75,6 @@ url_state.subscribe((data : any) => {
 common_search_state.subscribe((data : any) => {
     search_data = data;
 })
-
-
-
-// item_form_state.subscribe((data) => {
-//   item_form_data = data;
-
-// })
-
 
 login_state.subscribe((data) => {
   login_data = data;
@@ -112,6 +106,11 @@ common_standard_state.subscribe((data : any) => {
 })
 common_car_state.subscribe((data : any) => {
   car_data = data;
+})
+
+common_company_state.subscribe((data) => {
+  company_data = data;
+
 })
 
 

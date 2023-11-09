@@ -15,7 +15,7 @@ import { standardModalOpen } from '$lib/store/standard/function';
 import { unitModalOpen } from '$lib/store/unit/function';
 import { carModalOpen } from '$lib/store/car/function';
 
-
+import { companyModalOpen } from '$lib/store/company/function';
 
 
 
@@ -62,8 +62,6 @@ const DATA_FAIL_ALERT = {
 const DATA_SELECT_ALERT = {
     color : 'red',
     select : {title : '실패', content : '데이터를 1개 이상 선택해주세요.'},
-
-   
 }
 
 const MENU = {
@@ -76,9 +74,6 @@ const MENU = {
         {name: '창고 관리', help: "원자재,부자재,반제품,부분품,완제품 등을 관리하는 메뉴입니다."},
         {name: 'Excel 관리', help: "기준정보를 Excel에 작성하여 업로드하기 위한 메뉴입니다."},
       ],
-    
-    
-  
 }
 
 
@@ -118,6 +113,15 @@ const TABLE_FILTER : any = {
     car : [
         {value : "all",name : "전체"},
         {value : "name", name : "차량번호"},
+    ],
+    company : [
+        {value : "all",name : "전체"},
+        {value : "code", name : "사업자등록번호"},
+        {value : "name", name : "매입처명"},
+        {value : "phone", name : "연락처"},
+        {value : "email", name : "이메일"},
+
+        
     ],
 
 
@@ -159,9 +163,16 @@ const EXCEL_CONFIG : any = {
         {header: '차량번호', key: 'name', width: 30},
         {header: '등록일', key: 'created', width: 30},
     ],
+    company : [
+        {header: '번호코드', key: 'uid', width: 30},
+        {header: '사업자등록번호', key: 'code', width: 30},
+        {header: '회사명', key: 'name', width: 30},
+        {header: '연락처', key: 'phone', width: 30},
+        {header: '이메일', key: 'email', width: 30},
+        {header: '등록일', key: 'created', width: 30},
 
 
-
+    ],
 }; 
 
 
@@ -349,6 +360,45 @@ const TABLE_HEADER_CONFIG : any = {
             return date;
         },
     }],
+
+    company : [
+        {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
+        cellClick:function(e : any, cell:any){
+            cell.getRow().toggleSelect()
+        }},
+        {title:"ID", field:"uid", width:150, headerFilter:"input"},
+        
+        {title:"사업자번호", field:"code", width:150, headerFilter:"input"},
+        
+        {title:"매입처명", field:"name", width:150, headerFilter:"input", 
+        formatter:function(cell : any){
+            var value = cell.getValue();
+        return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
+         },
+
+        cellClick:function(e : any, cell:any){
+            let row = cell.getRow();
+           if(row){
+            companyModalOpen(row.getData(),"update");
+           }else{
+          
+           }
+        }
+    },
+        
+    {title:"연락처", field:"phone", width:150, headerFilter:"input"},
+  
+    {title:"이메일", field:"email", width:150, headerFilter:"input"},
+
+        {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
+        formatter: function(cell : any, formatterParams: any, onRendered: any) {
+            // Luxon을 사용하여 datetime 값을 date로 변환
+            const datetimeValue = cell.getValue();
+            const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
+            return date;
+        },
+    }],
+
 }
 
 

@@ -3,7 +3,7 @@
 <script>
 	
     // @ts-nocheck
-    import '../../app.postcss';
+    import '../../../app.postcss';
 
     import Header from '$lib/components/layout/Header.svelte';
     import SideBar from '$lib/components/layout/SideBar.svelte';

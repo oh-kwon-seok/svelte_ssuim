@@ -33,7 +33,7 @@
   // let text_style = 'font-heavy text-green-400 bg-green-100  hover:text-black '
   let text_style = 'font-heavy  hover:text-black '
 
-  console.log('gg');
+  console.log('mainPath',mainPath,activeUrl,$page.url);
 
 
 </script>
@@ -65,24 +65,25 @@
                 <svelte:fragment slot="icon">
                     <Icon.DatabaseSolid size="20"/>
                 </svelte:fragment>
-              <SidebarDropdownItem class={text_style} label="품목 관리" href='/product' active={activeUrl === '/product'} on:click={handleToggle('product')} />
-              <SidebarDropdownItem class={text_style} label="원산지 관리" href='/origin' active={activeUrl === '/origin'} on:click={handleToggle('origin')} />
-              <SidebarDropdownItem class={text_style} label="규격 관리" href='/standard' active={activeUrl === '/standard'} on:click={handleToggle('standard')} />
-              <SidebarDropdownItem class={text_style} label="단위 관리" href='/unit' active={activeUrl === '/unit'} on:click={handleToggle('unit')} />
-              <SidebarDropdownItem class={text_style} label="차량 관리" href='/car' active={activeUrl === '/car'} on:click={handleToggle('car')} />
-
-
+              <SidebarDropdownItem class={text_style} label="품목 관리" href='/info/product' active={activeUrl === '/info/product'} on:click={handleToggle('product')} />
+              <SidebarDropdownItem class={text_style} label="원산지 관리" href='/info/origin' active={activeUrl === '/info/origin'} on:click={handleToggle('origin')} />
+              <SidebarDropdownItem class={text_style} label="규격 관리" href='/info/standard' active={activeUrl === '/info/standard'} on:click={handleToggle('standard')} />
+              <SidebarDropdownItem class={text_style} label="단위 관리" href='/info/unit' active={activeUrl === 'info/unit'} on:click={handleToggle('unit')} />
+              <SidebarDropdownItem class={text_style} label="차량 관리" href='/info/car' active={activeUrl === 'info/car'} on:click={handleToggle('car')} />
             </SidebarDropdownWrapper>
  
           </SidebarGroup>
 
           <SidebarGroup border>
-            <SidebarDropdownWrapper class={text_style} label="영업 관리" isOpen={mainPath ==='project' ? true : false} transitionType="fly" {transitionParams} >
+            <SidebarDropdownWrapper class={text_style} label="거래처 관리" isOpen={mainPath ==='customer' ? true : false} transitionType="fly" {transitionParams} >
               <svelte:fragment slot="icon">
                 <Icon.StoreSolid size="20"/>
             </svelte:fragment>
-              <SidebarDropdownItem class={text_style} label="수주 관리" href='/project/project' active={activeUrl === '/project/project'} on:click={handleToggle('project')}/>
+            <SidebarDropdownItem class={text_style} label="매입처 관리" href='/customer/company' active={activeUrl === '/customer/company'} on:click={handleToggle('company')}/>
+
          
+            
+
             </SidebarDropdownWrapper>
           </SidebarGroup>
     

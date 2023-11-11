@@ -16,7 +16,9 @@ import { unitModalOpen } from '$lib/store/unit/function';
 import { carModalOpen } from '$lib/store/car/function';
 
 import { companyModalOpen } from '$lib/store/company/function';
+import { phoneNumber,businessNumber } from './function';
 
+import { userModalOpen } from '$lib/store/user/function';
 
 
 let table_data : any;
@@ -123,9 +125,15 @@ const TABLE_FILTER : any = {
 
         
     ],
-
-
-
+    user : [
+        {value : "all",name : "전체"},
+        {value : "id", name : "ID"},
+        {value : "car", name : "지정차량"},
+        {value : "code", name : "사업자번호"},
+        {value : "name", name : "이름"},
+        {value : "email", name : "이메일"},
+        {value : "phone", name : "연락처"},
+    ],
 }
 
 const EXCEL_CONFIG : any = {
@@ -170,8 +178,16 @@ const EXCEL_CONFIG : any = {
         {header: '연락처', key: 'phone', width: 30},
         {header: '이메일', key: 'email', width: 30},
         {header: '등록일', key: 'created', width: 30},
-
-
+    ],
+    user : [
+        {header: 'ID', key: 'id', width: 30},
+        {header: '지정차량', key: 'car', width: 30},
+        {header: '사업자등록번호', key: 'code', width: 30},
+        {header: '회사명', key: 'customer_name', width: 30},
+        {header: '대표자명', key: 'name', width: 30},
+        {header: '연락처', key: 'phone', width: 30},
+        {header: '이메일', key: 'email', width: 30},
+        {header: '등록일', key: 'created', width: 30},
     ],
 }; 
 
@@ -331,6 +347,7 @@ const TABLE_HEADER_CONFIG : any = {
             return date;
         },
     }],
+
     car : [
         {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
         cellClick:function(e : any, cell:any){
@@ -399,6 +416,50 @@ const TABLE_HEADER_CONFIG : any = {
         },
     }],
 
+    user : [
+        {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
+        cellClick:function(e : any, cell:any){
+            cell.getRow().toggleSelect()
+        }},
+        {title:"ID", field:"id", width:150, headerFilter:"input"},
+        {title:"사업자번호", field:"code", width:150, headerFilter:"input",
+        formatter:function(cell : any){
+            var value = cell.getValue();
+        return businessNumber(value);
+         },
+        },
+        {title:"상호명", field:"customer_name", width:150, headerFilter:"input", 
+        formatter:function(cell : any){
+            var value = cell.getValue();
+        return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
+         },
+
+        cellClick:function(e : any, cell:any){
+            let row = cell.getRow();
+           if(row){
+            userModalOpen(row.getData(),"update");
+           }else{
+          
+           }
+        }
+        },
+        {title:"지정차량", field:"car.name", width:150, headerFilter:"input"},
+        {title:"연락처", field:"phone", width:150, headerFilter:"input", formatter:function(cell : any){
+            var value = cell.getValue();
+        return phoneNumber(value);
+         },},
+  
+        {title:"이메일", field:"email", width:150, headerFilter:"input"},
+        
+        {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
+        formatter: function(cell : any, formatterParams: any, onRendered: any) {
+            // Luxon을 사용하여 datetime 값을 date로 변환
+            const datetimeValue = cell.getValue();
+            const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
+            return date;
+        },
+    }],
+
 }
 
 
@@ -420,7 +481,9 @@ const TABLE_TOTAL_CONFIG : any = {
     langs:{
         "ko-kr":{
             "columns":{
-                "name":"Name", //replace the title of column name with the value "Name"
+                // "name":"Name",
+                 //replace the title of column name with the value "Name"
+            
             },
             "data":{
                 "loading":"Loading", //data loader text

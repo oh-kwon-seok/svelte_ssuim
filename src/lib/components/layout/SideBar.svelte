@@ -80,9 +80,11 @@
                 <Icon.StoreSolid size="20"/>
             </svelte:fragment>
             <SidebarDropdownItem class={text_style} label="매입처 관리" href='/customer/company' active={activeUrl === '/customer/company'} on:click={handleToggle('company')}/>
-
-         
+            <SidebarDropdownItem class={text_style} label="회원 관리" href='/customer/user' active={activeUrl === '/customer/user'} on:click={handleToggle('user')}/>
             
+
+
+
 
             </SidebarDropdownWrapper>
           </SidebarGroup>

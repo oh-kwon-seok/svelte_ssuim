@@ -42,6 +42,7 @@
 		// 카카오 로그인 버튼을 눌렀을 때 동작하는 함수
 		Kakao.Auth.authorize({
 			redirectUri: 'http://localhost:5173/home' // 카카오 로그인 후 리다이렉트 될 주소
+			
 		});
 	}
 
@@ -52,7 +53,7 @@
 		$common_alert_state = {type : 'login', value : false};
 		
 	
-		const url = `/api/sign-api/sign-in`
+		const url = `/api/user/sign-in`
 
 		try {
 			await performAsyncTask();

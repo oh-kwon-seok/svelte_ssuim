@@ -9,15 +9,17 @@
     import Toast from '$lib/components/toast/Toast.svelte';
     import Alert from '$lib/components/alert/Alert.svelte';
     import {user_modal_state, user_form_state} from '$lib/store/user/state';
-    import {common_alert_state, common_toast_state,common_type_state, common_unit_state, common_origin_state,common_standard_state,common_car_state} from '$lib/store/common/state';
+    import {common_alert_state, common_toast_state,common_type_state, common_unit_state, common_origin_state,common_standard_state,common_car_state,table_state} from '$lib/store/common/state';
     
-    import {save} from '$lib/store/user/function';
+    import {save,userProductTable} from '$lib/store/user/function';
+
+    
     import {DATA_FAIL_ALERT,DATA_SELECT_ALERT} from '$lib/module/common/constants';
     import {businessNumber,phoneNumber,validEmail} from '$lib/module/common/function';
     
     import { EyeOutline, EyeSlashOutline } from 'flowbite-svelte-icons';
 
-    
+    import {onMount,afterUpdate } from 'svelte';
     export let title;
 
 
@@ -39,10 +41,19 @@
       label_title = '선택 삭제';
     }
 
-    let color = title === 'add' || title === 'update' ? 'blue' : 'red'; 
+    let color = title === 'add' || title === 'update'   ? 'blue' : 'red'; 
+
+    let tableComponent = "example-table-theme";
 
 
+      onMount(()=>{
+        userProductTable(table_state,"user_product",tableComponent);
+      });
+
+      afterUpdate(()=> {
+        userProductTable(table_state,"user_product",tableComponent);
   
+      })
 
     </script>
 
@@ -161,6 +172,15 @@
                 <Hr class="my-8 bg-slate-300 "  height="h-1"></Hr>
          
           </div>
+
+
+
+            <div id="example-table-theme" bind:this={tableComponent}></div>
+         
+        
+       
+
+
 <!-- 
           <div class="grid grid-cols-6 gap-4">
             <P class="col-span-3 text-bold" align='center'>BOM 리스트</P>
@@ -211,7 +231,7 @@
               {/if}
           {/if}
     
-    
+        
       
       
         </form>

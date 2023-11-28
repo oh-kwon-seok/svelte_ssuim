@@ -11,6 +11,8 @@ import {common_alert_state, common_toast_state,common_search_state,login_state,t
 import moment from 'moment';
 
 import {TOAST_SAMPLE} from '$lib/module/common/constants';
+import {TabulatorFull as Tabulator} from 'tabulator-tables';
+import {TABLE_TOTAL_CONFIG,TABLE_HEADER_CONFIG,TABLE_FILTER} from '$lib/module/common/constants';
 
 const api = import.meta.env.VITE_API_BASE_URL;
 
@@ -80,7 +82,7 @@ common_selected_state.subscribe((data) => {
 
 
 const userModalOpen = (data : any, title : any) => {
-  console.log('data : ', data);
+ console.log('data : ', data);
 
   console.log('title : ', title);
   
@@ -99,8 +101,7 @@ const userModalOpen = (data : any, title : any) => {
      
     }
     if(title === 'update' ){
-       
-   
+
         Object.keys(update_form).map((item)=> {    
             if(item === 'car'){
               update_form[item] = data[item]['uid'];
@@ -133,6 +134,9 @@ const userModalOpen = (data : any, title : any) => {
       }
   }
 }
+
+
+
 
 
 
@@ -239,6 +243,16 @@ const save = (param,title) => {
     
     if(title === 'update'){
       const url = `${api}/user/update`
+      
+      
+      let data =  table_data['user_product'].getSelectedData();
+
+      let checked_data = data.filter(item => {
+        return parseInt(item.qty) > 0 && item.qty !== undefined 
+      })
+
+     
+     
       try {
 
         console.log('params : ', param);
@@ -255,6 +269,8 @@ const save = (param,title) => {
           used : param.used,
           auth : 'user',
           token : login_data['token'],
+          user_product : checked_data,
+
         };
       axios.post(url,
         params,
@@ -335,96 +351,202 @@ const save = (param,title) => {
             return console.log('에러 : ',e);
           };
     
-
-
-
         }
-
-
-     
-     
-        
 
         update_modal[title]['use'] = !update_modal[title]['use'];
         user_modal_state.update(() => update_modal);
         user_form_state.update(()=> init_form_data);
     }
-
-
-
-
-  
   }
-  // const bomRowUtil = (title) => {
-  //   if(title === 'add'){
-  //     let new_id = update_form['child'].length + 1;
-  //     let new_bom_data = {
-       
-  //       id : new_id,
-  //       maker : update_form['maker'],
-  //       code : '',
-  //       name : '',
-  //       unit : 'BOX',
-  //       type : '완제품',
-  //       check : false,
-  //       use_qty : 0,
 
-  //     };
+
+  const userProductTable = (table_state,type,tableComponent) => {
+
+
+    const url = `${api}/product/select`; 
+
   
-  //     update_form['child'].push(new_bom_data);
-  //   }else if(title === 'check_delete'){
-  //     alert = {type : 'select', value : false}
-      
-  //     console.log('alert : ', alert);
+    let start_date = moment().subtract(10, "year").format('YYYY-MM-DDTHH:mm:ss');
 
- 
-  //     let delete_count = update_form['child'].filter(data => data.check === true).length;
-  //     update_form['child'] = update_form['child'].filter(data => data.check === false) 
+    let end_date = moment().add(1, "day").format('YYYY-MM-DDTHH:mm:ss');
 
+    let search_text = '';
+    let filter_title = 'all';
+    let checked_data = [];
+    let total_data = [];
 
+    let params = 
+    {
+      start_date : start_date,
+      end_date  : end_date,
+      search_text : search_text,
+      filter_title : filter_title,   
+    };
 
-  //     console.log('child : ',delete_count);
-  //     if(delete_count === 0 || delete_count === undefined){
-  //       alert = {type : 'select', value : true}
+   
+    const config = {
+      params : params,
+      headers:{
+        "Content-Type": "application/json",
+        
+      }
+    }
+      axios.get(url,config).then(res=>{
+        if(table_state['user_product']){
+          table_state['user_product'].destory();
+        }
 
-  //       common_alert_state.update(() => alert);
-       
-
-  //     }
-
-      
-      
-
-  //   }else {
-  //     update_form['child'].pop();
-  //   }
-  
-  //   user_form_state.update(() => update_form);
+        if(res.data.length > 0){
+          let product_data = res.data;
     
-  // }
-
-
-  // const bomRowCellClick = (title,id) => {
-  //   if(title === 'check' ){
-  //     for(let i =0; i<update_form['child'].length; i++){
-  //       if(id === update_form['child'][i]['id']){
+          const url = `${api}/user_product/info_select`;
+           
           
-  //         update_form['child'][i][title] = !update_form['child'][i][title];
-  //         break;
-  //       }
-  //     }
   
-  //   }
+          let params = 
+          {
+          user_id : update_form.id
+          };
+          const config = {
+            params : params,
+            headers:{
+              "Content-Type": "application/json",
+              
+            }
+          }
+            axios.get(url,config).then(res=>{
+              
+              let user_checked_data =  res.data;
+          
+
+              for(let i=0; i < product_data.length; i++){
+                let product_uid = product_data[i]['uid'];
+
+                for(let j=0; j< user_checked_data.length; j++){
+                  let user_checked_uid = user_checked_data[j]['product']['uid'];
+                  if(product_uid === user_checked_uid){
+                    checked_data.push(product_uid);
+                    product_data[i]['selected'] = true; 
+                    
+                    product_data[i]['qty'] = user_checked_data[j]['qty'].toString(); 
+                    
+                    console.log(user_checked_data[j]['qty']);
+                    user_checked_data.splice(j,1);
+                    break;
+                  }
+
+                }
+
+
+              }
+
+  
+
+            
+              console.log('total_data : ', total_data);
+          
+              // table_data['user_product'].setData(res.data);
+              // table_state.update(() => table_data);
+              table_data['user_product'] =   new Tabulator(tableComponent, {
+                height:TABLE_TOTAL_CONFIG['height'],
+                layout:TABLE_TOTAL_CONFIG['layout'],
+                pagination:TABLE_TOTAL_CONFIG['pagination'],
+                paginationSize:1000,
+                paginationSizeSelector:[10, 50, 100,1000,5000],
+                movableColumns:TABLE_TOTAL_CONFIG['movableColumns'],
+                paginationCounter: TABLE_TOTAL_CONFIG['paginationCounter'],
+                paginationAddRow:TABLE_TOTAL_CONFIG['paginationAddRow'], //add rows relative to the table
+                locale: TABLE_TOTAL_CONFIG['locale'],
+                langs: TABLE_TOTAL_CONFIG['langs'],
+                selectable: true,
+               
+      
+                rowClick:function(e, row){
+                  //e - the click event object
+                  //row - row component
+               
+                  row.toggleSelect(); //toggle row selected state on row click
+              },
+      
+                rowFormatter:function(row){
+                      row.getElement().classList.add("table-primary"); //mark rows with age greater than or equal to 18 as successful;
+                      let selected = row.getData().selected;
+
+                      if(selected){
+                        row.getElement().classList.add("tabulator-selected");
+                        row.toggleSelect();
+                      }
+                },
+             
+      
+                data : product_data,
+              
+                columns: TABLE_HEADER_CONFIG[type],
+                
+           
+               
+                });
+                table_state.update(()=> table_data);
+             
+           })
+        
+         
+       
+        
+    }else{
+      
+      if(table_state['user_product']){
+        table_state['user_product'].destory();
+      }
+
+      table_data['user_product'] =   new Tabulator(tableComponent, {
+        height:TABLE_TOTAL_CONFIG['height'],
+        layout:TABLE_TOTAL_CONFIG['layout'],
+        pagination:TABLE_TOTAL_CONFIG['pagination'],
+        paginationSize:TABLE_TOTAL_CONFIG['paginationSize'],
+        paginationSizeSelector:TABLE_TOTAL_CONFIG['paginationSizeSelector'],
+        movableColumns:TABLE_TOTAL_CONFIG['movableColumns'],
+        paginationCounter: TABLE_TOTAL_CONFIG['paginationCounter'],
+        paginationAddRow:TABLE_TOTAL_CONFIG['paginationAddRow'], //add rows relative to the table
+        locale: TABLE_TOTAL_CONFIG['locale'],
+        langs: TABLE_TOTAL_CONFIG['langs'],
+        selectable: true,
+        placeholder:"데이터 없음",
+        rowClick:function(e, row){
+          //e - the click event object
+          //row - row component
+       
+          row.toggleSelect(); //toggle row selected state on row click
+      },
+
+        rowFormatter:function(row){
+              row.getElement().classList.add("table-primary"); //mark rows with age greater than or equal to 18 as successful;
+        },
+     
+
+        data : [],
+      
+        columns: TABLE_HEADER_CONFIG[type],
+        
+  
+        });
+        console.log('table_data  :', table_data);
+
+        table_state.update(()=> table_data);
+
+
+    }
+     })
+
     
-  //   user_form_state.update(() => update_form);
-    
-
-
-  // }
+}
 
 
 
 
 
 
-export {userModalOpen,save}
+
+
+
+export {userModalOpen,save,userProductTable}

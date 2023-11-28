@@ -50,8 +50,7 @@
 
 
     onMount(()=>{
-        console.log('시점');
-       
+        
         makeTable(table_state,"product",tableComponent);
 
     });

@@ -18,7 +18,7 @@ import { carModalOpen } from '$lib/store/car/function';
 import { companyModalOpen } from '$lib/store/company/function';
 import { phoneNumber,businessNumber } from './function';
 
-import { userModalOpen } from '$lib/store/user/function';
+import { userModalOpen} from '$lib/store/user/function';
 
 
 let table_data : any;
@@ -146,6 +146,7 @@ const EXCEL_CONFIG : any = {
     {header: '단위', key: 'unit', width: 30},
     {header: '등록일', key: 'created', width: 30},
     ],
+  
     origin : [
         {header: '번호코드', key: 'uid', width: 30},
         {header: '원산지', key: 'name', width: 30},
@@ -189,6 +190,17 @@ const EXCEL_CONFIG : any = {
         {header: '이메일', key: 'email', width: 30},
         {header: '등록일', key: 'created', width: 30},
     ],
+    user_product : [
+        {header: '번호코드', key: 'uid', width: 30},
+        {header: '상품명', key: 'name', width: 30},
+        {header: '분류', key: "type", width: 30},
+        {header: '원산지', key: 'origin', width: 30},
+        {header: '규격', key: 'standard', width: 30},
+        {header: '단위', key: 'unit', width: 30},
+        {header: '개수', key: 'qty', width: 30},
+
+        {header: '등록일', key: 'created', width: 30},
+        ],
 }; 
 
 
@@ -227,6 +239,7 @@ const TABLE_HEADER_CONFIG : any = {
             const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
             return date;
         },
+
     }],
 
     origin : [
@@ -431,6 +444,7 @@ const TABLE_HEADER_CONFIG : any = {
         {title:"상호명", field:"customer_name", width:150, headerFilter:"input", 
         formatter:function(cell : any){
             var value = cell.getValue();
+            
         return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
          },
 
@@ -457,8 +471,34 @@ const TABLE_HEADER_CONFIG : any = {
             const datetimeValue = cell.getValue();
             const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
             return date;
-        },
-    }],
+        }},     
+    
+   ],
+
+   user_product : [
+    {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
+    cellClick:function(e : any, cell:any){
+        cell.getRow().toggleSelect();
+        console.log(cell.getRow());
+    }},
+    {title:"ID", field:"uid", width:150, headerFilter:"input"},
+    {title:"상품명", field:"name", width:150, headerFilter:"input", 
+    formatter:function(cell : any){
+        var value = cell.getValue();
+    return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
+     },
+
+  
+    },
+    {title:"분류", field:"type.name", width:150, headerFilter:"input"},
+    
+    {title:"원산지", field:"origin.name", width:150, headerFilter:"input"},
+    {title:"규격", field:"standard.name", width:150, headerFilter:"input"},
+    {title:"단위", field:"unit.name", width:150, headerFilter:"input"},
+    {title:"수량", field:"qty", width:150, editor : "input"},
+
+   ],
+
 
 }
 

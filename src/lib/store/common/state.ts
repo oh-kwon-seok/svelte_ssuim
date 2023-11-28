@@ -55,6 +55,14 @@ const url_state : any = writable({ path : '', query : ''});
 
   const table_state : any = writable({
     product : "",
+    car : "",
+    company : "",
+    origin : "",
+    standard : "",
+    type : "",
+    unit : "",
+    user : "",
+    user_product : "",
   });
 
   const common_product_state : any = writable([]);

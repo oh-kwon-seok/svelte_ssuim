@@ -31,12 +31,13 @@ let selected_data : any;
 
 let init_form_data = {
   uid : 0,
-  code : '',
-  name : '',
-  unit : '',
-  standard : '',
-  type : '',
-  origin : '',
+  sk_uid : 0,
+  ship_name : '',
+  origin_name : '',
+  inbox : '',
+  outbox : '',
+  qty : 0,
+  price : 0,
   used : 1,
 
 }
@@ -100,11 +101,9 @@ const productModalOpen = (data : any, title : any) => {
        
    
         Object.keys(update_form).map((item)=> {    
-            if(item === 'unit' || item === 'standard' || item === 'type' || item === 'origin'){
-              update_form[item] = data[item]['uid'];
-            }else{
+         
               update_form[item] = data[item];
-            }
+           
            
         }); 
 
@@ -175,7 +174,7 @@ const save = (param,title) => {
  
     if(title === 'add'){
     
-      if(param['name'] === '' || param['unit'] === '' || param['standard'] === '' || param['origin'] === '' || param['type'] === ''){
+      if(param['sk_uid'] === '' || param['ship_name'] === '' || param['origin_name'] === '' || param['qty'] === '' || param['qty'] === 0 || param['price'] === '' || param['price'] === 0){
         //return common_toast_state.update(() => TOAST_SAMPLE['fail']);
         alert['type'] = 'save';
         alert['value'] = true;
@@ -190,11 +189,14 @@ const save = (param,title) => {
   
           
           let params = {
-            name : param.name,
-            unit_uid : param.unit,
-            standard_uid : param.standard,
-            origin_uid : param.origin,
-            type_uid : param.type,
+            sk_uid : parseInt(param.sk_uid),
+            ship_name : param.ship_name,
+            origin_name : param.origin_name,
+            inbox : param.inbox,
+            outbox : param.outbox,
+            qty : parseInt(param.qty),
+            price : parseInt(param.price),
+          
             used : param.used,
             
             token : login_data['token'],
@@ -237,11 +239,13 @@ const save = (param,title) => {
 
         let params = {
           uid : param.uid,
-          name : param.name,
-          unit_uid : param.unit,
-          standard_uid : param.standard,
-          origin_uid : param.origin,
-          type_uid : param.type,
+          sk_uid : parseInt(param.sk_uid),
+          ship_name : param.ship_name,
+          origin_name : param.origin_name,
+          inbox : param.inbox,
+          outbox : param.outbox,
+          qty : parseInt(param.qty),
+          price : parseInt(param.price),
           used : param.used,
           token : login_data['token'],
         };
@@ -344,75 +348,7 @@ const save = (param,title) => {
 
   
   }
-  // const bomRowUtil = (title) => {
-  //   if(title === 'add'){
-  //     let new_id = update_form['child'].length + 1;
-  //     let new_bom_data = {
-       
-  //       id : new_id,
-  //       maker : update_form['maker'],
-  //       code : '',
-  //       name : '',
-  //       unit : 'BOX',
-  //       type : '완제품',
-  //       check : false,
-  //       use_qty : 0,
-
-  //     };
   
-  //     update_form['child'].push(new_bom_data);
-  //   }else if(title === 'check_delete'){
-  //     alert = {type : 'select', value : false}
-      
-  //     console.log('alert : ', alert);
-
- 
-  //     let delete_count = update_form['child'].filter(data => data.check === true).length;
-  //     update_form['child'] = update_form['child'].filter(data => data.check === false) 
-
-
-
-  //     console.log('child : ',delete_count);
-  //     if(delete_count === 0 || delete_count === undefined){
-  //       alert = {type : 'select', value : true}
-
-  //       common_alert_state.update(() => alert);
-       
-
-  //     }
-
-      
-      
-
-  //   }else {
-  //     update_form['child'].pop();
-  //   }
-  
-  //   product_form_state.update(() => update_form);
-    
-  // }
-
-
-  // const bomRowCellClick = (title,id) => {
-  //   if(title === 'check' ){
-  //     for(let i =0; i<update_form['child'].length; i++){
-  //       if(id === update_form['child'][i]['id']){
-          
-  //         update_form['child'][i][title] = !update_form['child'][i][title];
-  //         break;
-  //       }
-  //     }
-  
-  //   }
-    
-  //   product_form_state.update(() => update_form);
-    
-
-
-  // }
-
-
-
 
 
 

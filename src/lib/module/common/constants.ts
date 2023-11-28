@@ -9,13 +9,7 @@ import {table_state} from '$lib/store/common/state';
 
 
 import {productModalOpen} from '$lib/store/product/function';
-import { originModalOpen } from '$lib/store/origin/function';
-import { typeModalOpen } from '$lib/store/type/function';
-import { standardModalOpen } from '$lib/store/standard/function';
-import { unitModalOpen } from '$lib/store/unit/function';
-import { carModalOpen } from '$lib/store/car/function';
 
-import { companyModalOpen } from '$lib/store/company/function';
 import { phoneNumber,businessNumber } from './function';
 
 import { userModalOpen} from '$lib/store/user/function';
@@ -90,46 +84,16 @@ const TOAST_SAMPLE = {
 const TABLE_FILTER : any = {
     product : [
     {value : "all",name : "전체"},
-    {value : "name", name : "상품명"},
-    {value : "type", name : "분류"},
-    {value : "origin", name : "원산지"},
-    {value : "standard", name : "규격"},
-    {value : "unit", name : "단위"},
+    {value : "sk_uid", name : "SKUID"},
+    {value : "ship_name", name : "Ship_name"},
+    {value : "origin_name", name : "상품명"},
+    {value : "inbox", name : "인박스"},
+    {value : "outbox", name : "아웃박스"},
     ],
-    origin : [
-        {value : "all",name : "전체"},
-        {value : "name", name : "원산지"},
-    ],
-    type : [
-        {value : "all",name : "전체"},
-        {value : "name", name : "품목분류"},
-    ],
-    standard : [
-        {value : "all",name : "전체"},
-        {value : "name", name : "규격"},
-    ],
-    unit : [
-        {value : "all",name : "전체"},
-        {value : "name", name : "단위"},
-    ],
-    car : [
-        {value : "all",name : "전체"},
-        {value : "name", name : "차량번호"},
-    ],
-    company : [
-        {value : "all",name : "전체"},
-        {value : "code", name : "사업자등록번호"},
-        {value : "name", name : "매입처명"},
-        {value : "phone", name : "연락처"},
-        {value : "email", name : "이메일"},
 
-        
-    ],
     user : [
         {value : "all",name : "전체"},
         {value : "id", name : "ID"},
-        {value : "car", name : "지정차량"},
-        {value : "code", name : "사업자번호"},
         {value : "name", name : "이름"},
         {value : "email", name : "이메일"},
         {value : "phone", name : "연락처"},
@@ -139,68 +103,24 @@ const TABLE_FILTER : any = {
 const EXCEL_CONFIG : any = {
     product : [
     {header: '번호코드', key: 'uid', width: 30},
-    {header: '상품명', key: 'name', width: 30},
-    {header: '분류', key: "type", width: 30},
-    {header: '원산지', key: 'origin', width: 30},
-    {header: '규격', key: 'standard', width: 30},
-    {header: '단위', key: 'unit', width: 30},
-    {header: '등록일', key: 'created', width: 30},
+    {header: 'SKUID', key: 'sk_uid', width: 30},
+    {header: 'SHIP_NAME', key: "ship_name", width: 30},
+    {header: 'ORIGIN_NAME', key: 'origin_name', width: 30},
+    {header: '인박스', key: 'inbox', width: 30},
+    {header: '아웃박스', key: 'outbox', width: 30},
+    {header: '수량', key: 'qty', width: 30},
+    {header: '공급가', key: 'price', width: 30},
+    
     ],
   
-    origin : [
-        {header: '번호코드', key: 'uid', width: 30},
-        {header: '원산지', key: 'name', width: 30},
-        {header: '등록일', key: 'created', width: 30},
-    ],
-    type : [
-        {header: '번호코드', key: 'uid', width: 30},
-        {header: '품목분류', key: 'name', width: 30},
-        {header: '등록일', key: 'created', width: 30},
-    ],
-    standard : [
-        {header: '번호코드', key: 'uid', width: 30},
-        {header: '규격', key: 'name', width: 30},
-        {header: '등록일', key: 'created', width: 30},
-    ],
-    unit : [
-        {header: '번호코드', key: 'uid', width: 30},
-        {header: '단위', key: 'name', width: 30},
-        {header: '등록일', key: 'created', width: 30},
-    ],
-    car : [
-        {header: '번호코드', key: 'uid', width: 30},
-        {header: '차량번호', key: 'name', width: 30},
-        {header: '등록일', key: 'created', width: 30},
-    ],
-    company : [
-        {header: '번호코드', key: 'uid', width: 30},
-        {header: '사업자등록번호', key: 'code', width: 30},
-        {header: '회사명', key: 'name', width: 30},
-        {header: '연락처', key: 'phone', width: 30},
-        {header: '이메일', key: 'email', width: 30},
-        {header: '등록일', key: 'created', width: 30},
-    ],
     user : [
         {header: 'ID', key: 'id', width: 30},
-        {header: '지정차량', key: 'car', width: 30},
-        {header: '사업자등록번호', key: 'code', width: 30},
-        {header: '회사명', key: 'customer_name', width: 30},
         {header: '대표자명', key: 'name', width: 30},
         {header: '연락처', key: 'phone', width: 30},
         {header: '이메일', key: 'email', width: 30},
         {header: '등록일', key: 'created', width: 30},
     ],
-    user_product : [
-        {header: '번호코드', key: 'uid', width: 30},
-        {header: '상품명', key: 'name', width: 30},
-        {header: '분류', key: "type", width: 30},
-        {header: '원산지', key: 'origin', width: 30},
-        {header: '규격', key: 'standard', width: 30},
-        {header: '단위', key: 'unit', width: 30},
-        {header: '개수', key: 'qty', width: 30},
-
-        {header: '등록일', key: 'created', width: 30},
-        ],
+  
 }; 
 
 
@@ -210,8 +130,8 @@ const TABLE_HEADER_CONFIG : any = {
         cellClick:function(e : any, cell:any){
             cell.getRow().toggleSelect()
         }},
-        {title:"ID", field:"uid", width:150, headerFilter:"input"},
-        {title:"상품명", field:"name", width:150, headerFilter:"input", 
+        {title:"SKUID", field:"sk_uid", width:150, headerFilter:"input"},
+        {title:"SHIP_NAME", field:"ship_name", width:150, headerFilter:"input", 
         formatter:function(cell : any){
             var value = cell.getValue();
         return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
@@ -226,11 +146,11 @@ const TABLE_HEADER_CONFIG : any = {
            }
         }
     },
-        {title:"분류", field:"type.name", width:150, headerFilter:"input"},
+        {title:"ORIGIN_NAME", field:"origin_name", width:150, headerFilter:"input"},
         
-        {title:"원산지", field:"origin.name", width:150, headerFilter:"input"},
-        {title:"규격", field:"standard.name", width:150, headerFilter:"input"},
-        {title:"단위", field:"unit.name", width:150, headerFilter:"input"},
+        {title:"인박스", field:"inbox", width:150, headerFilter:"input"},
+        {title:"아웃박스", field:"outbox", width:150, headerFilter:"input"},
+        {title:"박스수량", field:"qty", width:150},
         
         {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
         formatter: function(cell : any, formatterParams: any, onRendered: any) {
@@ -240,193 +160,6 @@ const TABLE_HEADER_CONFIG : any = {
             return date;
         },
 
-    }],
-
-    origin : [
-        {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
-        cellClick:function(e : any, cell:any){
-            cell.getRow().toggleSelect()
-        }},
-        {title:"ID", field:"uid", width:150, headerFilter:"input"},
-        {title:"원산지", field:"name", width:150, headerFilter:"input", 
-        formatter:function(cell : any){
-            var value = cell.getValue();
-        return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
-         },
-
-        cellClick:function(e : any, cell:any){
-            let row = cell.getRow();
-           if(row){
-            originModalOpen(row.getData(),"update");
-           }else{
-          
-           }
-        }
-    },
-        {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
-        formatter: function(cell : any, formatterParams: any, onRendered: any) {
-            // Luxon을 사용하여 datetime 값을 date로 변환
-            const datetimeValue = cell.getValue();
-            const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
-            return date;
-        },
-    }],
-
-    type : [
-        {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
-        cellClick:function(e : any, cell:any){
-            cell.getRow().toggleSelect()
-        }},
-        {title:"ID", field:"uid", width:150, headerFilter:"input"},
-        {title:"품목분류", field:"name", width:150, headerFilter:"input", 
-        formatter:function(cell : any){
-            var value = cell.getValue();
-        return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
-         },
-
-        cellClick:function(e : any, cell:any){
-            let row = cell.getRow();
-           if(row){
-            typeModalOpen(row.getData(),"update");
-           }else{
-          
-           }
-        }
-    },
-        {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
-        formatter: function(cell : any, formatterParams: any, onRendered: any) {
-            // Luxon을 사용하여 datetime 값을 date로 변환
-            const datetimeValue = cell.getValue();
-            const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
-            return date;
-        },
-    }],
-
-    standard : [
-        {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
-        cellClick:function(e : any, cell:any){
-            cell.getRow().toggleSelect()
-        }},
-        {title:"ID", field:"uid", width:150, headerFilter:"input"},
-        {title:"규격", field:"name", width:150, headerFilter:"input", 
-        formatter:function(cell : any){
-            var value = cell.getValue();
-        return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
-         },
-
-        cellClick:function(e : any, cell:any){
-            let row = cell.getRow();
-           if(row){
-            standardModalOpen(row.getData(),"update");
-           }else{
-          
-           }
-        }
-    },
-        {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
-        formatter: function(cell : any, formatterParams: any, onRendered: any) {
-            // Luxon을 사용하여 datetime 값을 date로 변환
-            const datetimeValue = cell.getValue();
-            const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
-            return date;
-        },
-    }],
-    unit : [
-        {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
-        cellClick:function(e : any, cell:any){
-            cell.getRow().toggleSelect()
-        }},
-        {title:"ID", field:"uid", width:150, headerFilter:"input"},
-        {title:"단위", field:"name", width:150, headerFilter:"input", 
-        formatter:function(cell : any){
-            var value = cell.getValue();
-        return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
-         },
-
-        cellClick:function(e : any, cell:any){
-            let row = cell.getRow();
-           if(row){
-            unitModalOpen(row.getData(),"update");
-           }else{
-          
-           }
-        }
-    },
-        {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
-        formatter: function(cell : any, formatterParams: any, onRendered: any) {
-            // Luxon을 사용하여 datetime 값을 date로 변환
-            const datetimeValue = cell.getValue();
-            const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
-            return date;
-        },
-    }],
-
-    car : [
-        {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
-        cellClick:function(e : any, cell:any){
-            cell.getRow().toggleSelect()
-        }},
-        {title:"ID", field:"uid", width:150, headerFilter:"input"},
-        {title:"차량번호", field:"name", width:150, headerFilter:"input", 
-        formatter:function(cell : any){
-            var value = cell.getValue();
-        return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
-         },
-
-        cellClick:function(e : any, cell:any){
-            let row = cell.getRow();
-           if(row){
-            carModalOpen(row.getData(),"update");
-           }else{
-          
-           }
-        }
-    },
-        {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
-        formatter: function(cell : any, formatterParams: any, onRendered: any) {
-            // Luxon을 사용하여 datetime 값을 date로 변환
-            const datetimeValue = cell.getValue();
-            const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
-            return date;
-        },
-    }],
-
-    company : [
-        {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
-        cellClick:function(e : any, cell:any){
-            cell.getRow().toggleSelect()
-        }},
-        {title:"ID", field:"uid", width:150, headerFilter:"input"},
-        
-        {title:"사업자번호", field:"code", width:150, headerFilter:"input"},
-        
-        {title:"매입처명", field:"name", width:150, headerFilter:"input", 
-        formatter:function(cell : any){
-            var value = cell.getValue();
-        return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
-         },
-
-        cellClick:function(e : any, cell:any){
-            let row = cell.getRow();
-           if(row){
-            companyModalOpen(row.getData(),"update");
-           }else{
-          
-           }
-        }
-    },
-        
-    {title:"연락처", field:"phone", width:150, headerFilter:"input"},
-  
-    {title:"이메일", field:"email", width:150, headerFilter:"input"},
-
-        {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
-        formatter: function(cell : any, formatterParams: any, onRendered: any) {
-            // Luxon을 사용하여 datetime 값을 date로 변환
-            const datetimeValue = cell.getValue();
-            const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
-            return date;
-        },
     }],
 
     user : [
@@ -435,13 +168,7 @@ const TABLE_HEADER_CONFIG : any = {
             cell.getRow().toggleSelect()
         }},
         {title:"ID", field:"id", width:150, headerFilter:"input"},
-        {title:"사업자번호", field:"code", width:150, headerFilter:"input",
-        formatter:function(cell : any){
-            var value = cell.getValue();
-        return businessNumber(value);
-         },
-        },
-        {title:"상호명", field:"customer_name", width:150, headerFilter:"input", 
+        {title:"이름", field:"name", width:150, headerFilter:"input", 
         formatter:function(cell : any){
             var value = cell.getValue();
             
@@ -457,7 +184,6 @@ const TABLE_HEADER_CONFIG : any = {
            }
         }
         },
-        {title:"지정차량", field:"car.name", width:150, headerFilter:"input"},
         {title:"연락처", field:"phone", width:150, headerFilter:"input", formatter:function(cell : any){
             var value = cell.getValue();
         return phoneNumber(value);
@@ -475,29 +201,6 @@ const TABLE_HEADER_CONFIG : any = {
     
    ],
 
-   user_product : [
-    {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
-    cellClick:function(e : any, cell:any){
-        cell.getRow().toggleSelect();
-        console.log(cell.getRow());
-    }},
-    {title:"ID", field:"uid", width:150, headerFilter:"input"},
-    {title:"상품명", field:"name", width:150, headerFilter:"input", 
-    formatter:function(cell : any){
-        var value = cell.getValue();
-    return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
-     },
-
-  
-    },
-    {title:"분류", field:"type.name", width:150, headerFilter:"input"},
-    
-    {title:"원산지", field:"origin.name", width:150, headerFilter:"input"},
-    {title:"규격", field:"standard.name", width:150, headerFilter:"input"},
-    {title:"단위", field:"unit.name", width:150, headerFilter:"input"},
-    {title:"수량", field:"qty", width:150, editor : "input"},
-
-   ],
 
 
 }

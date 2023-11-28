@@ -17,14 +17,14 @@ import {v4 as uuid} from 'uuid';
 
   const product_form_state : any = writable({
     uid : 0,
-    code : '',
-    name : '',
-    unit : '',
-    standard : '',
-    type : '',
-    origin : '',
+    sk_uid : 0,
+    ship_name : '',
+    origin_name : '',
+    inbox : '',
+    outbox : '',
+    qty : 0,
+    price : 0,
     used : 1,
-
 
   })
   

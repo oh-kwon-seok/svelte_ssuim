@@ -2,7 +2,7 @@
 
 
 import { writable } from 'svelte/store';
-import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_origin_state, common_type_state, common_unit_state,common_standard_state,common_car_state,common_company_state,common_user_state,table_state } from './state';
+import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_user_state,table_state } from './state';
 
 // import {item_data,item_form_state} from '$lib/store/info/item/state';
 
@@ -37,14 +37,8 @@ let table_data : any;
 
 let product_data : any;
 
-let origin_data : any;
 
-let type_data : any;
-let unit_data : any;
-let standard_data : any;
-let car_data : any;
 
-let company_data : any;
 
 let user_data : any;
 
@@ -92,28 +86,6 @@ common_product_state.subscribe((data : any) => {
   product_data = data;
 })
 
-common_origin_state.subscribe((data : any) => {
-  origin_data = data;
-})
-
-common_type_state.subscribe((data : any) => {
-  type_data = data;
-})
-
-common_unit_state.subscribe((data : any) => {
-  unit_data = data;
-})
-common_standard_state.subscribe((data : any) => {
-  standard_data = data;
-})
-common_car_state.subscribe((data : any) => {
-  car_data = data;
-})
-
-common_company_state.subscribe((data) => {
-  company_data = data;
-
-})
 
 common_user_state.subscribe((data) => {
   user_data = data;
@@ -124,7 +96,7 @@ common_user_state.subscribe((data) => {
 const infoCallApi = (title) => {
 
  
-  const url = `${api}/${title}/info_select`; 
+  const url = `${api}/${title}/select`; 
   
 
   const config = {
@@ -141,23 +113,7 @@ const infoCallApi = (title) => {
       if(res.data.length > 0){
         if(title === 'origin'){
           origin_data = res.data;
-          common_origin_state.update(()=> origin_data);
-        }else if(title === 'unit'){
-          unit_data = res.data;
-          common_unit_state.update(()=> unit_data);
-        
-        }else if(title === 'type'){
-          type_data = res.data;
-          common_type_state.update(()=> type_data);
-        
-        }else if(title === 'standard'){
-          standard_data = res.data;
-          common_standard_state.update(()=> standard_data);
-        
-        }else if(title === 'car'){
-          car_data = res.data;
-          common_car_state.update(()=> car_data);
-        
+          common_product_state.update(()=> product_data);
         }
       
 

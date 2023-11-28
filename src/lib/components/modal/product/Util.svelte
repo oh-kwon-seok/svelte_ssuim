@@ -9,7 +9,7 @@
     import Toast from '$lib/components/toast/Toast.svelte';
     import Alert from '$lib/components/alert/Alert.svelte';
     import {product_modal_state, product_form_state} from '$lib/store/product/state';
-    import {common_alert_state, common_toast_state,common_type_state, common_unit_state, common_origin_state,common_standard_state} from '$lib/store/common/state';
+    import {common_alert_state, common_toast_state} from '$lib/store/common/state';
     
     import {save} from '$lib/store/product/function';
     import {DATA_FAIL_ALERT,DATA_SELECT_ALERT} from '$lib/module/common/constants';
@@ -50,61 +50,54 @@
           {#if title === 'add' || title === 'update'}
    
         <div class="grid grid-cols-2 gap-4">
+          
           <Label class="space-y-2">
-            <span>분류</span>
-            <Select id="countrie" class="mt-2" bind:value={$product_form_state['type']} placeholder="">
-              
-              
-                {#each $common_type_state as item}
-                  <option value={item.uid}>{item.name}</option>
-                {/each}
-              </Select>
-          </Label>
-          <Label class="space-y-2">
-            <span>품명</span>
-            <Input type="text" id="last_name" placeholder="품명을 입력하세요" required bind:value={$product_form_state['name']}/>
+            <span>SK UID</span>
+            <Input type="text" id="last_name" placeholder="SK UID를 입력하세요" required bind:value={$product_form_state['sk_uid']}/>
             
-            {#if $product_form_state['name'] === '' && $common_alert_state['value'] === true}
+            {#if ($product_form_state['sk_uid'] === '' || $product_form_state['sk_uid'] === 0) && $common_alert_state['value'] === true}
             <Helper class="mt-2" color="red"><span class="font-medium">데이터를 입력해주세요</span></Helper>
             {/if}
           </Label>
 
+          <Label class="space-y-2">
+            <span>SHIP_NAME</span>
+            <Input type="text" id="last_name" placeholder="SHIP_NAME을 입력하세요" required bind:value={$product_form_state['ship_name']}/>
+            
+          </Label>
+
+          <Label class="space-y-2">
+            <span>ORIGIN_NAME</span>
+            <Input type="text" id="last_name" placeholder="ORIGIN_NAME을 입력하세요" required bind:value={$product_form_state['origin_name']}/>
+            
+          </Label>
+
+          <Label class="space-y-2">
+            <span>인박스</span>
+            <Input type="text" id="last_name" placeholder="인박스를 입력하세요" required bind:value={$product_form_state['inbox']}/>
+            
+          </Label>
+
+          <Label class="space-y-2">
+            <span>아웃박스</span>
+            <Input type="text" id="last_name" placeholder="인박스를 입력하세요" required bind:value={$product_form_state['outbox']}/>
+            
+          </Label>
+
+          <Label class="space-y-2">
+            <span>수량</span>
+            <Input type="number" id="last_name" placeholder="수량을 입력하세요" required bind:value={$product_form_state['qty']}/>
+            
+          </Label>
+          <Label class="space-y-2">
+            <span>공급가</span>
+            <Input type="number" id="last_name" placeholder="공급금액을 입력하세요" required bind:value={$product_form_state['price']}/>
+            
+          </Label>
+
+
        
-
-          <Label class="space-y-2">
-            <span>원산지</span>
-
-            <Select id="countrie" class="mt-2" bind:value={$product_form_state['origin']} placeholder="">
-              
-              
-                {#each $common_origin_state as item}
-                  <option value={item.uid}>{item.name}</option>
-                {/each}
-              </Select>
-          </Label>
-
-          <Label class="space-y-2">
-            <span>규격</span>
-            <Select id="countrie" class="mt-2" bind:value={$product_form_state['standard']} placeholder="">
-              
-              
-                {#each $common_standard_state as item}
-                  <option value={item.uid}>{item.name}</option>
-                {/each}
-              </Select>
-          </Label>
-    
-          <Label class="space-y-2">
-            <span>단위</span>
-            <Select id="countries" class="mt-2" bind:value={$product_form_state['unit']} placeholder="">
-              
-              
-                {#each $common_unit_state as item}
-                  <option value={item.uid}>{item.name}</option>
-                {/each}
-              </Select>
-          </Label>
-          
+      
           
           
           {#if $product_modal_state['title'] === 'update'}
@@ -124,29 +117,7 @@
                 <Hr class="my-8 bg-slate-300 "  height="h-1"></Hr>
          
           </div>
-<!-- 
-          <div class="grid grid-cols-6 gap-4">
-            <P class="col-span-3 text-bold" align='center'>BOM 리스트</P>
-            <Button color="blue" class="gap-4" on:click={() => bomRowUtil('add')}>
-              행추가
-              
-              
-              <Indicator color="none" class="bg-red-500 text-xs text-primary-800 font-semibold" size="lg">{$info_item_form_state['child'].length > 0 ? $info_item_form_state['child'].length : 0}</Indicator>
-            
-            </Button>
-            <Button color="red" class="gap-4" on:click={() => bomRowUtil('check_delete')}>
-              선택삭제
-             </Button>
-             <Button color="red" class="gap-4" on:click={() => bomRowUtil('delete')}>
-              행삭제
-             </Button>
-          </div> -->
 
-
-
-          <!-- {#if $common_toast_state['value'] === true}
-          <Toast />
-         {/if} -->
 
          {#if $common_alert_state['type'] === 'save' && $common_alert_state['value'] === true}
             

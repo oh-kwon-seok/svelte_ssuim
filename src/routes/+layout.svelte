@@ -23,11 +23,9 @@
 		changeUrl(url_obj);
 
 		// 기준정보 select용 데이터들을 호출한다.
-
+		infoCallApi('product');
+		infoCallApi('ship');
 	
-		
-		
-
 	
 	});
 	

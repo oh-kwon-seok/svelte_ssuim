@@ -2,7 +2,7 @@
 
 
 import { writable } from 'svelte/store';
-import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_user_state,table_state } from './state';
+import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_ship_state,common_user_state,table_state } from './state';
 
 // import {item_data,item_form_state} from '$lib/store/info/item/state';
 
@@ -36,6 +36,7 @@ let url_data : any;
 let table_data : any;
 
 let product_data : any;
+let ship_data : any;
 
 
 
@@ -85,7 +86,9 @@ table_state.subscribe((data : any) => {
 common_product_state.subscribe((data : any) => {
   product_data = data;
 })
-
+common_ship_state.subscribe((data : any) => {
+  ship_data = data;
+})
 
 common_user_state.subscribe((data) => {
   user_data = data;
@@ -96,8 +99,8 @@ common_user_state.subscribe((data) => {
 const infoCallApi = (title) => {
 
  
-  const url = `${api}/${title}/select`; 
-  
+  const url = `${api}/${title}/info_select`; 
+  AnalyserNode
 
   const config = {
     headers:{
@@ -111,9 +114,12 @@ const infoCallApi = (title) => {
    
   
       if(res.data.length > 0){
-        if(title === 'origin'){
-          origin_data = res.data;
+        if(title === 'product'){
+          product_data = res.data;
           common_product_state.update(()=> product_data);
+        } else if(title === 'ship'){
+          ship_data = res.data;
+          common_ship_state.update(()=> ship_data);
         }
       
 
@@ -402,7 +408,37 @@ const excelDownload = (type,config) => {
     }
   }
 
-  const excelUpload = (e,config) => {
+  const excelUpload = (e) => {
+    const coopang_upload_config : any = [
+      {header: '발주번호', key: '발주번호', width: 30},
+      {header: '물류센터', key: '물류센터', width: 30},
+      {header: '입고유형', key: '입고유형', width: 30},
+      {header: '발주상태', key: '발주상태', width: 30},
+      {header: '상품번호', key: '상품번호', width: 30},
+      {header: '상품바코드', key: '상품바코드', width: 30},
+      {header: '상품이름', key: '상품이름', width: 30},
+      {header: '발주수량', key: '발주수량', width: 30},
+      {header: '확정수량', key: '확정수량', width: 30},
+      {header: '유통기한', key: '유통기한', width: 30},
+      {header: '제조일자', key: '제조일자', width: 30},
+      {header: '생산년도', key: '생산년도', width: 30},
+      {header: '납품부족사유', key: '납품부족사유', width: 30},
+      {header: '회송담당자', key: '회송담당자', width: 30},
+      {header: '회송담당자연락처', key: '회송담당자연락처', width: 30},
+      {header: '회송지주소', key: '회송지주소', width: 30},
+      {header: '매입가', key: '매입가', width: 30},
+      {header: '공급가', key: '공급가', width: 30},
+      {header: '부가세', key: '부가세', width: 30},
+      {header: '매입금', key: '매입금', width: 30},
+      {header: '입고예정일', key: '입고예정일', width: 30},
+      {header: '발주등록일시', key: '발주등록일시', width: 30},
+      
+  
+   
+      
+
+    ]; 
+
     
     const wb = new Excel.Workbook();
     const reader = new FileReader()
@@ -422,32 +458,27 @@ const excelDownload = (type,config) => {
             let obj = {
 
             };
-            for(let i=0; i<config.length; i++){
-              obj[config[i].key] = row.values[i+1];
+            for(let i=0; i<coopang_upload_config.length; i++){
+              obj[coopang_upload_config[i].key] = row.values[i+1] !== '' ?  row.values[i+1] : "비었음";
 
             }
-            obj['expand'] = false;
-            obj['check'] = false;
+
+            console.log('obj : ', obj);
             change_data.push(obj);
 
-            list_data = change_data;
+          
           }else {
 
           }
-           
-
-           
-
-          
           });
-          // item_data.update(() => list_data);
-          search_data['filteredItems'] = list_data;
-          common_search_state.update(() => search_data);
+          
           
        
 
         })
       })
+
+    
      
     }
    

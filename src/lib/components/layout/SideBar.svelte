@@ -66,6 +66,8 @@
                     <Icon.DatabaseSolid size="20"/>
                 </svelte:fragment>
               <SidebarDropdownItem class={text_style} label="품목 관리" href='/info/product' active={activeUrl === '/info/product'} on:click={handleToggle('product')} />
+              <SidebarDropdownItem class={text_style} label="물류센터 관리" href='/info/ship' active={activeUrl === '/info/ship'} on:click={handleToggle('ship')} />
+              
           
             </SidebarDropdownWrapper>
  

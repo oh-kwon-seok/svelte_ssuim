@@ -9,7 +9,7 @@ import {table_state} from '$lib/store/common/state';
 
 
 import {productModalOpen} from '$lib/store/product/function';
-
+import {shipModalOpen} from '$lib/store/ship/function';
 import { phoneNumber,businessNumber } from './function';
 
 import { userModalOpen} from '$lib/store/user/function';
@@ -98,6 +98,14 @@ const TABLE_FILTER : any = {
         {value : "email", name : "이메일"},
         {value : "phone", name : "연락처"},
     ],
+    ship : [
+        {value : "all",name : "전체"},
+        {value : "area", name : "지역"},
+        {value : "receive_user", name : "수령인"},
+        {value : "phone1", name : "연락처1"},
+        {value : "phone2", name : "연락처2"},
+        {value : "address", name : "주소"},
+        ],
 }
 
 const EXCEL_CONFIG : any = {
@@ -120,6 +128,16 @@ const EXCEL_CONFIG : any = {
         {header: '이메일', key: 'email', width: 30},
         {header: '등록일', key: 'created', width: 30},
     ],
+
+    ship : [
+        {header: '번호코드', key: 'uid', width: 30},
+        {header: '지역', key: 'area', width: 30},
+        {header: '수령인', key: "receive_user", width: 30},
+        {header: '연락처1', key: 'phone1', width: 30},
+        {header: '연락처2', key: 'phone2', width: 30},
+        {header: '주소', key: 'address', width: 30},
+       
+        ],
   
 }; 
 
@@ -200,6 +218,43 @@ const TABLE_HEADER_CONFIG : any = {
         }},     
     
    ],
+
+   ship : [
+    {formatter:"rowSelection",width : 60, field: "selected", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, 
+    cellClick:function(e : any, cell:any){
+        cell.getRow().toggleSelect()
+    }},
+    {title:"지역", field:"area", width:150, headerFilter:"input"},
+    {title:"수령인", field:"receive_user", width:150, headerFilter:"input", 
+    formatter:function(cell : any){
+        var value = cell.getValue();
+    return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
+     },
+
+    cellClick:function(e : any, cell:any){
+        let row = cell.getRow();
+       if(row){
+        shipModalOpen(row.getData(),"update");
+       }else{
+      
+       }
+    }
+},
+    {title:"연락처1", field:"phone1", width:150, headerFilter:"input"},
+    
+    {title:"연락처2", field:"phone2", width:150, headerFilter:"input"},
+    {title:"주소", field:"address", width:300, headerFilter:"input"},
+
+    
+    {title:"등록일", field:"created", hozAlign:"center", sorter:"date",  headerFilter:"input", 
+    formatter: function(cell : any, formatterParams: any, onRendered: any) {
+        // Luxon을 사용하여 datetime 값을 date로 변환
+        const datetimeValue = cell.getValue();
+        const date = DateTime.fromISO(datetimeValue).toFormat("yyyy-MM-dd");
+        return date;
+    },
+
+}],
 
 
 

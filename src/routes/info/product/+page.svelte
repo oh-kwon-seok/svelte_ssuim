@@ -21,11 +21,11 @@
     import * as Icon from 'svelte-awesome-icons';
 
     import {productModalOpen} from '$lib/store/product/function';
-    import {excelDownload, excelUpload, fileButtonClick} from '$lib/store/common/function';
+    import {excelDownload, excelUpload, productSendDownload,shipDownload,fileButtonClick} from '$lib/store/common/function';
     
     import {product_form_state,product_modal_state} from '$lib/store/product/state';
 
-    import {url_state,cookie_state,common_product_state,table_state,common_toast_state,common_search_state} from '$lib/store/common/state';
+    import {url_state,cookie_state,table_state,common_toast_state,coopang_upload_result_state} from '$lib/store/common/state';
     import {TABLE_COMPONENT,EXCEL_CONFIG} from '$lib/module/common/constants';
 
     import SearchBar from '$lib/components/layout/SearchBar.svelte'
@@ -132,6 +132,17 @@
                   
                         />
                     </Button>
+                    {#if $coopang_upload_result_state.length > 0}
+                      <Button  color='green' on:click={() =>productSendDownload()}>
+                        <Icon.FileCsvSolid class='mr-2' size="20" />
+                        생산부 전달용 다운
+                    </Button>
+                    <Button  color='green' on:click={() => shipDownload()}>
+                      <Icon.FileCsvSolid class='mr-2' size="20" />
+                      한진택배송장 다운
+                  </Button>
+                    {/if}
+                  
 
                       
 

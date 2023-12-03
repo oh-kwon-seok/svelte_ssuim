@@ -21,11 +21,11 @@
     import * as Icon from 'svelte-awesome-icons';
 
     import {productModalOpen} from '$lib/store/product/function';
-    import {excelDownload, excelUpload, productSendDownload,shipDownload,fileButtonClick} from '$lib/store/common/function';
+    import {excelDownload, excelUpload, productSendDownload,shipDownload,fileButtonClick,coopangShipmentDownload,excelHanjinUpload,excelHanjinTransportUpload} from '$lib/store/common/function';
     
     import {product_form_state,product_modal_state} from '$lib/store/product/state';
 
-    import {url_state,cookie_state,table_state,common_toast_state,coopang_upload_result_state} from '$lib/store/common/state';
+    import {url_state,cookie_state,table_state,common_toast_state,coopang_upload_result_state,hanjin_upload_state,hanjin_transport_upload_state} from '$lib/store/common/state';
     import {TABLE_COMPONENT,EXCEL_CONFIG} from '$lib/module/common/constants';
 
     import SearchBar from '$lib/components/layout/SearchBar.svelte'
@@ -120,28 +120,7 @@
                           엑셀다운
                       </Button>
 
-                      <Button  color='green' on:click={(e)=> fileButtonClick('upload')}>
-                        <Icon.UploadSolid class='mr-2' size="20" />
-                          쿠팡발주서 업로드
-                        <input 
-                        hidden  
-                        id = 'upload' 
-                        type='file' 
-                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
-                        on:change={(e)=> excelUpload(e)}
-                  
-                        />
-                    </Button>
-                    {#if $coopang_upload_result_state.length > 0}
-                      <Button  color='green' on:click={() =>productSendDownload()}>
-                        <Icon.FileCsvSolid class='mr-2' size="20" />
-                        생산부 전달용 다운
-                    </Button>
-                    <Button  color='green' on:click={() => shipDownload()}>
-                      <Icon.FileCsvSolid class='mr-2' size="20" />
-                      한진택배송장 다운
-                  </Button>
-                    {/if}
+                    
                   
 
                       
@@ -156,6 +135,79 @@
                         
 
                       </div>
+                      <div class='m-5'>
+                        <Button  color='green' on:click={(e)=> fileButtonClick('upload')}>
+                          <Icon.UploadSolid class='mr-2' size="20" />
+                            1.쿠팡발주서 업로드
+                          <input 
+                          hidden  
+                          id = 'upload' 
+                          type='file' 
+                          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
+                          on:change={(e)=> excelUpload(e)}
+                    
+                          />
+                      </Button>
+                      {#if $coopang_upload_result_state.length > 0}
+                        <Button  color='green' on:click={(e)=> fileButtonClick('upload1')}>
+                          <Icon.UploadSolid class='mr-2' size="20" />
+                            2.한진택배양식 업로드
+                          <input 
+                          hidden  
+                          id = 'upload1' 
+                          type='file' 
+                          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
+                          on:change={(e)=> excelHanjinUpload(e)}
+                    
+                          />
+                      </Button>
+                      {#if $hanjin_upload_state.length > 0}
+                      <Button  color='green' on:click={(e)=> fileButtonClick('upload2')}>
+                        <Icon.UploadSolid class='mr-2' size="20" />
+                          3.한진택배 운송장 업로드
+                        <input 
+                        hidden  
+                        id = 'upload2' 
+                        type='file' 
+                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
+                        on:change={(e)=> excelHanjinTransportUpload(e)}
+                  
+                        />
+                    </Button>
+                      {/if}
+
+
+                      {/if}
+                   
+
+
+                    
+
+                        </div>
+
+                      <div class='m-5'>
+
+                        {#if $coopang_upload_result_state.length > 0}
+                        <Button  color='green' on:click={() =>productSendDownload()}>
+                          <Icon.FileCsvSolid class='mr-2' size="20" />
+                          생산부 전달용 다운
+                      </Button>
+                      <Button  color='green' on:click={() => shipDownload()}>
+                        <Icon.FileCsvSolid class='mr-2' size="20" />
+                        한진택배송장 다운
+                      </Button>
+
+                        {#if $hanjin_transport_upload_state.length > 0}
+                        <Button  color='green' on:click={() =>coopangShipmentDownload()}>
+                          <Icon.FileCsvSolid class='mr-2' size="20" />
+                          쿠팡쉽먼트 다운
+                      </Button>
+                      {/if}
+
+                      {/if}
+
+                      </div>
+
 
                       <div id="example-table-theme" bind:this={tableComponent}></div>
                     </TabItem>

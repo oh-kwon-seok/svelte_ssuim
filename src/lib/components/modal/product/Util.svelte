@@ -52,7 +52,7 @@
         <div class="grid grid-cols-2 gap-4">
           
           <Label class="space-y-2">
-            <span>SK UID</span>
+            <span>SKU ID</span>
             <Input type="text" id="last_name" placeholder="SK UID를 입력하세요" required bind:value={$product_form_state['sk_uid']}/>
             
             {#if ($product_form_state['sk_uid'] === '' || $product_form_state['sk_uid'] === 0) && $common_alert_state['value'] === true}
@@ -61,14 +61,14 @@
           </Label>
 
           <Label class="space-y-2">
-            <span>SHIP_NAME</span>
-            <Input type="text" id="last_name" placeholder="SHIP_NAME을 입력하세요" required bind:value={$product_form_state['ship_name']}/>
+            <span>SKU NAME</span>
+            <Input type="text" id="last_name" placeholder="SKU_NAME을 입력하세요" required bind:value={$product_form_state['ship_name']}/>
             
           </Label>
 
           <Label class="space-y-2">
-            <span>ORIGIN_NAME</span>
-            <Input type="text" id="last_name" placeholder="ORIGIN_NAME을 입력하세요" required bind:value={$product_form_state['origin_name']}/>
+            <span>마감명</span>
+            <Input type="text" id="last_name" placeholder="마감명을 입력하세요" required bind:value={$product_form_state['origin_name']}/>
             
           </Label>
 

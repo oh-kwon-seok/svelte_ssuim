@@ -84,9 +84,9 @@ const TOAST_SAMPLE = {
 const TABLE_FILTER : any = {
     product : [
     {value : "all",name : "전체"},
-    {value : "sk_uid", name : "SKUID"},
-    {value : "ship_name", name : "Ship_name"},
-    {value : "origin_name", name : "상품명"},
+    {value : "sk_uid", name : "SKU ID"},
+    {value : "ship_name", name : "SKU NAME"},
+    {value : "origin_name", name : "마감명"},
     {value : "inbox", name : "인박스"},
     {value : "outbox", name : "아웃박스"},
     ],
@@ -111,8 +111,8 @@ const TABLE_FILTER : any = {
 const EXCEL_CONFIG : any = {
     product : [
     {header: '번호코드', key: 'uid', width: 30},
-    {header: 'SKUID', key: 'sk_uid', width: 30},
-    {header: 'SHIP_NAME', key: "ship_name", width: 30},
+    {header: 'SKU ID', key: 'sk_uid', width: 30},
+    {header: 'SKU NAME', key: "ship_name", width: 30},
     {header: 'ORIGIN_NAME', key: 'origin_name', width: 30},
     {header: '인박스', key: 'inbox', width: 30},
     {header: '아웃박스', key: 'outbox', width: 30},
@@ -148,8 +148,8 @@ const TABLE_HEADER_CONFIG : any = {
         cellClick:function(e : any, cell:any){
             cell.getRow().toggleSelect()
         }},
-        {title:"SKUID", field:"sk_uid", width:150, headerFilter:"input"},
-        {title:"SHIP_NAME", field:"ship_name", width:150, headerFilter:"input", 
+        {title:"SKU ID", field:"sk_uid", width:150, headerFilter:"input"},
+        {title:"SKU NAME", field:"ship_name", width:150, headerFilter:"input", 
         formatter:function(cell : any){
             var value = cell.getValue();
         return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
@@ -164,7 +164,7 @@ const TABLE_HEADER_CONFIG : any = {
            }
         }
     },
-        {title:"ORIGIN_NAME", field:"origin_name", width:150, headerFilter:"input"},
+        {title:"마감명", field:"origin_name", width:150, headerFilter:"input"},
         
         {title:"인박스", field:"inbox", width:150, headerFilter:"input"},
         {title:"아웃박스", field:"outbox", width:150, headerFilter:"input"},

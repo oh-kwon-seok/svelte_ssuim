@@ -1,5 +1,3 @@
-
-
 <script>
 	
     // @ts-nocheck
@@ -21,7 +19,7 @@
     import * as Icon from 'svelte-awesome-icons';
 
     import {productModalOpen} from '$lib/store/product/function';
-    import {excelDownload, excelUpload, productSendDownload,shipDownload,fileButtonClick,coopangShipmentDownload,excelHanjinUpload,excelHanjinTransportUpload,palletDownload} from '$lib/store/common/function';
+    import {excelDownload, excelUpload, productSendDownload,shipDownload,fileButtonClick,coopangShipmentDownload,excelHanjinUpload,excelHanjinTransportUpload,palletDownload,milkrunBoxDownload} from '$lib/store/common/function';
     
     import {product_form_state,product_modal_state} from '$lib/store/product/state';
 
@@ -196,6 +194,10 @@
                         <Icon.FileCsvSolid class='mr-2' size="20" />
                         파렛트 다운
                      </Button>
+                     <Button  color='green' on:click={() => milkrunBoxDownload()}>
+                      <Icon.FileCsvSolid class='mr-2' size="20" />
+                      밀크런 박스리스트 다운
+                   </Button>
                       
                      <Button  color='green' on:click={() => shipDownload()}>
                         <Icon.FileCsvSolid class='mr-2' size="20" />

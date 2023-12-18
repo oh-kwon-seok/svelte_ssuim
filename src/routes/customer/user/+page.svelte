@@ -37,9 +37,7 @@
 	import { afterUpdate, onMount } from 'svelte';
 
   
-    // import {TabulatorFull as Tabulator} from 'tabulator-tables';
 
-    import 'tabulator-tables-css'; // CSS 파일이 import됩니다.
 	import moment from 'moment';
             
   

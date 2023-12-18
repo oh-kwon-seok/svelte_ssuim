@@ -1,9 +1,24 @@
-import { dev } from '$app/environment';
 
-// we don't need any JS on this page, though we'll load
-// it in dev so that we get hot module replacement
-export const csr = dev;
+import type { PageLoad } from './$types';
 
-// since there's no dynamic data here, we can prerender
-// it so that it gets served as a static asset in production
-export const prerender = true;
+//@ts-ignore
+import { cookie_state } from '$lib/store/common/state';
+
+
+
+
+
+
+export const load = (({ params}) => {
+  console.log('params : ',params);
+
+    if (cookie_state === '' || cookie_state === undefined) {
+      return {
+        title: 'redirect',
+      };
+    }
+   
+ 
+  // throw error(404, 'Not found');
+  
+}) satisfies PageLoad;

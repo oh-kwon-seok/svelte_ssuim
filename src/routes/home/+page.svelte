@@ -30,7 +30,7 @@
     // import {TabulatorFull as Tabulator} from 'tabulator-tables';
     import * as Icon from 'svelte-awesome-icons';
     
-    import 'tabulator-tables-css'; // CSS 파일이 import됩니다.
+   
 	import moment from 'moment';
 
   
@@ -40,16 +40,8 @@
 
     let status;
   
-    let tableComponent = "example-table-theme";
-    
-
    
-    onMount(()=>{
-        console.log('시점');
-       
-        makeTable(table_state,"product",tableComponent);
-
-    });
+    
    
     afterUpdate(()=> {
 

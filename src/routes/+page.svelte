@@ -130,15 +130,7 @@
   
 
 </script>
-		<style>
-		    .image-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-			width : 50%;
-        }
-		</style>
+	
 		<div class="flex justify-center items-center ">
 		<Card class="w-full mt-16 "  padding='xl' img={src_url}   reverse={false} horizontal>	
 		<form class="flex flex-col space-y-6" >

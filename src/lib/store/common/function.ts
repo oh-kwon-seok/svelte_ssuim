@@ -347,8 +347,8 @@ const productSendDownload = () => {
 
   try {
 
-    let product_title : any= '생산부 전달용_택배';
-    let product_title2 : any= '생산부 전달용';
+    let product_title : any= '생산부 전달용_통합';
+    let product_title2 : any= '생산부 전달용_택배';
     let product_title3 : any= '생산부 전달용_밀크런';
     
     
@@ -388,8 +388,8 @@ const productSendDownload = () => {
     // key: 컬럼을 접근하기 위한 key
     // hidden: 숨김 여부
     // width: 컬럼 넓이
-    sheetOne.columns = product_send_config;
-    sheetTwo.columns = coopang_download_config;
+    sheetOne.columns = coopang_download_config;
+    sheetTwo.columns = product_send_config;
     sheetThree.columns = product_send_config;
     
 
@@ -426,7 +426,16 @@ if (centerSums[center] >= 10) {
 });
 
 
-const sortedData = box_result.sort((a, b) => {
+const borderStyle = {
+  top: { style: 'thin' },
+  left: { style: 'thin' },
+  bottom: { style: 'thin' },
+  right: { style: 'thin' }
+};
+
+
+
+const sortedBoxData = box_result.sort((a, b) => {
   const centerA = a["물류센터"];
   const centerB = b["물류센터"];
 
@@ -436,20 +445,7 @@ const sortedData = box_result.sort((a, b) => {
 });
 
 
-console.log('box_result : ', box_result);
-console.log('sortedData : ', sortedData);
-
-
-    
-const borderStyle = {
-  top: { style: 'thin' },
-  left: { style: 'thin' },
-  bottom: { style: 'thin' },
-  right: { style: 'thin' }
-};
-
-
-sortedData.map((item, index) => {
+sortedBoxData.map((item, index) => {
   sheetOne.addRow(item);
 
   // 추가된 행의 컬럼 설정(헤더와 style이 다를 경우)
@@ -463,13 +459,32 @@ sortedData.map((item, index) => {
 });
 
 
+const sortedMilkrunData = milk_run_result.sort((a, b) => {
+  const centerA = a["물류센터"];
+  const centerB = b["물류센터"];
+
+  if (centerA < centerB) return -1;
+  if (centerA > centerB) return 1;
+  return 0;
+});
+
+    
 
 
-console.log('coopang_upload_data', coopang_upload_data);
 coopang_upload_data.map((item, index) => {
+  sheetOne.addRow(item);
+  for(let loop = 1; loop <= 6; loop++) {
+    const col = sheetOne.getRow(index + 2).getCell(loop);
+    col.border = borderStyle;
+    col.font = {name: 'Arial Black', size: 10};
+  }
+});
+
+sortedBoxData.map((item, index) => {
   sheetTwo.addRow(item);
 
   // 추가된 행의 컬럼 설정(헤더와 style이 다를 경우)
+
   for(let loop = 1; loop <= 6; loop++) {
     const col = sheetTwo.getRow(index + 2).getCell(loop);
     col.border = borderStyle;
@@ -477,6 +492,22 @@ coopang_upload_data.map((item, index) => {
   }
 
 });
+
+sortedMilkrunData.map((item, index) => {
+  sheetThree.addRow(item);
+
+  // 추가된 행의 컬럼 설정(헤더와 style이 다를 경우)
+
+  for(let loop = 1; loop <= 6; loop++) {
+    const col = sheetThree.getRow(index + 2).getCell(loop);
+    col.border = borderStyle;
+    col.font = {name: 'Arial Black', size: 10};
+  }
+
+});
+
+
+
 
 
 
@@ -596,9 +627,9 @@ Object.keys(centerDataMap).forEach(center => {
 
 const palletDownload = () => {
   const pallet_config : any = [
-    {header: 'No', key: 'no', width: 30},
-    {header: '상품명', key: '제품명', width: 30},
-    {header: '수량', key: '수량', width: 30},
+    {header: 'No', key: 'no', width: 10},
+    {header: '상품명', key: '제품명', width: 50},
+    {header: '수량', key: '수량', width: 15},
  
   ]; 
 
@@ -1042,49 +1073,55 @@ Object.keys(centerDataMap).forEach(center => {
       worksheet.getCell(`A${a_index}`).value = "박스 상품 리스트";
       worksheet.getCell(`B${a_index}`).value = "";
 
-      worksheet.getCell(`A${a_index}`).border = {
-        top: { style: 'thin' },
-        left: { style: 'thin' },
+
+      worksheet.getCell(`A${a_index}`).font = { name: 'Arial Black', size: 30,bold: true};
+
+      // worksheet.getCell(`A${a_index}`).border = {
+      //   top: { style: 'thin' },
+      //   left: { style: 'thin' },
        
-      };
-      worksheet.getCell(`B${a_index}`).border = {
-        top: { style: 'thin' },
+      // };
+      // worksheet.getCell(`B${a_index}`).border = {
+      //   top: { style: 'thin' },
       
       
-        right: { style: 'thin' },
-      };
+      //   right: { style: 'thin' },
+      // };
 
 
       worksheet.getCell(`A${b_index}`).value = "업체명 : (주)쓰임받는 사람들";
       worksheet.getCell(`B${b_index}`).value = "";
 
-      worksheet.getCell(`A${b_index}`).border = {
+      worksheet.getCell(`A${b_index}`).font = { name: 'Arial Black', size: 20,bold: true};
+      // worksheet.getCell(`A${b_index}`).border = {
        
-        left: { style: 'thin' },
+      //   left: { style: 'thin' },
        
-      };
-      worksheet.getCell(`B${b_index}`).border = {
+      // };
+      // worksheet.getCell(`B${b_index}`).border = {
        
       
         
-        right: { style: 'thin' },
-      };
+      //   right: { style: 'thin' },
+      // };
 
       
 
       worksheet.getCell(`A${c_index}`).value = "발주번호 : " + data['발주번호'] + "(" + data['물류센터'] + ")";
       worksheet.getCell(`B${c_index}`).value = "";
 
-      worksheet.getCell(`A${c_index}`).border = {
+      worksheet.getCell(`A${c_index}`).font = { name: 'Arial Black', size: 16,bold: true};
+
+      // worksheet.getCell(`A${c_index}`).border = {
        
-        left: { style: 'thin' },
+      //   left: { style: 'thin' },
        
-      };
-      worksheet.getCell(`B${c_index}`).border = {
+      // };
+      // worksheet.getCell(`B${c_index}`).border = {
        
         
-        right: { style: 'thin' },
-      };
+      //   right: { style: 'thin' },
+      // };
 
 
 
@@ -1096,12 +1133,16 @@ Object.keys(centerDataMap).forEach(center => {
         worksheet.getCell(`B${d_index}`).value = total_box_qty;
       }
 
+      worksheet.getCell(`A${d_index}`).font = { name: 'Arial Black', size: 20,bold: true};
+
       worksheet.getCell(`A${d_index}`).border = {
         top: { style: 'thin' },
         left: { style: 'thin' },
         bottom: { style: 'thin' },
         right: { style: 'thin' },
       };
+
+      worksheet.getCell(`B${d_index}`).font = { name: 'Arial Black', size: 20,bold: true};
       worksheet.getCell(`B${d_index}`).border = {
         top: { style: 'thin' },
         left: { style: 'thin' },
@@ -1109,6 +1150,7 @@ Object.keys(centerDataMap).forEach(center => {
         right: { style: 'thin' },
       };
 
+     
   
 
 
@@ -1119,19 +1161,27 @@ Object.keys(centerDataMap).forEach(center => {
 
 
     worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
-      worksheet.getRow(rowNumber).height = 14 / 3 * 28.35;
 
+      if(rowNumber % 4 === 0){
+
+        worksheet.getRow(rowNumber).height = 4.5 * 28.35;
+      }else{
+        worksheet.getRow(rowNumber).height = 2.5 * 28.35;
+      }
+   
+    
     
       row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
         // 스타일 설정 예시 (원하는 스타일로 변경 가능)
-        cell.alignment = { vertical: 'middle', horizontal: 'center' };
-        cell.font = { name: 'Arial Black', size: 12,bold: true};
+        cell.alignment = { vertical: 'middle', horizontal: 'center',wrapText: true };
+        // cell.font = { name: 'Arial Black', size: 12,bold: true};
         cell.fill = {
           type: 'pattern',
           pattern: 'solid',
           fgColor: { argb: 'FFFFFFFF' } // 흰색 배경
         };
         
+
         console.log(row[cell]);
 
         // cell.border = {

@@ -9,7 +9,7 @@
     import Toast from '$lib/components/toast/Toast.svelte';
     import Alert from '$lib/components/alert/Alert.svelte';
     import {user_modal_state, user_form_state} from '$lib/store/user/state';
-    import {common_alert_state, common_toast_state,common_type_state, common_unit_state, common_origin_state,common_standard_state,common_car_state,table_state} from '$lib/store/common/state';
+    import {common_alert_state, common_toast_state,table_state} from '$lib/store/common/state';
     
     import {save,userProductTable} from '$lib/store/user/function';
 
@@ -143,15 +143,7 @@
 
 
 
-          <Label class="space-y-2">
-            <span>지정차량</span>
-            <Select id="countrie" class="mt-2" bind:value={$user_form_state['car']} placeholder="">
-                {#each $common_car_state as item}
-                  <option value={item.uid}>{item.name}</option>
-                {/each}
-              </Select>
-          </Label>
-       
+          
 
           
 

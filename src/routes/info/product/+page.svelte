@@ -23,7 +23,7 @@
     
     import {product_form_state,product_modal_state} from '$lib/store/product/state';
 
-    import {url_state,cookie_state,table_state,common_toast_state,coopang_upload_result_state,hanjin_upload_state,hanjin_transport_upload_state} from '$lib/store/common/state';
+    import {url_state,cookie_state,table_state,common_toast_state,coopang_upload_result_state,hanjin_upload_state,hanjin_transport_upload_state, milkrun_qty_state, box_qty_state} from '$lib/store/common/state';
     import {TABLE_COMPONENT,EXCEL_CONFIG} from '$lib/module/common/constants';
 
     import SearchBar from '$lib/components/layout/SearchBar.svelte'
@@ -152,7 +152,7 @@
                     
                           />
                       </Button>
-                      {#if $coopang_upload_result_state.length > 0}
+                      {#if $coopang_upload_result_state.length > 0 && $box_qty_state > 0}
                         <Button  color='green' on:click={(e)=> fileButtonClick('upload1')}>
                           <Icon.UploadSolid class='mr-2' size="20" />
                             2.한진택배양식 업로드
@@ -165,7 +165,7 @@
                     
                           />
                       </Button>
-                      {#if $hanjin_upload_state.length > 0}
+                      {#if $hanjin_upload_state.length > 0 && $box_qty_state > 0}
                       <Button  color='green' on:click={(e)=> fileButtonClick('upload2')}>
                         <Icon.UploadSolid class='mr-2' size="20" />
                           3.한진택배 운송장 업로드
@@ -191,33 +191,43 @@
 
                       <div class='m-5'>
 
-                        {#if $coopang_upload_result_state.length > 0}
+                        {#if $coopang_upload_result_state.length > 0 && ($box_qty_state > 0 || $milkrun_qty_state > 0)}
                         <Button  color='green' on:click={() =>productSendDownload()}>
                           <Icon.FileCsvSolid class='mr-2' size="20" />
                           생산부 전달용 다운
                       </Button>
-                      <Button  color='green' on:click={() => palletDownload()}>
+                      {/if}
+
+                      {#if $milkrun_qty_state > 0}
+                      <Button  color='blue' on:click={() => palletDownload()}>
                         <Icon.FileCsvSolid class='mr-2' size="20" />
-                        파렛트 다운
+                        밀크런 파렛트 다운
+                         
                      </Button>
-                     <Button  color='green' on:click={() => milkrunBoxDownload()}>
+                     <Button  color='blue' on:click={() => milkrunBoxDownload()}>
                       <Icon.FileCsvSolid class='mr-2' size="20" />
                       밀크런 박스리스트 다운
-                   </Button>
+                     </Button>
+                     {/if}
                       
-                     <Button  color='green' on:click={() => shipDownload()}>
-                        <Icon.FileCsvSolid class='mr-2' size="20" />
-                        한진택배송장 다운
-                      </Button>
 
-                        {#if $hanjin_transport_upload_state.length > 0}
-                        <Button  color='green' on:click={() =>coopangShipmentDownload()}>
+
+                     {#if $coopang_upload_result_state.length > 0}
+                        <Button  color='green' on:click={() => shipDownload()}>
                           <Icon.FileCsvSolid class='mr-2' size="20" />
-                          쿠팡쉽먼트 다운
-                      </Button>
-                      {/if}
+                          한진택배송장 다운
+                        </Button>
+                        {/if}
 
-                      {/if}
+                          {#if $hanjin_transport_upload_state.length > 0}
+                          <Button  color='green' on:click={() =>coopangShipmentDownload()}>
+                            <Icon.FileCsvSolid class='mr-2' size="20" />
+                            쿠팡쉽먼트 다운
+                        </Button>
+                         {/if}
+                 
+
+             
 
                       </div>
 

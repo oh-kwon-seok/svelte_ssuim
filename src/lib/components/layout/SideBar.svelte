@@ -49,7 +49,7 @@
 
     <Sidebar >
         <SidebarWrapper divClass='overflow-y-auto py-4 px-3 bg-gray-50 rounded  h-screen'>
-          <SidebarGroup >
+          <!-- <SidebarGroup >
             
             <SidebarItem class={text_style} label="Home" href='/home' active={activeUrl === '/home'} {spanClass}>
              
@@ -58,9 +58,9 @@
                 </svelte:fragment>
             </SidebarItem>
  
-          </SidebarGroup>
+          </SidebarGroup> -->
 
-          <SidebarGroup border>
+          <SidebarGroup >
             <SidebarDropdownWrapper class={text_style} label="기준정보관리" isOpen={mainPath ==='info' ? true : false} transitionType="fly" {transitionParams} >
                 <svelte:fragment slot="icon">
                     <Icon.DatabaseSolid size="20"/>

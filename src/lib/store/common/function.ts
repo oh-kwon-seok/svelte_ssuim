@@ -2,7 +2,7 @@
 
 
 import { writable } from 'svelte/store';
-import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_ship_state,common_user_state,table_state,coopang_upload_state,coopang_upload_result_state,coopang_shipment_state,hanjin_upload_state,hanjin_transport_upload_state } from './state';
+import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_ship_state,common_user_state,table_state,coopang_upload_state,coopang_upload_result_state,coopang_shipment_state,hanjin_upload_state,hanjin_transport_upload_state, box_qty_state, milkrun_qty_state } from './state';
 
 // import {item_data,item_form_state} from '$lib/store/info/item/state';
 
@@ -15,6 +15,7 @@ import moment from 'moment';
 
 
 import {TabulatorFull as Tabulator} from 'tabulator-tables';
+import type { an } from 'vitest/dist/types-71ccd11d';
 
 
 const api = import.meta.env.VITE_API_BASE_URL;
@@ -48,6 +49,11 @@ let hanjin_upload_data : any;
 let hanjin_transport_upload_data : any;
 
 let user_data : any;
+
+let milkrun_qty_data : any;
+let box_qty_data : any;
+
+
 
 
 const workbook = new Excel.Workbook();
@@ -117,6 +123,17 @@ hanjin_upload_state.subscribe((data) => {
 })
 hanjin_transport_upload_state.subscribe((data) => {
   hanjin_transport_upload_data = data;
+
+})
+
+milkrun_qty_state.subscribe((data) => {
+  milkrun_qty_data = data;
+
+})
+
+
+box_qty_state.subscribe((data) => {
+  milkrun_qty_data = data;
 
 })
 
@@ -493,6 +510,8 @@ sortedBoxData.map((item, index) => {
 
 });
 
+
+console.log('sortedMilkrunData',sortedMilkrunData);
 sortedMilkrunData.map((item, index) => {
   sheetThree.addRow(item);
 
@@ -627,9 +646,9 @@ Object.keys(centerDataMap).forEach(center => {
 
 const palletDownload = () => {
   const pallet_config : any = [
-    {header: 'No', key: 'no', width: 10},
-    {header: '상품명', key: '제품명', width: 50},
-    {header: '수량', key: '수량', width: 15},
+    {header: 'No', key: 'no', width: 15},
+    {header: '상품명', key: '제품명', width: 40},
+    {header: '수량', key: '수량', width: 20},
  
   ]; 
 
@@ -1282,6 +1301,9 @@ const shipDownload = () => {
             sheetOne.columns = ship_config;
          
             const sampleData = coopang_upload_result_data;
+
+           
+
             const borderStyle = {
               top: { style: 'thin' },
               left: { style: 'thin' },
@@ -1652,8 +1674,11 @@ const excelDownload = (type,config) => {
                       let qty = filtered_coopang_data[i]['박스수량'] -  box_in_qty;
                       if(qty === 0){
                         filtered_coopang_data[i]['수량'] = box_in_qty ;
+                        filtered_coopang_data[i]['한진_수량'] = box_in_qty ;
+                        
                       }else{
                         filtered_coopang_data[i]['수량'] = box_in_qty + "(" + (filtered_coopang_data[i]['박스수량'] - box_in_qty) + ")";
+                        filtered_coopang_data[i]['한진_수량'] = box_in_qty ;
                       }
                      
                     }
@@ -1662,7 +1687,7 @@ const excelDownload = (type,config) => {
                     filtered_coopang_data[i]['수량'] = filtered_coopang_data[i]['확정수량'];
 
                   }
-                  filtered_coopang_data[i]['확인사항'] =  filtered_coopang_data[i]['확인사항체크용'] + '-' + filtered_coopang_data[i]['수량'] + '개';
+                  filtered_coopang_data[i]['확인사항'] =  filtered_coopang_data[i]['확인사항체크용'] + '-' + filtered_coopang_data[i]['한진_수량'] + '개';
 
                   box_in_qty -= filtered_coopang_data[i]['박스수량'];
 
@@ -1693,8 +1718,49 @@ const excelDownload = (type,config) => {
 
          coopang_upload_result_state.update(() => coopang_upload_result_data);
           
+         console.log('coopang_upload_result_data : ', coopang_upload_result_data);
          coopang_shipment_data = filtered_coopang_data;
 
+
+         
+    const milk_run_result = [];
+    const box_result = [];
+
+    // 물류센터별 수량을 더하고, 10 이상인 경우 별도의 배열로 분류
+    const centerSums = {};
+    filtered_coopang_data.forEach(item => {
+    const center = item["물류센터"];
+    const quantity = item["실제박스수량"];
+
+    // 중복된 물류센터가 나올 경우 합산
+    centerSums[center] = (centerSums[center] || 0) + quantity;
+
+    // 합산 결과가 10 이상인 경우 별도의 배열로 분류
+    if (centerSums[center] >= 10) {
+      // 이미 결과 배열에 해당 물류센터가 없으면 추가
+      if (!milk_run_result.includes(center)) {
+        milk_run_result.push(item);
+      }
+    }else{
+      if (!box_result.includes(center)) {
+        box_result.push(item);
+      }
+    }
+    });
+
+
+    milkrun_qty_data = milk_run_result.length;
+    box_qty_data = box_result.length;
+
+
+    milkrun_qty_state.update(() => milkrun_qty_data);
+    box_qty_state.update(() => box_qty_data);
+
+    console.log('milkrun_qty_data',milkrun_qty_data);
+    console.log('box_qty_data',box_qty_data);
+    
+
+  
          coopang_shipment_state.update(() => coopang_shipment_data);
         
 

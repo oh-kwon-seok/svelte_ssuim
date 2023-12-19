@@ -80,5 +80,9 @@ const url_state : any = writable({ path : '', query : ''});
   const hanjin_transport_upload_state : any =  writable([]);
   const hanjin_upload_state : any =  writable([]);
   
+  const milkrun_qty_state : any = writable(0);
+  const box_qty_state : any = writable(0);
+  
+  
 
-  export {menu_state,cookie_state,load_state,common_alert_state,common_search_state,login_state,url_state,common_product_state,common_ship_state,common_toast_state,table_state,common_selected_state,common_user_state,coopang_upload_state,coopang_upload_result_state,coopang_shipment_state,hanjin_upload_state,hanjin_transport_upload_state};
+  export {menu_state,cookie_state,load_state,common_alert_state,common_search_state,login_state,url_state,common_product_state,common_ship_state,common_toast_state,table_state,common_selected_state,common_user_state,coopang_upload_state,coopang_upload_result_state,coopang_shipment_state,hanjin_upload_state,hanjin_transport_upload_state,milkrun_qty_state,box_qty_state};

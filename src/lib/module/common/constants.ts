@@ -62,14 +62,16 @@ const DATA_SELECT_ALERT = {
 
 const MENU = {
     info : [
-        {name: '품목 관리', help: " 품목관리란, 원자재,부자재,반제품,부분품,완제품 등 제품생산 및 출하에 필요한 모든 재료를 말합니다."},
+        {id : 'product',name: '품목 관리', help: " 품목관리란, 상품 및 제품의 박스수량 및 제원을 통일화하여 관리하기 위한 기능입니다."},
     
-        {name: 'BOM 관리', help: "BOM 관리란, 제품 생산 및 출하에 필요한 모든 원자재/부자재/반제품/부분품 등을 리스트로 관리하여 필요시 생산 및 출하메뉴에서 불러오는 메뉴입니다."},
-        {name: '거래처 관리', help: "업체에서 거래하는 거래처 관리 메뉴입니다. 영업처 또는 제조사가 될 수도 있습니다."},
-        {name: '회원 관리', help: "MES 프로그램을 사용하는 사용자를 관리하는 메뉴입니다."},
-        {name: '창고 관리', help: "원자재,부자재,반제품,부분품,완제품 등을 관리하는 메뉴입니다."},
-        {name: 'Excel 관리', help: "기준정보를 Excel에 작성하여 업로드하기 위한 메뉴입니다."},
+        {id : 'ship',name: '물류센터 관리', help: "물류센터 관리란, 해당 물류센터 정보를 관리하여 엑셀에 연동하기 위해 구성합니다."},
+
       ],
+      customer : [
+        {id : 'user',name: '회원 관리', help: " 회원관리란, 회원 정보를 관리하기 위한기능을 뜻합니다."},
+    
+      ],
+
 }
 
 
@@ -149,7 +151,7 @@ const TABLE_HEADER_CONFIG : any = {
             cell.getRow().toggleSelect()
         }},
         {title:"SKU ID", field:"sk_uid", width:150, headerFilter:"input"},
-        {title:"SKU NAME", field:"ship_name", width:150, headerFilter:"input", 
+        {title:"SKU NAME", field:"ship_name", width:250, headerFilter:"input", 
         formatter:function(cell : any){
             var value = cell.getValue();
         return "<span style='color:#3FB449; font-weight:bold;'>" + value + "</span>";
@@ -164,7 +166,7 @@ const TABLE_HEADER_CONFIG : any = {
            }
         }
     },
-        {title:"마감명", field:"origin_name", width:150, headerFilter:"input"},
+        {title:"마감명", field:"origin_name", width:250, headerFilter:"input"},
         
         {title:"인박스", field:"inbox", width:150, headerFilter:"input"},
         {title:"아웃박스", field:"outbox", width:150, headerFilter:"input"},

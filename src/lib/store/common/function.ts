@@ -335,22 +335,22 @@ const check_delete = (data, key,value) => {
 
 const productSendDownload = () => {
   const product_send_config : any = [
-    {header: '구분', key: '구분', width: 30},
+    {header: '구분', key: '구분', width: 5},
     {header: '제품명', key: '제품명', width: 30},
-    {header: '수량', key: '수량', width: 30},
-    {header: '박스', key: '박스', width: 30},
-    {header: '발주처', key: '발주처', width: 30},
-    {header: '발주번호', key: '발주번호', width: 30},
-    {header: '유통기한', key: '유통기한', width: 30},
-    {header: '비고', key: '비고', width: 30},
+    {header: '수량', key: '수량', width: 5},
+    {header: '박스', key: '박스', width: 5},
+    {header: '발주처', key: '발주처', width: 10},
+    {header: '발주번호', key: '발주번호', width: 10},
+    {header: '유통기한', key: '유통기한', width: 5},
+    {header: '비고', key: '비고', width: 5},
   ]; 
 
   const coopang_download_config : any = [
-    {header: '구분', key: '구분', width: 30},
-    {header: '제품명', key: '제품명', width: 30},
-    {header: '바코드', key: '상품바코드', width: 30},
-    {header: '수량', key: '확정수량', width: 30},
-    {header: '유통기한', key: '유통기한', width: 30},
+    {header: '구분', key: '구분', width: 5},
+    {header: '제품명', key: '제품명', width:60},
+    {header: '바코드', key: '상품바코드', width: 20},
+    {header: '수량', key: '확정수량', width: 5},
+    {header: '유통기한', key: '유통기한', width: 10},
   ]; 
 
   const coopang_milk_run_download_config : any = [
@@ -408,6 +408,21 @@ const productSendDownload = () => {
     sheetOne.columns = coopang_download_config;
     sheetTwo.columns = product_send_config;
     sheetThree.columns = product_send_config;
+
+   
+
+    sheetOne.getRow(1).eachCell((cell) => {
+      cell.alignment = { horizontal: 'center',vertical: 'middle' };
+      cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+    });
+    sheetTwo.getRow(1).eachCell((cell) => {
+      cell.alignment = { horizontal: 'center',vertical: 'middle' };
+      cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+    });
+    sheetThree.getRow(1).eachCell((cell) => {
+      cell.alignment = { horizontal: 'center',vertical: 'middle' };
+      cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+    });
     
 
 
@@ -423,25 +438,34 @@ const box_result = [];
 // 물류센터별 수량을 더하고, 10 이상인 경우 별도의 배열로 분류
 const centerSums = {};
 filtered_coopang_data.forEach(item => {
-const center = item["물류센터"];
-const quantity = item["실제박스수량"];
+  const center = item["물류센터"];
+  const quantity = item["실제박스수량"];
+  // 중복된 물류센터가 나올 경우 합산
+  centerSums[center] = (centerSums[center] || 0) + quantity;
 
-// 중복된 물류센터가 나올 경우 합산
-centerSums[center] = (centerSums[center] || 0) + quantity;
+  });
 
-// 합산 결과가 10 이상인 경우 별도의 배열로 분류
-if (centerSums[center] >= 10) {
-  // 이미 결과 배열에 해당 물류센터가 없으면 추가
-  if (!milk_run_result.includes(center)) {
-    milk_run_result.push(item);
+
+  filtered_coopang_data.forEach(item => {
+    const center = item["물류센터"];
+  
+     if (centerSums[center] >= 10) {
+    // 이미 결과 배열에 해당 물류센터가 없으면 추가
+    if (!milk_run_result.includes(center)) {
+      milk_run_result.push(item);
+    }
+  }else{
+    if (!box_result.includes(center)) {
+      box_result.push(item);
+    }
   }
-}else{
-  if (!box_result.includes(center)) {
-    box_result.push(item);
-  }
-}
-});
 
+    });
+
+
+
+
+console.log('milkrun_Data : ', milk_run_result);
 
 const borderStyle = {
   top: { style: 'thin' },
@@ -462,13 +486,38 @@ const sortedBoxData = box_result.sort((a, b) => {
 });
 
 
-sortedBoxData.map((item, index) => {
+
+
+filtered_coopang_data.map((item, index) => {
+  item['구분'] = index+1;
+  item['상품바코드'] = item['상품바코드'].toString(); 
+
   sheetOne.addRow(item);
+  for(let loop = 1; loop <= 5; loop++) {
+    const col = sheetOne.getRow(index + 2).getCell(loop);
+    if(loop === 1 || loop === 3 || loop === 4){
+      col.alignment = { horizontal: 'center',vertical: 'middle' };
+
+    }else{
+      col.alignment = { vertical: 'middle' };
+    }
+    col.border = borderStyle;
+    col.font = {name: 'Arial Black', size: 8};
+  }
+});
+
+sheetOne.properties.defaultRowHeight = 30;
+
+
+
+sortedBoxData.map((item, index) => {
+  item['구분'] = index+1;
+  sheetTwo.addRow(item);
 
   // 추가된 행의 컬럼 설정(헤더와 style이 다를 경우)
 
   for(let loop = 1; loop <= 6; loop++) {
-    const col = sheetOne.getRow(index + 2).getCell(loop);
+    const col = sheetTwo.getRow(index + 2).getCell(loop);
     col.border = borderStyle;
     col.font = {name: 'Arial Black', size: 10};
   }
@@ -485,34 +534,9 @@ const sortedMilkrunData = milk_run_result.sort((a, b) => {
   return 0;
 });
 
-    
-
-
-coopang_upload_data.map((item, index) => {
-  sheetOne.addRow(item);
-  for(let loop = 1; loop <= 6; loop++) {
-    const col = sheetOne.getRow(index + 2).getCell(loop);
-    col.border = borderStyle;
-    col.font = {name: 'Arial Black', size: 10};
-  }
-});
-
-sortedBoxData.map((item, index) => {
-  sheetTwo.addRow(item);
-
-  // 추가된 행의 컬럼 설정(헤더와 style이 다를 경우)
-
-  for(let loop = 1; loop <= 6; loop++) {
-    const col = sheetTwo.getRow(index + 2).getCell(loop);
-    col.border = borderStyle;
-    col.font = {name: 'Arial Black', size: 10};
-  }
-
-});
-
-
-console.log('sortedMilkrunData',sortedMilkrunData);
+  
 sortedMilkrunData.map((item, index) => {
+  item['구분'] = index+1;
   sheetThree.addRow(item);
 
   // 추가된 행의 컬럼 설정(헤더와 style이 다를 경우)
@@ -689,22 +713,25 @@ const milk_run_result = [];
 const centerSums = {};
 
 filtered_coopang_data.forEach(item => {
-const center = item["물류센터"];
-const quantity = item["실제박스수량"];
+  const center = item["물류센터"];
+  const quantity = item["실제박스수량"];
+  // 중복된 물류센터가 나올 경우 합산
+  centerSums[center] = (centerSums[center] || 0) + quantity;
 
-// 중복된 물류센터가 나올 경우 합산
-centerSums[center] = (centerSums[center] || 0) + quantity;
+  });
 
-if (centerSums[center] >= 10) {
- 
-  // 이미 결과 배열에 해당 물류센터가 없으면 추가
-  if (!milk_run_result.includes(center)) {
-    milk_run_result.push(item);
+
+  filtered_coopang_data.forEach(item => {
+    const center = item["물류센터"];
+  
+     if (centerSums[center] >= 10) {
+    // 이미 결과 배열에 해당 물류센터가 없으면 추가
+    if (!milk_run_result.includes(center)) {
+      milk_run_result.push(item);
+    }
   }
-}else{
- 
-}
-});
+
+    });
 
 // 각 물류센터별로 발주번호를 겹치지 않게 추출
 const uniqueOrderNumbersByCenter = {};
@@ -732,11 +759,13 @@ let currentOrderNumber = null;
 
 const orderNumbersByCenter = {};
 
+let no = 0;
+
 milk_run_result.forEach((item, index) => {
   const center = item["물류센터"];
 
   const orderNumber = item["발주번호"];
-  let no = 0;
+  
   // 발주번호가 바뀌는 시점에 빈 객체 추가
   
   if ( currentOrderNumber !== orderNumber) {
@@ -752,7 +781,8 @@ milk_run_result.forEach((item, index) => {
     };
     resultArray.push(new_obj);
   }
-  item['no'] = no + 1;
+  no = no + 1;
+  item['no'] = no;
   // 데이터 추가
   resultArray.push(item);
 
@@ -807,6 +837,8 @@ Object.keys(centerDataMap).forEach(center => {
     box_qty += item['실제박스수량'];
   });
 
+
+  orderNumbersByCenter[center] = [...new Set(orderNumbersByCenter[center])]
 
 
   // A1부터 C8까지의 셀에 공통된 스타일 적용
@@ -946,22 +978,31 @@ const milk_run_result = [];
 const centerSums = {};
 
 filtered_coopang_data.forEach(item => {
-const center = item["물류센터"];
-const quantity = item["실제박스수량"];
+  const center = item["물류센터"];
+  const quantity = item["실제박스수량"];
+  // 중복된 물류센터가 나올 경우 합산
+  centerSums[center] = (centerSums[center] || 0) + quantity;
 
-// 중복된 물류센터가 나올 경우 합산
-centerSums[center] = (centerSums[center] || 0) + quantity;
+  });
 
-if (centerSums[center] >= 10) {
- 
-  // 이미 결과 배열에 해당 물류센터가 없으면 추가
-  if (!milk_run_result.includes(center)) {
-    milk_run_result.push(item);
+
+  filtered_coopang_data.forEach(item => {
+    const center = item["물류센터"];
+  
+     if (centerSums[center] >= 10) {
+    // 이미 결과 배열에 해당 물류센터가 없으면 추가
+    if (!milk_run_result.includes(center)) {
+      milk_run_result.push(item);
+    }
   }
-}else{
- 
-}
-});
+
+    });
+
+
+
+
+
+
 
 // 각 물류센터별로 발주번호를 겹치지 않게 추출
 const uniqueOrderNumbersByCenter = {};
@@ -980,7 +1021,7 @@ milk_run_result.forEach(item => {
   }
 });
 
-console.log('발주번호 : ',milk_run_result);
+
 
 
 const resultArray = [];
@@ -1011,8 +1052,7 @@ milk_run_result.forEach((item, index) => {
 
 });
 
-console.log('resul : ',resultArray);
-console.log('orderNumbersByCenter : ',orderNumbersByCenter);
+
 
 
 
@@ -1024,7 +1064,7 @@ uniqueCenters.forEach(center => {
 centerDataMap[center] = resultArray.filter(item => item["물류센터"] === center);
 });
 
-console.log('centerDataMap',centerDataMap);
+
 
 
 
@@ -1044,7 +1084,7 @@ Object.keys(centerDataMap).forEach(center => {
   
   let box_qty = 0;
   
-  console.log('centerDataMap : ',centerData);
+
   centerData.forEach(item => {
     box_qty += item['실제박스수량'];
   });
@@ -1054,29 +1094,36 @@ Object.keys(centerDataMap).forEach(center => {
 
 
   console.log('centerData : ', centerData);
+  
+  
 
+  let total_index = 0;
+
+
+  let a_index = 0; 
+  let b_index = 0;
+  let c_index = 0;
+  let d_index = 0;
+  let e_index = 0;
   centerData.forEach((data,index) => {
     
     let total_box_qty = data['확정수량'];
 
-    console.log('total_box_qty', total_box_qty);
+    // console.log('total_box_qty', total_box_qty);
 
-    let a_index ; 
-    let b_index ;
-    let c_index ;
-    let d_index ;
-    let e_index ;
+   
+ 
 
     for(let i =0; i< data['실제박스수량']; i++){
-    
-      if( i === 0){
+      console.log('total : ',total_index);
+      
+      
+      if(a_index ===0){
         a_index = i + 1; 
         b_index = i + 2;
         c_index = i + 3;
         d_index = i + 4;
         e_index = i + 5;
-        
-
       }else{
         a_index = a_index + 4;
         b_index = a_index+1;
@@ -1085,63 +1132,23 @@ Object.keys(centerDataMap).forEach(center => {
         e_index = a_index+4;
       }
      
-      
-      
-   
-
+     
       worksheet.getCell(`A${a_index}`).value = "박스 상품 리스트";
       worksheet.getCell(`B${a_index}`).value = "";
 
 
       worksheet.getCell(`A${a_index}`).font = { name: 'Arial Black', size: 30,bold: true};
 
-      // worksheet.getCell(`A${a_index}`).border = {
-      //   top: { style: 'thin' },
-      //   left: { style: 'thin' },
-       
-      // };
-      // worksheet.getCell(`B${a_index}`).border = {
-      //   top: { style: 'thin' },
-      
-      
-      //   right: { style: 'thin' },
-      // };
-
-
       worksheet.getCell(`A${b_index}`).value = "업체명 : (주)쓰임받는 사람들";
       worksheet.getCell(`B${b_index}`).value = "";
 
       worksheet.getCell(`A${b_index}`).font = { name: 'Arial Black', size: 20,bold: true};
-      // worksheet.getCell(`A${b_index}`).border = {
-       
-      //   left: { style: 'thin' },
-       
-      // };
-      // worksheet.getCell(`B${b_index}`).border = {
-       
-      
-        
-      //   right: { style: 'thin' },
-      // };
-
       
 
       worksheet.getCell(`A${c_index}`).value = "발주번호 : " + data['발주번호'] + "(" + data['물류센터'] + ")";
       worksheet.getCell(`B${c_index}`).value = "";
 
       worksheet.getCell(`A${c_index}`).font = { name: 'Arial Black', size: 16,bold: true};
-
-      // worksheet.getCell(`A${c_index}`).border = {
-       
-      //   left: { style: 'thin' },
-       
-      // };
-      // worksheet.getCell(`B${c_index}`).border = {
-       
-        
-      //   right: { style: 'thin' },
-      // };
-
 
 
       worksheet.getCell(`A${d_index}`).value = data['제품명'];
@@ -1175,9 +1182,11 @@ Object.keys(centerDataMap).forEach(center => {
 
       total_box_qty -= data['박스수량'];
       
-      console.log('total_box_qty', total_box_qty);
+      
+      total_index +=1;
     }
 
+    
 
     worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
 
@@ -1203,27 +1212,11 @@ Object.keys(centerDataMap).forEach(center => {
 
         console.log(row[cell]);
 
-        // cell.border = {
-        //   top: { style: 'thin' },
-        //   left: { style: 'thin' },
-        //   bottom: { style: 'thin' },
-        //   right: { style: 'thin' }
-        // };
+        
       });
     });
 
     
-
-
-  
-    // // 데이터 입력
-    // worksheet.getCell(`A${rowIndex}`).value = data['실제박스수량'];
-    // worksheet.getCell(`B${rowIndex}`).value = data['박스수량'];
-   
-    // // 특정 조건에 따라 셀 병합
-    // if (parseInt(data['실제박스수량']) > 10) {
-    //   worksheet.mergeCells(`A${rowIndex}:B${rowIndex}`);
-    // }
   });
 
 
@@ -1625,6 +1618,9 @@ const excelDownload = (type,config) => {
           });
 
 
+
+        
+
           
           let standard_coopang_data = [];
           for(let i =0; i<filtered_coopang_data.length; i++){
@@ -1718,7 +1714,7 @@ const excelDownload = (type,config) => {
 
          coopang_upload_result_state.update(() => coopang_upload_result_data);
           
-         console.log('coopang_upload_result_data : ', coopang_upload_result_data);
+     
          coopang_shipment_data = filtered_coopang_data;
 
 
@@ -1731,12 +1727,16 @@ const excelDownload = (type,config) => {
     filtered_coopang_data.forEach(item => {
     const center = item["물류센터"];
     const quantity = item["실제박스수량"];
-
     // 중복된 물류센터가 나올 경우 합산
     centerSums[center] = (centerSums[center] || 0) + quantity;
 
-    // 합산 결과가 10 이상인 경우 별도의 배열로 분류
-    if (centerSums[center] >= 10) {
+    });
+
+
+    filtered_coopang_data.forEach(item => {
+      const center = item["물류센터"];
+    
+       if (centerSums[center] >= 10) {
       // 이미 결과 배열에 해당 물류센터가 없으면 추가
       if (!milk_run_result.includes(center)) {
         milk_run_result.push(item);
@@ -1746,7 +1746,10 @@ const excelDownload = (type,config) => {
         box_result.push(item);
       }
     }
-    });
+
+      });
+
+
 
 
     milkrun_qty_data = milk_run_result.length;

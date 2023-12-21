@@ -24,4 +24,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Nginx 실행
-CMD ["npm","start"]
+CMD ["npm","run","preview"]

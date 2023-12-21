@@ -53,7 +53,7 @@
 		$common_alert_state = {type : 'login', value : false};
 		
 	
-		const url = `/api/user/sign-in`
+		const url = `http://localhost:8081/user/sign-in`
 
 		try {
 			await performAsyncTask();

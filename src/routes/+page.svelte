@@ -22,29 +22,13 @@
 
 
 
-
+	const api = import.meta.env.VITE_API_BASE_URL;
+	
 	
 	const clientId = import.meta.env.NAVER_CLIENT_ID
 	const callbackUrl = '/api/sign-in/naver-login'
 	
-	let kakaoClientId = '2713d0b777a1e2fbfaf1b0cd5aa224f4'; // 여기에 본인의 Kakao 클라이언트 ID를 입력하세요.
-  	let kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=http://localhost:5173/home&response_type=code`;
 
-
-
-	function handleKakaoLogin() {
-    	window.location.href = kakaoAuthURL;
-  }
-
-
-
-  function onKakaoLogin() {
-		// 카카오 로그인 버튼을 눌렀을 때 동작하는 함수
-		Kakao.Auth.authorize({
-			redirectUri: 'http://localhost:5173/home' // 카카오 로그인 후 리다이렉트 될 주소
-			
-		});
-	}
 
 
 
@@ -53,8 +37,9 @@
 		$common_alert_state = {type : 'login', value : false};
 		
 	
-		const url = `http://localhost:8081/user/sign-in`
+		const url = `${api}/user/sign-in`
 
+		console.log(url);
 		try {
 			await performAsyncTask();
 

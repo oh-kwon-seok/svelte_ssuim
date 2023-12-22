@@ -140,10 +140,11 @@ box_qty_state.subscribe((data) => {
 
 const infoCallApi = (title) => {
 
+
  
   const url = `${api}/${title}/info_select`; 
 
-
+  console.log('url : ', url);
   const config = {
     headers:{
       "Content-Type": "application/json",
@@ -1825,6 +1826,8 @@ const excelDownload = (type,config) => {
           }
           });
 
+          console.log('change_data : ', change_data);
+
           let filtered_hanjin_data = change_data.filter((item)=> {
             return item.체결번호 !== '' && item.체결번호 !== undefined && item.체결번호 !== null;
           });
@@ -1834,18 +1837,60 @@ const excelDownload = (type,config) => {
           if(filtered_hanjin_data.length === 0){
            
           }else{
-            if(coopang_upload_result_data.length ===  filtered_hanjin_data.length){
+
+
+    
+            const milk_run_result = [];
+            const box_result = [];
+        
+            // 물류센터별 수량을 더하고, 10 이상인 경우 별도의 배열로 분류
+            const centerSums = {};
+            coopang_upload_result_data.forEach(item => {
+            const center = item["물류센터"];
+            const quantity = item["실제박스수량"];
+            // 중복된 물류센터가 나올 경우 합산
+            centerSums[center] = (centerSums[center] || 0) + quantity;
+        
+            });
+        
+        
+            coopang_upload_result_data.forEach(item => {
+              const center = item["물류센터"];
+            
+               if (centerSums[center] >= 10) {
+              // 이미 결과 배열에 해당 물류센터가 없으면 추가
+              if (!milk_run_result.includes(center)) {
+                milk_run_result.push(item);
+              }
+            }else{
+              if (!box_result.includes(center)) {
+                box_result.push(item);
+              }
+            }
+          });
+
+          console.log('box_result',box_result);
+
+            
+          
               
-              for(let i=0; i<coopang_upload_result_data.length; i++){
-                hanjin_upload_data[i]["상품번호"] = coopang_upload_result_data[i]["상품번호"];
+              for(let i=0; i<box_result.length; i++){
+
+                for(let j=0; j<hanjin_upload_data.length; j++){
+                  if(box_result[i]["확인사항"] === hanjin_upload_data[j]["확인사항"]){
+                    hanjin_upload_data[j]["상품번호"] = box_result[i]["상품번호"];
+                  }
+
+
+                }
+               
+           
 
               }
               console.log('hanjin_upload_data : ', hanjin_upload_data);
 
               hanjin_upload_state.update(() => hanjin_upload_data);
-            }else{
-              alert('쿠팡 발주서업로드 데이터와 한진업로드 데이터가 일치하지 않습니다.');
-            }
+            
 
           
           }

@@ -19,7 +19,7 @@
     import * as Icon from 'svelte-awesome-icons';
 
     import {productModalOpen} from '$lib/store/product/function';
-    import {excelDownload, excelUpload, productSendDownload,shipDownload,fileButtonClick,coopangShipmentDownload,excelHanjinUpload,excelHanjinTransportUpload,palletDownload,milkrunBoxDownload} from '$lib/store/common/function';
+    import {excelDownload, excelUpload, productSendDownload,shipDownload,fileButtonClick,coopangShipmentDownload,excelHanjinUpload,excelHanjinTransportUpload,palletDownload,milkrunBoxDownload,productSendPriceDownload} from '$lib/store/common/function';
     
     import {product_form_state,product_modal_state} from '$lib/store/product/state';
 
@@ -196,6 +196,10 @@
                           <Icon.FileCsvSolid class='mr-2' size="20" />
                           생산부 전달용 다운
                       </Button>
+                      <Button  color='green' on:click={() =>productSendPriceDownload()}>
+                        <Icon.FileCsvSolid class='mr-2' size="20" />
+                        제품 매출표 다운
+                    </Button>
                       {/if}
 
                       {#if $milkrun_qty_state > 0}

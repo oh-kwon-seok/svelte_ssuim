@@ -36,7 +36,7 @@ export default defineConfig({
 	
 	  proxy: {
 		'/api': {
-		  target: `http://61.81.103.186:8081`,
+		  target: `http://ssuim.snowkids1.co.kr:8081`,
 		  changeOrigin: true,
 		  rewrite: (path) => path.replace(/^\/api/, ''),
 		},

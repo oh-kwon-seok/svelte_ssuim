@@ -2378,7 +2378,9 @@ const excelDownload = (type,config) => {
               
               filtered_coopang_data[i]['송장번호(Invoice Number)'] = '';
 
-              filtered_coopang_data[i]['확정수량(Confirmed Qty)'] = filtered_coopang_data[i]['확정수량'];
+              filtered_coopang_data[i]['확정수량(Confirmed Qty)'] = filtered_coopang_data[i]['한진_수량'];
+              
+              
               filtered_coopang_data[i]['납품수량(Shipped Qty)'] = filtered_coopang_data[i]['한진_수량'];
               
               

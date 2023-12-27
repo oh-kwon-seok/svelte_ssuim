@@ -144,7 +144,6 @@ const infoCallApi = (title) => {
  
   const url = `${api}/${title}/info_select`; 
 
-  console.log('url : ', url);
   const config = {
     headers:{
       "Content-Type": "application/json",
@@ -171,9 +170,9 @@ const infoCallApi = (title) => {
       }
    })
   }catch(e){
-    console.log('e',e);
+  
   } finally {
-    console.log('final : ');
+  
   }
   }
 
@@ -192,7 +191,6 @@ const changeUrl = (obj) => {
   url_data['path'] =obj['path'];
   url_data['query'] =obj['query'];
 
-  console.log('url_data',url_data);
   
   url_state.update(()=> url_data);
 
@@ -233,13 +231,11 @@ const onChangeHandler = (e) => {
     login_data['token'] = token;
     login_state.update(()=> login_data);
   
-    console.log(login_data);
     }
 
 
   const handleToggle = (title) => {
    
-    console.log('title', title);
     
     menu_data[title] = !menu_data[title];
     menu_state.update(()=> menu_data);
@@ -257,7 +253,6 @@ const onSearchHandler = (e : any) => {
 
     search_data['search_text'] = e.target.value;
     
-    console.log('e.target.value',e.target.value);
     // if(search_data['type'] === 'all'){
     //   search_data['filteredItems'] = list_data.filter((item) => item['maker'].indexOf(search_data['search_text'].toLowerCase()) !== -1 || item['name'].indexOf(search_data['search_text'].toLowerCase()) !== -1)
     // }else {
@@ -418,7 +413,14 @@ const productSendDownload = () => {
     sheetFour.columns = coopang_download_config;
     
 
-   
+    const borderStyle = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' }
+    };
+
+    
 
     sheetOne.getRow(1).eachCell((cell) => {
       cell.alignment = { horizontal: 'center',vertical: 'middle' };
@@ -438,74 +440,15 @@ const productSendDownload = () => {
     });
     
 
-
+console.log('coopang_', coopang_upload_result_data);
+console.log('coopang_', coopang_upload_data);
 
 let filtered_coopang_data = coopang_upload_data.filter((item)=> {
   return typeof item.발주번호 === 'number';
 });
 
 
-const milk_run_result = [];
-const milk_run_temp_result = [];
 
-const box_result = [];
-
-// 물류센터별 수량을 더하고, 10 이상인 경우 별도의 배열로 분류
-const centerSums = {};
-filtered_coopang_data.forEach(item => {
-  const center = item["물류센터"];
-  const quantity = item["실제박스수량"];
-  // 중복된 물류센터가 나올 경우 합산
-  centerSums[center] = (centerSums[center] || 0) + quantity;
-
-  });
-
-
-  filtered_coopang_data.forEach(item => {
-    const center = item["물류센터"];
-  
-     if (centerSums[center] >= 13) {
-    // 이미 결과 배열에 해당 물류센터가 없으면 추가
-    if (!milk_run_result.includes(center)) {
-      milk_run_result.push(item);
-    }
-  }else if(centerSums[center] > 9 && centerSums[center] < 13 ){
-    if (!milk_run_temp_result.includes(center)) {
-      milk_run_temp_result.push(item);
-    }
-
-  }else{
-    if (!box_result.includes(center)) {
-      box_result.push(item);
-    }
-  }
-
-    });
-
-    console.log('centerSums : ', centerSums);
-
-
-
-
-console.log('milkrun_Data : ', milk_run_result);
-
-const borderStyle = {
-  top: { style: 'thin' },
-  left: { style: 'thin' },
-  bottom: { style: 'thin' },
-  right: { style: 'thin' }
-};
-
-
-
-const sortedBoxData = box_result.sort((a, b) => {
-  const centerA = a["물류센터"];
-  const centerB = b["물류센터"];
-
-  if (centerA < centerB) return -1;
-  if (centerA > centerB) return 1;
-  return 0;
-});
 
 
 
@@ -561,6 +504,82 @@ sheetOne.properties.defaultRowHeight = 30;
 sheetTwo.properties.defaultRowHeight = 30;
 sheetThree.properties.defaultRowHeight = 30;
 sheetFour.properties.defaultRowHeight = 30;
+
+
+
+
+
+
+const milk_run_result = [];
+const milk_run_temp_result = [];
+
+const box_result = [];
+
+// 물류센터별 수량을 더하고, 10 이상인 경우 별도의 배열로 분류
+const result_centerSums = {};
+const centerSums = {};
+
+coopang_upload_result_data.forEach(item => {
+  const center = item["물류센터"];
+  const quantity = 1;
+  // 중복된 물류센터가 나올 경우 합산
+  result_centerSums[center] = (result_centerSums[center] || 0) + quantity;
+
+  });
+  coopang_upload_result_data.forEach(item => {
+    const center = item["물류센터"];
+     if (result_centerSums[center] < 10) {
+      if (!box_result.includes(center)) {
+        box_result.push(item);
+      }
+ 
+  }else{
+  }
+
+  });
+
+
+
+  filtered_coopang_data.forEach(item => {
+      const center = item["물류센터"];
+      const quantity = item["실제박스수량"];
+      // 중복된 물류센터가 나올 경우 합산
+      centerSums[center] = (centerSums[center] || 0) + quantity;
+    
+      });
+      filtered_coopang_data.forEach(item => {
+        const center = item["물류센터"];
+      
+         if (centerSums[center] >= 13) {
+        // 이미 결과 배열에 해당 물류센터가 없으면 추가
+        if (!milk_run_result.includes(center)) {
+          milk_run_result.push(item);
+        }
+      }else if(centerSums[center] > 9 && centerSums[center] < 13 ){
+        if (!milk_run_temp_result.includes(center)) {
+          milk_run_temp_result.push(item);
+        }
+    
+      }
+    
+        });
+
+   
+
+
+
+
+
+
+
+const sortedBoxData = box_result.sort((a, b) => {
+  const centerA = a["물류센터"];
+  const centerB = b["물류센터"];
+
+  if (centerA < centerB) return -1;
+  if (centerA > centerB) return 1;
+  return 0;
+});
 
 
 
@@ -657,7 +676,6 @@ uniqueCenters.forEach(center => {
 centerDataMap[center] = milk_run_result.filter(item => item["물류센터"] === center);
 });
 
-console.log('centerDataMap',centerDataMap);
 
 
 
@@ -670,7 +688,7 @@ Object.keys(centerDataMap).forEach(center => {
   
   let box_qty = 0;
   centerData.forEach(item => {
-    box_qty += item['실제박스수량'];
+    box_qty += item["실제박스수량"];
   });
 
 
@@ -931,7 +949,6 @@ const sortedBoxData = box_result.sort((a, b) => {
 
 
 
-console.log('filtered : ', filtered_coopang_data);
 
 
 // id를 기준으로 그룹화하고 qty를 더하는 함수
@@ -963,7 +980,6 @@ const product_total_data = filtered_coopang_data.reduce(totalCoopangData, []);
 
 
 
-console.log('product_total_data : ', product_total_data);
 product_total_data.map((item, index) => {
   item['구분'] = index+1;
   item['상품바코드'] = item['상품바코드'].toString(); 
@@ -1874,45 +1890,31 @@ const shipDownload = () => {
 
 
 
-            let filtered_coopang_data = coopang_upload_data.filter((item)=> {
-              return typeof item.발주번호 === 'number';
-            });
-            
-            
-            const milk_run_result = [];
-
-            
+         
+      
+        
             const box_result = [];
             
             // 물류센터별 수량을 더하고, 10 이상인 경우 별도의 배열로 분류
             const centerSums = {};
-            filtered_coopang_data.forEach(item => {
+            coopang_upload_result_data.forEach(item => {
               const center = item["물류센터"];
-              const quantity = item["실제박스수량"];
+              const quantity = 1;
               // 중복된 물류센터가 나올 경우 합산
               centerSums[center] = (centerSums[center] || 0) + quantity;
             
               });
-            
-            
-              filtered_coopang_data.forEach(item => {
+              coopang_upload_result_data.forEach(item => {
                 const center = item["물류센터"];
-              
-                 if (centerSums[center] >= 13) {
-                // 이미 결과 배열에 해당 물류센터가 없으면 추가
-                if (!milk_run_result.includes(center)) {
-                  milk_run_result.push(item);
-                }
-              }else if(centerSums[center] > 9 && centerSums[center] < 13 ){
-            
-            
+                 if (centerSums[center] < 10) {
+                  if (!box_result.includes(center)) {
+                    box_result.push(item);
+                  }
+             
               }else{
-                if (!box_result.includes(center)) {
-                  box_result.push(item);
-                }
               }
-
-            });
+            
+              });
           
       
           const workbook = new Excel.Workbook();
@@ -2391,45 +2393,68 @@ const excelDownload = (type,config) => {
 
          coopang_upload_result_state.update(() => coopang_upload_result_data);
 
-         console.log('coopang_upload_result_data : ', coopang_upload_result_data);
+         
           
      
         
 
 
+
          
-    const milk_run_result = [];
-    const box_result = [];
 
-    // 물류센터별 수량을 더하고, 10 이상인 경우 별도의 배열로 분류
-    const centerSums = {};
-    coopang_upload_result_data.forEach(item => {
-    const center = item["물류센터"];
-    const quantity = item["실제박스수량"];
-    // 중복된 물류센터가 나올 경우 합산
-    centerSums[center] = (centerSums[center] || 0) + quantity;
-
-    });
-
-
-    
-    coopang_upload_result_data.forEach(item => {
-        const center = item["물류센터"];
-      
-         if (centerSums[center] >= 13) {
-        // 이미 결과 배열에 해당 물류센터가 없으면 추가
-        if (!milk_run_result.includes(center)) {
-          milk_run_result.push(item);
-        }
-      }else if(centerSums[center] > 9 && centerSums[center] < 13 ){
-       
-      }else{
-        if (!box_result.includes(center)) {
-          box_result.push(item);
-        }
-      }
-    
-        });
+         const milk_run_result = [];
+         const milk_run_temp_result = [];
+         
+         const box_result = [];
+         
+         // 물류센터별 수량을 더하고, 10 이상인 경우 별도의 배열로 분류
+         const result_centerSums = {};
+         const centerSums = {};
+         
+         coopang_upload_result_data.forEach(item => {
+           const center = item["물류센터"];
+           const quantity = 1;
+           // 중복된 물류센터가 나올 경우 합산
+           result_centerSums[center] = (result_centerSums[center] || 0) + quantity;
+         
+           });
+           coopang_upload_result_data.forEach(item => {
+             const center = item["물류센터"];
+              if (result_centerSums[center] < 10) {
+               if (!box_result.includes(center)) {
+                 box_result.push(item);
+               }
+          
+           }else{
+           }
+         
+           });
+         
+         
+         
+           filtered_coopang_data.forEach(item => {
+               const center = item["물류센터"];
+               const quantity = item["실제박스수량"];
+               // 중복된 물류센터가 나올 경우 합산
+               centerSums[center] = (centerSums[center] || 0) + quantity;
+             
+               });
+               filtered_coopang_data.forEach(item => {
+                 const center = item["물류센터"];
+               
+                  if (centerSums[center] >= 13) {
+                 // 이미 결과 배열에 해당 물류센터가 없으면 추가
+                 if (!milk_run_result.includes(center)) {
+                   milk_run_result.push(item);
+                 }
+               }else if(centerSums[center] > 9 && centerSums[center] < 13 ){
+                 if (!milk_run_temp_result.includes(center)) {
+                   milk_run_temp_result.push(item);
+                 }
+             
+               }
+             
+                 });
 
 
 
@@ -2443,7 +2468,7 @@ const excelDownload = (type,config) => {
 
     coopang_shipment_data = box_result;
 
-        console.log('box_result : ',box_result);
+ 
     
 
   
@@ -2472,8 +2497,7 @@ const excelDownload = (type,config) => {
      
    
     ]; 
-    console.log('시도함');
-
+    
 
     const wb = new Excel.Workbook();
     const reader = new FileReader()
@@ -2487,10 +2511,8 @@ const excelDownload = (type,config) => {
      
       const buffer = reader.result;
       wb.xlsx.load(buffer).then(workbook => {
-        console.log(workbook, 'workbook instance555')
         workbook.eachSheet((sheet, id) => {
           sheet.eachRow((row, rowIndex) => {
-            console.log(row.values, rowIndex);
             if(rowIndex > 1){
             let obj = {
 
@@ -2512,7 +2534,8 @@ const excelDownload = (type,config) => {
           }
           });
 
-
+          console.log('coopang_shipment : ', coopang_shipment_data);
+          
            
     
        
@@ -2542,14 +2565,39 @@ const excelDownload = (type,config) => {
 
             itemB['체결번호'] = matchingA['체결번호'];
             usedCheques.push({ [key]: itemB['체결번호'] });
+            console.log('체결번호if : ', itemB['체결번호']);
           
             
           } else {
             const nextMatchingA = hanjin_upload_data.find(itemA => itemA['확인사항'] === key && itemA['체결번호'] !== matchingA['체결번호']);
             test.push(itemB);
 
+
             itemB['체결번호'] = nextMatchingA ? nextMatchingA['체결번호'] : undefined;
-            usedCheques.push({ [key]: itemB['체결번호'] });
+            const isDuplicate = usedCheques.some(entry => entry[key] === itemB['체결번호']);
+
+            
+            if (isDuplicate) {
+              // 중복된 경우, nextMatchingA와 비슷한 다음 체결번호를 찾아서 처리
+              let nextChequeIndex = hanjin_upload_data.findIndex(itemA => itemA['확인사항'] === key && itemA['체결번호'] !== matchingA['체결번호']);
+          
+              while (nextChequeIndex !== -1) {
+                // 다음 인덱스부터 처리하는 로직
+                const nextMatchingB = hanjin_upload_data[nextChequeIndex];
+                
+                // 다음 체결번호 찾기
+                nextChequeIndex = hanjin_upload_data.findIndex((itemA, index) => index > nextChequeIndex && itemA['확인사항'] === key && itemA['체결번호'] !== matchingA['체결번호']);
+                
+                if (!usedCheques.some(entry => entry[key] === nextMatchingB['체결번호'])) {
+                  usedCheques.push({ [key]: nextMatchingB['체결번호'] });
+                }
+              }
+            } else {
+              // 중복되지 않은 경우, 현재 체결번호 추가
+              usedCheques.push({ [key]: itemB['체결번호'] });
+            }
+
+          
             
           }
         } else {
@@ -2562,6 +2610,10 @@ const excelDownload = (type,config) => {
     
 
 let new_data;
+
+console.log('unique',usedCheques);
+console.log('test : ' ,test);
+
 for (let i = 0;i < test.length; i++) {
 
   let key = Object.keys(usedCheques[i])[0];
@@ -2584,6 +2636,8 @@ for (let i = 0;i < test.length; i++) {
 
 coopang_shipment_data = empty_result;
 
+console.log('empty_result : ', empty_result);
+
       
           
               hanjin_upload_state.update(() => hanjin_upload_data);
@@ -2601,8 +2655,7 @@ coopang_shipment_data = empty_result;
   }
   const excelHanjinTransportUpload = (e) => {
 
-    console.log('coopangShipment : ', coopang_shipment_data);
-  
+   
     const hanjin_transport_upload_config : any = [
       {header: '고객번호', key: '고객번호', width: 30},
       {header: '고객명', key: '고객명', width: 30},
@@ -2634,10 +2687,8 @@ coopang_shipment_data = empty_result;
      
       const buffer = reader.result;
       wb.xlsx.load(buffer).then(workbook => {
-        console.log(workbook, 'workbook instance555')
         workbook.eachSheet((sheet, id) => {
           sheet.eachRow((row, rowIndex) => {
-            console.log(row.values, rowIndex);
             if(rowIndex > 1){
             let obj = {
 
@@ -2661,6 +2712,9 @@ coopang_shipment_data = empty_result;
 
         
 
+          
+          console.log('coopang_shipment_data : ', coopang_shipment_data);
+          console.log('filtered_hanjin_transport_data : ', filtered_hanjin_transport_data);
           
           if(filtered_hanjin_transport_data.length === 0){
            
@@ -2689,8 +2743,6 @@ coopang_shipment_data = empty_result;
 
           }
 
-          // console.log('coopang_shipment_data : ', coopang_data);
-          // console.log('hanjin_data : ', hanjin_data);
           
           coopang_shipment_data = coopang_data;
          
@@ -2820,8 +2872,6 @@ coopang_shipment_data = empty_result;
           }
         }
           axios.get(url,config).then(res=>{
-            console.log('select_query : ',res);
-            console.log('table_data : ',table_data);
             
             table_data[type].setData(res.data);
             table_state.update(() => table_data);
@@ -2836,9 +2886,6 @@ coopang_shipment_data = empty_result;
       const makeTable = (table_state,type,tableComponent) => {
 
 
-        console.log(table_state);
-        console.log(type);
-        console.log(tableComponent);
         
         const url = `${api}/${type}/select`; 
         
@@ -2871,8 +2918,7 @@ coopang_shipment_data = empty_result;
         }
           axios.get(url,config).then(res=>{
             
-            console.log('makeTable : ',res);
-         
+          
            
             if(res.data.length > 0){
              
@@ -2914,8 +2960,7 @@ coopang_shipment_data = empty_result;
          
              
               });
-              console.log('table_data  :', table_data);
-
+            
               table_state.update(()=> table_data);
 
           
@@ -2958,8 +3003,7 @@ coopang_shipment_data = empty_result;
             
       
             });
-            console.log('table_data  :', table_data);
-
+          
             table_state.update(()=> table_data);
 
 

@@ -196,10 +196,10 @@
                           <Icon.FileCsvSolid class='mr-2' size="20" />
                           생산부 전달용 다운
                       </Button>
-                      <Button  color='green' on:click={() =>productSendPriceDownload()}>
+                      <!-- <Button  color='green' on:click={() =>productSendPriceDownload()}>
                         <Icon.FileCsvSolid class='mr-2' size="20" />
                         제품 매출표 다운
-                    </Button>
+                    </Button> -->
                       {/if}
 
                       {#if $milkrun_qty_state > 0}

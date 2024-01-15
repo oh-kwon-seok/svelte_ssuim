@@ -23,5 +23,5 @@ RUN npm run build
 # 포트 설정
 EXPOSE 3000
 
-# Nginx 실행
-CMD ["npm","run","preview"]
+# 프로그램 실행
+CMD ["npm","run","preview", "--", "--host"]

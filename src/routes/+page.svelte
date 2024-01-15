@@ -25,9 +25,7 @@
 	const api = import.meta.env.VITE_API_BASE_URL;
 	
 	
-	const clientId = import.meta.env.NAVER_CLIENT_ID
-	const callbackUrl = '/api/sign-in/naver-login'
-	
+
 
 
 

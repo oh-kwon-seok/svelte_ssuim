@@ -165,7 +165,7 @@
                     
                           />
                       </Button>
-                      {#if $hanjin_upload_state.length > 0 && $box_qty_state > 0}
+                      {#if $hanjin_upload_state.length > 0}
                       <Button  color='green' on:click={(e)=> fileButtonClick('upload2')}>
                         <Icon.UploadSolid class='mr-2' size="20" />
                           3.한진택배 운송장 업로드

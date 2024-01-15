@@ -1876,6 +1876,7 @@ const shipDownload = () => {
     {header: '우편번호', key: '우편번호', width: 30},
     {header: '주소', key: '주소', width: 100},
     {header: '확인사항', key: '확인사항', width: 30},
+    {header: '선/착불', key: '선/착불', width: 30},
     {header: '체결번호', key: '체결번호', width: 30},
 
 
@@ -1946,8 +1947,22 @@ const shipDownload = () => {
             // hidden: 숨김 여부
             // width: 컬럼 넓이
             sheetOne.columns = ship_config;
+
+            
+            const sortedBoxData =  box_result.sort((a, b) => {
+              const centerA = a["수령인"];
+              const centerB = b["수령인"];
+            
+              if (centerA < centerB) return -1;
+              if (centerA > centerB) return 1;
+              return 0;
+            });
+
+
+
+     
          
-            const sampleData = box_result;
+            const sampleData = sortedBoxData;
 
            
 
@@ -2390,6 +2405,8 @@ const excelDownload = (type,config) => {
 
 
 
+          console.log('coopang_upload_result_data : ', coopang_upload_result_data);
+
 
          coopang_upload_result_state.update(() => coopang_upload_result_data);
 
@@ -2430,7 +2447,9 @@ const excelDownload = (type,config) => {
          
            });
          
+
          
+
          
            filtered_coopang_data.forEach(item => {
                const center = item["물류센터"];
@@ -2454,7 +2473,7 @@ const excelDownload = (type,config) => {
              
                }
              
-                 });
+               });
 
 
 
@@ -2466,7 +2485,21 @@ const excelDownload = (type,config) => {
     milkrun_qty_state.update(() => milkrun_qty_data);
     box_qty_state.update(() => box_qty_data);
 
-    coopang_shipment_data = box_result;
+    console.log('box_result : ', box_result);
+    
+    
+    const sortedBoxData =  box_result.sort((a, b) => {
+      const centerA = a["수령인"];
+      const centerB = b["수령인"];
+    
+      if (centerA < centerB) return -1;
+      if (centerA > centerB) return 1;
+      return 0;
+    });
+
+    
+    
+    coopang_shipment_data = sortedBoxData;
 
  
     
@@ -2493,6 +2526,7 @@ const excelDownload = (type,config) => {
       {header: '우편번호', key: '우편번호', width: 30},
       {header: '주소', key: '주소', width: 30},
       {header: '확인사항', key: '확인사항', width: 30},
+      {header: '선/착불', key: '선/착불', width: 30},
       {header: '체결번호', key: '체결번호', width: 30},
      
    
@@ -2535,9 +2569,11 @@ const excelDownload = (type,config) => {
           });
 
           console.log('coopang_shipment : ', coopang_shipment_data);
+          console.log('hanjin_upload_data : ', hanjin_upload_data);
           
            
-    
+          
+          hanjin_upload_state.update(() => hanjin_upload_data);
        
 
           if(hanjin_upload_data.length === 0){
@@ -2550,12 +2586,16 @@ const excelDownload = (type,config) => {
      
             let test = [];
             let usedCheques = [];
-      
+            
       
       coopang_shipment_data.forEach(itemB => {
         const key = itemB['확인사항'];
       
         const matchingA = hanjin_upload_data.find(itemA => itemA['확인사항'] === key);
+
+        console.log('matchingA : ', matchingA);
+    
+        
       
         if (matchingA) {
           let nextChequeIndex = usedCheques.findIndex(entry => entry[key] === matchingA['체결번호']);
@@ -2565,8 +2605,6 @@ const excelDownload = (type,config) => {
 
             itemB['체결번호'] = matchingA['체결번호'];
             usedCheques.push({ [key]: itemB['체결번호'] });
-            console.log('체결번호if : ', itemB['체결번호']);
-          
             
           } else {
             const nextMatchingA = hanjin_upload_data.find(itemA => itemA['확인사항'] === key && itemA['체결번호'] !== matchingA['체결번호']);
@@ -2614,15 +2652,26 @@ let new_data;
 console.log('unique',usedCheques);
 console.log('test : ' ,test);
 
+let unique = usedCheques.sort((a, b) => {
+  const keyA = Object.keys(a)[0];
+  const keyB = Object.keys(b)[0];
+  return a[keyA].localeCompare(b[keyB]);
+});
+
+
+
+console.log('coopang_shipment_data : ' ,coopang_shipment_data);
+
 for (let i = 0;i < test.length; i++) {
 
-  let key = Object.keys(usedCheques[i])[0];
+  let key = Object.keys(unique[i])[0];
 
+  console.log('usedCheques[i][key]',unique[i][key]);
   // '체결번호' 속성을 삭제
   delete test[i]["체결번호"];
 
   // 새로운 데이터 객체 생성
-  new_data = { ...test[i], "체결번호": usedCheques[i][key] };
+  new_data = { ...test[i], "체결번호": unique[i][key] };
 
 
 
@@ -2633,7 +2682,7 @@ for (let i = 0;i < test.length; i++) {
 
 // 디버깅을 위한 로그
       
-
+console.log('hanjin_upload_data : ', hanjin_upload_data);
 coopang_shipment_data = empty_result;
 
 console.log('empty_result : ', empty_result);
@@ -2714,7 +2763,6 @@ console.log('empty_result : ', empty_result);
 
           
           console.log('coopang_shipment_data : ', coopang_shipment_data);
-          console.log('filtered_hanjin_transport_data : ', filtered_hanjin_transport_data);
           
           if(filtered_hanjin_transport_data.length === 0){
            
@@ -2724,8 +2772,7 @@ console.log('empty_result : ', empty_result);
 
           let coopang_data = coopang_shipment_data;
 
-          
-
+       
           let hanjin_data = hanjin_upload_data;
           
           
@@ -2734,7 +2781,7 @@ console.log('empty_result : ', empty_result);
             
             for(let j=0; j<coopang_data.length; j++){
               if(filtered_hanjin_transport_data[i]['고객출고번호'] === coopang_data[j]['체결번호']){
-                coopang_data[j]['송장번호(Invoice Number)'] = filtered_hanjin_transport_data[i]['운송장번호'];
+                coopang_data[j]['송장번호(Invoice Number)'] = filtered_hanjin_transport_data[i]['운송장번호'].toString();
               
                 
               }
@@ -2743,6 +2790,8 @@ console.log('empty_result : ', empty_result);
 
           }
 
+         
+         
           
           coopang_shipment_data = coopang_data;
          

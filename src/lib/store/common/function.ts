@@ -2,7 +2,7 @@
 
 
 import { writable } from 'svelte/store';
-import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_ship_state,common_user_state,table_state,coopang_upload_state,coopang_upload_result_state,coopang_shipment_state,hanjin_upload_state,hanjin_transport_upload_state, box_qty_state, milkrun_qty_state } from './state';
+import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_ship_state,common_user_state,table_state,coopang_upload_state,coopang_upload_result_state,coopang_shipment_state,hanjin_upload_state,hanjin_transport_upload_state, box_qty_state, milkrun_qty_state,common_standard_state } from './state';
 
 // import {item_data,item_form_state} from '$lib/store/info/item/state';
 
@@ -38,6 +38,8 @@ let table_data : any;
 
 let product_data : any;
 let ship_data : any;
+let standard_data : any;
+
 let coopang_upload_data : any;
 
 let coopang_upload_result_data : any;
@@ -101,6 +103,9 @@ common_product_state.subscribe((data : any) => {
 common_ship_state.subscribe((data : any) => {
   ship_data = data;
 })
+common_standard_state.subscribe((data : any) => {
+  standard_data = data;
+})
 
 common_user_state.subscribe((data) => {
   user_data = data;
@@ -162,6 +167,10 @@ const infoCallApi = (title) => {
         } else if(title === 'ship'){
           ship_data = res.data;
           common_ship_state.update(()=> ship_data);
+        } else if(title === 'standard'){
+          console.log('res_data  :', res.data);
+          standard_data = res.data;
+          common_standard_state.update(()=> standard_data);
         }
       
 
@@ -444,7 +453,7 @@ console.log('coopang_', coopang_upload_result_data);
 console.log('coopang_', coopang_upload_data);
 
 let filtered_coopang_data = coopang_upload_data.filter((item)=> {
-  return typeof item.발주번호 === 'number';
+  return typeof item.발주번호 === 'number' && item.확정수량 > parseInt(standard_data[0]['order_limit_qty']);
 });
 
 
@@ -528,7 +537,7 @@ coopang_upload_result_data.forEach(item => {
   });
   coopang_upload_result_data.forEach(item => {
     const center = item["물류센터"];
-     if (result_centerSums[center] < 10) {
+     if (result_centerSums[center] < parseInt(standard_data[0]['milkrun_qty'])) {
       if (!box_result.includes(center)) {
         box_result.push(item);
       }
@@ -550,16 +559,11 @@ coopang_upload_result_data.forEach(item => {
       filtered_coopang_data.forEach(item => {
         const center = item["물류센터"];
       
-         if (centerSums[center] >= 13) {
+         if (centerSums[center] >= parseInt(standard_data[0]['milkrun_qty'])) {
         // 이미 결과 배열에 해당 물류센터가 없으면 추가
         if (!milk_run_result.includes(center)) {
           milk_run_result.push(item);
         }
-      }else if(centerSums[center] > 9 && centerSums[center] < 13 ){
-        if (!milk_run_temp_result.includes(center)) {
-          milk_run_temp_result.push(item);
-        }
-    
       }
     
         });
@@ -885,7 +889,7 @@ const productSendPriceDownload = () => {
 
 
 let filtered_coopang_data = coopang_upload_data.filter((item)=> {
-  return typeof item.발주번호 === 'number';
+  return typeof item.발주번호 === 'number' && item.확정수량 > parseInt(standard_data[0]['order_limit_qty']);
 });
 
 
@@ -908,16 +912,11 @@ filtered_coopang_data.forEach(item => {
   filtered_coopang_data.forEach(item => {
     const center = item["물류센터"];
   
-     if (centerSums[center] >= 13) {
+     if (centerSums[center] >= parseInt(standard_data[0]['milkrun_qty'])) {
     // 이미 결과 배열에 해당 물류센터가 없으면 추가
     if (!milk_run_result.includes(center)) {
       milk_run_result.push(item);
     }
-  }else if(centerSums[center] > 9 && centerSums[center] < 13 ){
-    if (!milk_run_temp_result.includes(center)) {
-      milk_run_temp_result.push(item);
-    }
-
   }else{
     if (!box_result.includes(center)) {
       box_result.push(item);
@@ -1328,7 +1327,7 @@ const palletDownload = () => {
     // width: 컬럼 넓이
    
 let filtered_coopang_data = coopang_upload_data.filter((item)=> {
-  return typeof item.발주번호 === 'number';
+  return typeof item.발주번호 === 'number' && item.확정수량 > parseInt(standard_data[0]['order_limit_qty']);
 });
 
 
@@ -1350,7 +1349,7 @@ filtered_coopang_data.forEach(item => {
   filtered_coopang_data.forEach(item => {
     const center = item["물류센터"];
   
-    if (centerSums[center] >= 13) {
+    if (centerSums[center] >= parseInt(standard_data[0]['milkrun_qty'])) {
       // 이미 결과 배열에 해당 물류센터가 없으면 추가
       if (!milk_run_result.includes(center)) {
         milk_run_result.push(item);
@@ -1593,7 +1592,7 @@ const milkrunBoxDownload = () => {
     // width: 컬럼 넓이
    
 let filtered_coopang_data = coopang_upload_data.filter((item)=> {
-  return typeof item.발주번호 === 'number';
+  return typeof item.발주번호 === 'number' && item.확정수량 > parseInt(standard_data[0]['order_limit_qty']);
 });
 
 
@@ -1615,7 +1614,7 @@ filtered_coopang_data.forEach(item => {
   filtered_coopang_data.forEach(item => {
     const center = item["물류센터"];
   
-     if (centerSums[center] >= 13) {
+     if (centerSums[center] >= parseInt(standard_data[0]['milkrun_qty'])) {
     // 이미 결과 배열에 해당 물류센터가 없으면 추가
     if (!milk_run_result.includes(center)) {
       milk_run_result.push(item);
@@ -1907,7 +1906,7 @@ const shipDownload = () => {
               });
               coopang_upload_result_data.forEach(item => {
                 const center = item["물류센터"];
-                 if (centerSums[center] < 10) {
+                 if (centerSums[center] < parseInt(standard_data[0]['milkrun_qty'])) {
                   if (!box_result.includes(center)) {
                     box_result.push(item);
                   }
@@ -2294,15 +2293,12 @@ const excelDownload = (type,config) => {
           });
           coopang_upload_state.update(() => coopang_upload_data);
           
-        
           let filtered_coopang_data = change_data.filter((item)=> {
-            return typeof item.발주번호 === 'number';
+            return typeof item.발주번호 === 'number' && item.확정수량 > parseInt(standard_data[0]['order_limit_qty']);
           });
 
 
-
-        
-
+       
           
           let standard_coopang_data = [];
           for(let i =0; i<filtered_coopang_data.length; i++){
@@ -2420,7 +2416,7 @@ const excelDownload = (type,config) => {
          
 
          const milk_run_result = [];
-         const milk_run_temp_result = [];
+      
          
          const box_result = [];
          
@@ -2437,7 +2433,7 @@ const excelDownload = (type,config) => {
            });
            coopang_upload_result_data.forEach(item => {
              const center = item["물류센터"];
-              if (result_centerSums[center] < 10) {
+              if (result_centerSums[center] < parseInt(standard_data[0]['milkrun_qty'])) {
                if (!box_result.includes(center)) {
                  box_result.push(item);
                }
@@ -2461,16 +2457,11 @@ const excelDownload = (type,config) => {
                filtered_coopang_data.forEach(item => {
                  const center = item["물류센터"];
                
-                  if (centerSums[center] >= 13) {
+                  if (centerSums[center] >= parseInt(standard_data[0]['milkrun_qty'])) {
                  // 이미 결과 배열에 해당 물류센터가 없으면 추가
                  if (!milk_run_result.includes(center)) {
                    milk_run_result.push(item);
                  }
-               }else if(centerSums[center] > 9 && centerSums[center] < 13 ){
-                 if (!milk_run_temp_result.includes(center)) {
-                   milk_run_temp_result.push(item);
-                 }
-             
                }
              
                });
@@ -2486,6 +2477,7 @@ const excelDownload = (type,config) => {
     box_qty_state.update(() => box_qty_data);
 
     console.log('box_result : ', box_result);
+    console.log('milk_run_result : ', milk_run_result);
     
     
     const sortedBoxData =  box_result.sort((a, b) => {

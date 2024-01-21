@@ -15,13 +15,18 @@
 
     import Util from '$lib/components/modal/product/Util.svelte';
     
+    import StandardUtil from '$lib/components/modal/standard/Util.svelte';
+
 
     import * as Icon from 'svelte-awesome-icons';
 
     import {productModalOpen} from '$lib/store/product/function';
+    import {standardModalOpen} from '$lib/store/standard/function';
+
     import {excelDownload, excelUpload, productSendDownload,shipDownload,fileButtonClick,coopangShipmentDownload,excelHanjinUpload,excelHanjinTransportUpload,palletDownload,milkrunBoxDownload,productSendPriceDownload} from '$lib/store/common/function';
     
     import {product_form_state,product_modal_state} from '$lib/store/product/state';
+    import {standard_form_state,standard_modal_state} from '$lib/store/standard/state';
 
     import {url_state,cookie_state,table_state,common_toast_state,coopang_upload_result_state,hanjin_upload_state,hanjin_transport_upload_state, milkrun_qty_state, box_qty_state} from '$lib/store/common/state';
     import {TABLE_COMPONENT,EXCEL_CONFIG} from '$lib/module/common/constants';
@@ -123,6 +128,17 @@
                           <Icon.FileCsvSolid class='mr-2' size="20" />
                           엑셀다운
                       </Button>
+
+                      <Button  color='red' on:click={() =>standardModalOpen()}>
+                        <Icon.GearsSolid class='mr-2' size="20" />
+                        설정
+                    </Button>
+
+
+                
+                  {#if $standard_modal_state['title'] === 'update'}
+                  <StandardUtil title="update" />
+                  {/if}
 
                     
                   

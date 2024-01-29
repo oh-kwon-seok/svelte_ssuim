@@ -2,7 +2,7 @@
 
 
 import { writable } from 'svelte/store';
-import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_ship_state,common_user_state,table_state,coopang_upload_state,coopang_upload_result_state,coopang_shipment_state,hanjin_upload_state,hanjin_transport_upload_state, box_qty_state, milkrun_qty_state,common_standard_state } from './state';
+import {common_alert_state,common_toast_state, menu_state,url_state,load_state,common_search_state,login_state,common_product_state,common_ship_state,common_user_state,table_state,coopang_upload_state,coopang_upload_result_state,coopang_shipment_state,hanjin_upload_state,hanjin_transport_upload_state, box_qty_state, milkrun_qty_state,common_standard_state, coopang_upload_finish_state } from './state';
 
 // import {item_data,item_form_state} from '$lib/store/info/item/state';
 
@@ -42,13 +42,21 @@ let standard_data : any;
 
 let coopang_upload_data : any;
 
+
+
+
+
+
 let coopang_upload_result_data : any;
+
 
 let coopang_shipment_data : any;
 
 let hanjin_upload_data : any;
 
 let hanjin_transport_upload_data : any;
+
+let coopang_upload_finish_data : any;
 
 let user_data : any;
 
@@ -2003,6 +2011,111 @@ const shipDownload = () => {
 }
 
 
+const coopangFinishDownload = () => {
+ 
+
+
+  const coopang_upload_finish_config : any = [
+    {header: '발주번호', key: '발주번호', width: 30},
+    {header: '물류센터', key: '물류센터', width: 30},
+    {header: '입고유형', key: '입고유형', width: 30},
+    {header: '발주상태', key: '발주상태', width: 30},
+    {header: '상품번호', key: '상품번호', width: 30},
+    {header: '상품바코드', key: '상품바코드', width: 30},
+    {header: '상품이름', key: '상품이름', width: 30},
+    {header: '발주수량', key: '발주수량', width: 30},
+    {header: '확정수량', key: '확정수량', width: 30},
+    {header: '유통기한', key: '유통기한', width: 30},
+    {header: '제조일자', key: '제조일자', width: 30},
+    {header: '생산년도', key: '생산년도', width: 30},
+    {header: '납품부족사유', key: '납품부족사유', width: 30},
+    {header: '회송담당자', key: '회송담당자', width: 30},
+    {header: '회송담당자연락처', key: '회송담당자연락처', width: 30},
+    {header: '회송지주소', key: '회송지주소', width: 30},
+    {header: '매입가', key: '매입가', width: 30},
+    {header: '공급가', key: '공급가', width: 30},
+    {header: '부가세', key: '부가세', width: 30},
+    {header: '매입금', key: '매입금', width: 30},
+    {header: '입고예정일', key: '입고예정일', width: 30},
+    {header: '발주등록일시', key: '발주등록일시', width: 30},
+  ]; 
+
+    try {
+      
+         
+            let ship_title : any= '쿠팡발주서 확정용 파일';
+            
+          
+      
+          const workbook = new Excel.Workbook();
+            // 엑셀 생성
+      
+            // 생성자
+            workbook.creator = '작성자';
+           
+            // 최종 수정자
+            workbook.lastModifiedBy = '최종 수정자';
+           
+            // 생성일(현재 일자로 처리)
+            workbook.created = new Date();
+           
+            // 수정일(현재 일자로 처리)
+            workbook.modified = new Date();
+      
+            let file_name = ship_title + moment().format('YYYY-MM-DD HH:mm:ss') + '.xlsx';
+          
+          
+            workbook.addWorksheet(ship_title);
+            const sheetOne = workbook.getWorksheet(ship_title);
+                 
+                 
+                  
+            // 컬럼 설정
+            // header: 엑셀에 표기되는 이름
+            // key: 컬럼을 접근하기 위한 key
+            // hidden: 숨김 여부
+            // width: 컬럼 넓이
+            sheetOne.columns = coopang_upload_finish_config;
+         
+            const sampleData = coopang_upload_finish_data;
+            const borderStyle = {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' }
+            };
+           
+            sampleData.map((item, index) => {
+              sheetOne.addRow(item);
+           
+              // 추가된 행의 컬럼 설정(헤더와 style이 다를 경우)
+              
+              for(let loop = 1; loop <= 6; loop++) {
+                const col = sheetOne.getRow(index + 2).getCell(loop);
+                col.border = borderStyle;
+                col.font = {name: 'Arial Black', size: 10};
+              }
+            
+          });
+      
+      
+              
+         
+            workbook.xlsx.writeBuffer().then((data) => {
+              const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+              const url = window.URL.createObjectURL(blob);
+              const anchor = document.createElement('a');
+              anchor.href = url;
+              anchor.download = file_name;
+              anchor.click();
+              window.URL.revokeObjectURL(url);
+            })
+          } catch(error) {
+            console.error(error);
+          }
+}
+
+
 
 const coopangShipmentDownload = () => {
   console.log('coopang_shipment_data : ', coopang_shipment_data);
@@ -2298,6 +2411,11 @@ const excelDownload = (type,config) => {
           });
 
 
+          let filtered_coopang_finish_data = change_data.filter((item)=> { // 쿠팡에 재업로드용
+            return typeof item.발주번호 === 'number';
+          });
+
+   
        
           
           let standard_coopang_data = [];
@@ -2333,7 +2451,7 @@ const excelDownload = (type,config) => {
               box_qty = Math.ceil(filtered_coopang_data[i]['확정수량'] / filtered_coopang_data[i]['박스수량']);
               filtered_coopang_data[i]['실제박스수량'] = box_qty;
              
-              // if(box_qty > 0 && box_qty < 10){
+             
                 let box_in_qty = filtered_coopang_data[i]['확정수량'];
                 
                 for(let a=0; a<box_qty; a++){
@@ -2377,7 +2495,7 @@ const excelDownload = (type,config) => {
                   standard_coopang_data.push(filtered_coopang_data[i]);
                   coopang_upload_result_data = standard_coopang_data;
                 }
-              // }
+             
               
 
               filtered_coopang_data[i]['발주번호(PO ID)'] = filtered_coopang_data[i]['발주번호'];
@@ -2401,23 +2519,12 @@ const excelDownload = (type,config) => {
 
 
 
-          console.log('coopang_upload_result_data : ', coopang_upload_result_data);
+        
 
 
          coopang_upload_result_state.update(() => coopang_upload_result_data);
 
-         
-          
-     
-        
-
-
-
-         
-
          const milk_run_result = [];
-      
-         
          const box_result = [];
          
          // 물류센터별 수량을 더하고, 10 이상인 경우 별도의 배열로 분류
@@ -2444,9 +2551,6 @@ const excelDownload = (type,config) => {
            });
          
 
-         
-
-         
            filtered_coopang_data.forEach(item => {
                const center = item["물류센터"];
                const quantity = item["실제박스수량"];
@@ -2465,9 +2569,41 @@ const excelDownload = (type,config) => {
                }
              
                });
+               
+               
+               
+               console.log('box_qty : ',box_result);
+
+
+               console.log('milk_run_result : ', milk_run_result);
+
+
+               for(let i=0; i < filtered_coopang_finish_data.length; i++){
+                filtered_coopang_finish_data[i]['상품바코드'] = filtered_coopang_finish_data[i]['상품바코드'].toString();
+
+                if(filtered_coopang_finish_data[i]['발주수량'] < parseInt(standard_data[0]['order_limit_qty'])){
+                  filtered_coopang_finish_data[i]['확정수량'] = 0;
+                  filtered_coopang_finish_data[i]['납품부족사유'] = "최소발주량 변경 필요 (MOQ)";
+
+                }
+                  for(let j=0; j<milk_run_result.length; j++){
+                    if(filtered_coopang_finish_data[i]['발주번호'] === milk_run_result[j]['발주번호'] &&  filtered_coopang_finish_data[i]['상품번호'] === milk_run_result[j]['상품번호']){
+                      filtered_coopang_finish_data[i]['입고유형'] = "밀크런";
+                    }
+
+                  }
 
 
 
+               }
+
+              
+
+               coopang_upload_finish_data = filtered_coopang_finish_data;
+
+               coopang_upload_finish_state.update(() => coopang_upload_finish_data);
+
+            
 
     milkrun_qty_data = milk_run_result.length;
     box_qty_data = box_result.length;
@@ -3091,5 +3227,6 @@ export {handleToggle,
   coopangShipmentDownload,
   palletDownload,
   milkrunBoxDownload,
-  productSendPriceDownload
+  productSendPriceDownload,
+  coopangFinishDownload
 }

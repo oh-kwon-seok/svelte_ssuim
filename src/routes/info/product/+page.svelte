@@ -23,12 +23,12 @@
     import {productModalOpen} from '$lib/store/product/function';
     import {standardModalOpen} from '$lib/store/standard/function';
 
-    import {excelDownload, excelUpload, productSendDownload,shipDownload,fileButtonClick,coopangShipmentDownload,excelHanjinUpload,excelHanjinTransportUpload,palletDownload,milkrunBoxDownload,productSendPriceDownload} from '$lib/store/common/function';
+    import {excelDownload, excelUpload, productSendDownload,shipDownload,fileButtonClick,coopangShipmentDownload,excelHanjinUpload,excelHanjinTransportUpload,palletDownload,milkrunBoxDownload,coopangFinishDownload} from '$lib/store/common/function';
     
     import {product_form_state,product_modal_state} from '$lib/store/product/state';
     import {standard_form_state,standard_modal_state} from '$lib/store/standard/state';
 
-    import {url_state,cookie_state,table_state,common_toast_state,coopang_upload_result_state,hanjin_upload_state,hanjin_transport_upload_state, milkrun_qty_state, box_qty_state} from '$lib/store/common/state';
+    import {url_state,cookie_state,table_state,common_toast_state,coopang_upload_result_state,hanjin_upload_state,hanjin_transport_upload_state, milkrun_qty_state, box_qty_state, coopang_upload_finish_state} from '$lib/store/common/state';
     import {TABLE_COMPONENT,EXCEL_CONFIG} from '$lib/module/common/constants';
 
     import SearchBar from '$lib/components/layout/SearchBar.svelte'
@@ -207,6 +207,13 @@
 
                       <div class='m-5'>
 
+                        {#if $coopang_upload_finish_state.length > 0}
+                        <Button  color='green' on:click={() => coopangFinishDownload()}>
+                          <Icon.FileCsvSolid class='mr-2' size="20" />
+                          쿠팡발주서 확정용 파일 다운
+                      </Button>
+                       {/if}
+
                         {#if $coopang_upload_result_state.length > 0 && ($box_qty_state > 0 || $milkrun_qty_state > 0)}
                         <Button  color='green' on:click={() =>productSendDownload()}>
                           <Icon.FileCsvSolid class='mr-2' size="20" />
@@ -245,6 +252,7 @@
                             쿠팡쉽먼트 다운
                         </Button>
                          {/if}
+                        
                  
 
              

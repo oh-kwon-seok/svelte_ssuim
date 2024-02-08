@@ -1707,10 +1707,27 @@ Object.keys(centerDataMap).forEach(center => {
   let worksheet = workbook.addWorksheet(sheetName);
 
 
-  worksheet.getColumn('A').width = 60;
-  worksheet.getColumn('B').width = 15;
-  
 
+
+
+  worksheet.pageSetup.margins = {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    header: 0,
+    footer: 0
+  };
+
+
+
+  // worksheet.getColumn('A').width = 60;
+  // worksheet.getColumn('B').width = 15;
+
+
+  worksheet.getColumn('A').width = 65.13;
+  worksheet.getColumn('B').width = 29;
+  
 
 
   let centerData = centerDataMap[center];
@@ -1738,6 +1755,7 @@ Object.keys(centerDataMap).forEach(center => {
   let c_index = 0;
   let d_index = 0;
   let e_index = 0;
+  var startNumber = 4;
   centerData.forEach((data,index) => {
     
     let total_box_qty = data['확정수량'];
@@ -1748,40 +1766,70 @@ Object.keys(centerDataMap).forEach(center => {
  
 
     for(let i =0; i< data['실제박스수량']; i++){
-      console.log('total : ',total_index);
-      
-      
-      if(a_index ===0){
-        a_index = i + 1; 
+   
+
+         if (total_index === 0 ) {  // 0
+        a_index = i + 1;
         b_index = i + 2;
         c_index = i + 3;
         d_index = i + 4;
         e_index = i + 5;
-      }else{
-        a_index = a_index + 4;
-        b_index = a_index+1;
-        c_index = a_index+2;
-        d_index = a_index+3;
-        e_index = a_index+4;
+     
+      }else if(total_index % 2 === 1){ // 1,3,5,7
+        a_index = e_index + 1;
+        b_index = a_index + 1;
+        c_index = a_index + 2;
+        d_index = a_index + 3;
+      }else if(total_index > 0 && total_index % 2 === 0){
+        a_index = d_index + 1;
+        b_index = a_index + 1;
+        c_index = a_index + 2;
+        d_index = a_index + 3;
+        e_index = a_index + 4;
+        
       }
+      console.log('i : ', i);
+      console.log('i % 2 : ', i % 2);
+      console.log('total_index : ', total_index);
+      console.log('a_index : ', a_index);
+      console.log('b_index : ', b_index);
+      console.log('c_index : ', c_index);
+      console.log('d_index : ', d_index);
+      console.log('e_index : ', e_index);
      
+      // if (i % 2 === 0) { 
+      //   a_index = i + 1;
+      //   b_index = i + 2;
+      //   c_index = i + 3;
+      //   d_index = i + 4;
+    
      
+      //   e_index = i + 5;
+      // } else { 
+      
+      //   a_index = e_index + 1;
+      //   b_index = a_index + 1;
+      //   c_index = a_index + 2;
+      //   d_index = a_index + 3;
+      // }
+     
+      worksheet.mergeCells(`A${a_index}:B${a_index}`);
+
       worksheet.getCell(`A${a_index}`).value = "박스 상품 리스트";
-      worksheet.getCell(`B${a_index}`).value = "";
 
+      worksheet.getCell(`A${a_index}`).font = { name: 'Arial Black', size: 48};
 
-      worksheet.getCell(`A${a_index}`).font = { name: 'Arial Black', size: 30,bold: true};
+      worksheet.mergeCells(`A${b_index}:B${b_index}`);
 
       worksheet.getCell(`A${b_index}`).value = "업체명 : (주)쓰임받는 사람들";
-      worksheet.getCell(`B${b_index}`).value = "";
-
-      worksheet.getCell(`A${b_index}`).font = { name: 'Arial Black', size: 20,bold: true};
+ 
+      worksheet.getCell(`A${b_index}`).font = { name: 'Arial Black', size: 36};
       
+      worksheet.mergeCells(`A${c_index}:B${c_index}`);
 
       worksheet.getCell(`A${c_index}`).value = "발주번호 : " + data['발주번호'] + "(" + data['물류센터'] + ")";
-      worksheet.getCell(`B${c_index}`).value = "";
-
-      worksheet.getCell(`A${c_index}`).font = { name: 'Arial Black', size: 16,bold: true};
+   
+      worksheet.getCell(`A${c_index}`).font = { name: 'Arial Black', size: 28};
 
 
       worksheet.getCell(`A${d_index}`).value = data['제품명'];
@@ -1792,7 +1840,7 @@ Object.keys(centerDataMap).forEach(center => {
         worksheet.getCell(`B${d_index}`).value = total_box_qty;
       }
 
-      worksheet.getCell(`A${d_index}`).font = { name: 'Arial Black', size: 20,bold: true};
+      worksheet.getCell(`A${d_index}`).font = { name: 'Arial Black', size: 26};
 
       worksheet.getCell(`A${d_index}`).border = {
         top: { style: 'thin' },
@@ -1801,7 +1849,7 @@ Object.keys(centerDataMap).forEach(center => {
         right: { style: 'thin' },
       };
 
-      worksheet.getCell(`B${d_index}`).font = { name: 'Arial Black', size: 20,bold: true};
+      worksheet.getCell(`B${d_index}`).font = { name: 'Arial Black', size: 26};
       worksheet.getCell(`B${d_index}`).border = {
         top: { style: 'thin' },
         left: { style: 'thin' },
@@ -1809,6 +1857,23 @@ Object.keys(centerDataMap).forEach(center => {
         right: { style: 'thin' },
       };
 
+      if( i % 2 === 0 ){
+        // worksheet.mergeCells(`A${e_index}:B${e_index}`);
+
+        worksheet.getCell(`A${e_index}`).value = "ss";
+
+      }
+   
+ 
+   
+ 
+
+      // if(i === 0 || i % 2 === 0){
+   
+      //   worksheet.getCell(`A${e_index}`).font = { name: 'Arial Black', size: 26};
+      //   worksheet.getCell(`A${e_index}`).value = "";
+      // }
+    
      
   
 
@@ -1820,15 +1885,47 @@ Object.keys(centerDataMap).forEach(center => {
     }
 
     
+    let init_qty = 4;
 
-    worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
-
-      if(rowNumber % 4 === 0){
-
-        worksheet.getRow(rowNumber).height = 4.5 * 28.35;
-      }else{
-        worksheet.getRow(rowNumber).height = 2.5 * 28.35;
+    function generateSequence() {
+      const sequence = [4];
+    
+      while (sequence[sequence.length - 1] < 1000) {
+        sequence.push(sequence[sequence.length - 1] + 5);
+        sequence.push(sequence[sequence.length - 1] + 4);
       }
+    
+      return sequence.filter(num => num <= 1000);
+    }
+
+    const generatedSequence = generateSequence();
+    console.log('generatedSequence : ', generatedSequence);
+
+
+    
+    worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+      
+      if(init_qty === rowNumber){
+        init_qty += 5;
+
+      }
+
+
+      // if(rowNumber % 4 === 0){
+      //4 ,9 , 13, 18일때
+      //   worksheet.getRow(rowNumber).height = 4.5 * 28.35;
+      // }else{
+      //   worksheet.getRow(rowNumber).height = 2.5 * 28.35;
+      // }
+      
+
+      if(generatedSequence.includes(rowNumber)){
+        worksheet.getRow(rowNumber).height = 150;
+      }else{
+        worksheet.getRow(rowNumber).height = 71.25;
+      }
+
+      
    
     
     
@@ -1843,7 +1940,7 @@ Object.keys(centerDataMap).forEach(center => {
         };
         
 
-        console.log(row[cell]);
+       
 
         
       });

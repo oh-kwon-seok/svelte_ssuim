@@ -457,8 +457,6 @@ const productSendDownload = () => {
     });
     
 
-console.log('coopang_', coopang_upload_result_data);
-console.log('coopang_', coopang_upload_data);
 
 let filtered_coopang_data = coopang_upload_data.filter((item)=> {
   return typeof item.발주번호 === 'number' && item.확정수량 > parseInt(standard_data[0]['order_limit_qty']);
@@ -1860,7 +1858,7 @@ Object.keys(centerDataMap).forEach(center => {
       if( i % 2 === 0 ){
         // worksheet.mergeCells(`A${e_index}:B${e_index}`);
 
-        worksheet.getCell(`A${e_index}`).value = "ss";
+        worksheet.getCell(`A${e_index}`).value = "";
 
       }
    
@@ -1885,9 +1883,8 @@ Object.keys(centerDataMap).forEach(center => {
     }
 
     
-    let init_qty = 4;
-
-    function generateSequence() {
+  
+    function itemSequence() { // item 정보가 있는곳
       const sequence = [4];
     
       while (sequence[sequence.length - 1] < 1000) {
@@ -1897,32 +1894,35 @@ Object.keys(centerDataMap).forEach(center => {
     
       return sequence.filter(num => num <= 1000);
     }
+    function emptySequence() { // 여백이 있는곳
+      const sequence = [5];
+    
+      while (sequence[sequence.length - 1] < 1000) {
+        sequence.push(sequence[sequence.length - 1] + 9);
+      }
+    
+      return sequence.filter(num => num <= 1000);
+    }
 
-    const generatedSequence = generateSequence();
-    console.log('generatedSequence : ', generatedSequence);
+    const itemArray = itemSequence();
+    const emptyArray = emptySequence();
+    console.log('itemArray : ', itemArray);
+    console.log('emptyArray : ', emptyArray);
+    
 
 
     
     worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
-      
-      if(init_qty === rowNumber){
-        init_qty += 5;
-
-      }
-
-
-      // if(rowNumber % 4 === 0){
-      //4 ,9 , 13, 18일때
-      //   worksheet.getRow(rowNumber).height = 4.5 * 28.35;
-      // }else{
-      //   worksheet.getRow(rowNumber).height = 2.5 * 28.35;
-      // }
-      
-
-      if(generatedSequence.includes(rowNumber)){
+     
+      if(itemArray.includes(rowNumber)){
+        console.log('rowNumber : ', rowNumber);
         worksheet.getRow(rowNumber).height = 150;
-      }else{
-        worksheet.getRow(rowNumber).height = 71.25;
+       
+      }else if(emptyArray.includes(rowNumber)){
+          worksheet.getRow(rowNumber).height = 70;
+      }
+      else{
+        worksheet.getRow(rowNumber).height = 60.25;
       }
 
       
@@ -2248,6 +2248,8 @@ const coopangShipmentDownload = () => {
       
          
             let ship_title : any= '쿠팡 쉽먼트 업로드 양식';
+            let ship_title1 : any= 'empty sheet1';
+            let ship_title2 : any= 'empty sheet2';
             
           
       
@@ -2270,10 +2272,12 @@ const coopangShipmentDownload = () => {
           
           
             workbook.addWorksheet(ship_title);
+            workbook.addWorksheet(ship_title1);
+            workbook.addWorksheet(ship_title2);
+                 
             const sheetOne = workbook.getWorksheet(ship_title);
-                 
-                 
-                  
+           
+                
             // 컬럼 설정
             // header: 엑셀에 표기되는 이름
             // key: 컬럼을 접근하기 위한 key
@@ -3325,5 +3329,6 @@ export {handleToggle,
   palletDownload,
   milkrunBoxDownload,
   productSendPriceDownload,
-  coopangFinishDownload
+  coopangFinishDownload,
+  
 }

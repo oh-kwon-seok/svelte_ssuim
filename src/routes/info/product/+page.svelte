@@ -206,7 +206,7 @@
                         </div>
 
                       <div class='m-5'>
-
+                      
                         {#if $coopang_upload_finish_state.length > 0}
                         <Button  color='green' on:click={() => coopangFinishDownload()}>
                           <Icon.FileCsvSolid class='mr-2' size="20" />

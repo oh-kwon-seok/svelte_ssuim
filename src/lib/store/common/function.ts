@@ -348,6 +348,7 @@ const check_delete = (data, key,value) => {
 
 const productSendDownload = () => {
   const product_send_config : any = [
+   
     {header: '구분', key: '구분', width: 5},
     {header: '제품명', key: '제품명', width: 30},
     {header: '수량(여유공간)', key: '수량', width: 5},
@@ -359,6 +360,7 @@ const productSendDownload = () => {
   ]; 
 
   const coopang_download_config : any = [
+    {header: '', key: '여백', width: 5},
     {header: '구분', key: '구분', width: 5},
     {header: '제품명', key: '제품명', width:60},
     {header: '바코드', key: '상품바코드', width: 20},
@@ -419,6 +421,15 @@ const productSendDownload = () => {
          
          
           
+    sheetOne.pageSetup.margins = {
+    left: 0,
+    right: 0,
+    top: 20,
+    bottom: 0,
+    header: 0,
+    footer: 0
+  };
+
     // 컬럼 설정
     // header: 엑셀에 표기되는 이름
     // key: 컬럼을 접근하기 위한 key
@@ -429,7 +440,6 @@ const productSendDownload = () => {
     sheetThree.columns = coopang_download_config;
     sheetFour.columns = coopang_download_config;
     
-
     const borderStyle = {
       top: { style: 'thin' },
       left: { style: 'thin' },
@@ -437,11 +447,26 @@ const productSendDownload = () => {
       right: { style: 'thin' }
     };
 
+
+    const emptyBorderStyle = {
+      top: { style: 'none' },
+      left: { style: 'none' },
+      bottom: { style: 'none' },
+      right: { style: 'none' }
+    };
+
     
 
-    sheetOne.getRow(1).eachCell((cell) => {
-      cell.alignment = { horizontal: 'center',vertical: 'middle' };
-      cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+    sheetOne.getRow(1).eachCell((cell,cellNumber) => {
+     
+      if(cellNumber !== 1){
+        cell.alignment = { horizontal: 'center',vertical: 'middle' };
+        cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      }else{
+        cell.border = { top: { style: 'none' }, left: { style: 'none' }, bottom: { style: 'none' }, right: { style: 'none' } };
+      
+      }
+     
     });
     sheetTwo.getRow(1).eachCell((cell) => {
       cell.alignment = { horizontal: 'center',vertical: 'middle' };
@@ -502,15 +527,25 @@ product_total_data.map((item, index) => {
   item['상품바코드'] = item['상품바코드'].toString(); 
 
   sheetOne.addRow(item);
-  for(let loop = 1; loop <= 5; loop++) {
+  for(let loop = 1; loop <= 6; loop++) {
     const col = sheetOne.getRow(index + 2).getCell(loop);
-    if(loop === 1 || loop === 3 || loop === 4){
+    if(loop === 2 || loop === 4 || loop === 5){
       col.alignment = { horizontal: 'center',vertical: 'middle' };
 
     }else{
       col.alignment = { vertical: 'middle' };
     }
-    col.border = borderStyle;
+    if(loop === 1){
+      col.border = emptyBorderStyle;
+      col.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFFFFFFF' } // 채우기 색상을 투명으로 설정
+      };
+
+    }else{
+      col.border = borderStyle;
+    }
     col.font = {name: 'Arial Black', size: 8};
   }
 });

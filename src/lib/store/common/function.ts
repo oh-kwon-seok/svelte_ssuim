@@ -362,10 +362,11 @@ const productSendDownload = () => {
   const coopang_download_config : any = [
     {header: '', key: '여백', width: 5},
     {header: '구분', key: '구분', width: 5},
-    {header: '제품명', key: '제품명', width:60},
+    {header: '제품명', key: '제품명', width:75},
     {header: '바코드', key: '상품바코드', width: 20},
     {header: '수량', key: '확정수량', width: 5},
     {header: '유통기한', key: '유통기한', width: 10},
+    {header: '', key: '여백', width: 5},
   ]; 
 
   const coopang_milk_run_download_config : any = [
@@ -424,7 +425,7 @@ const productSendDownload = () => {
     sheetOne.pageSetup.margins = {
     left: 0,
     right: 0,
-    top: 20,
+    top: 0,
     bottom: 0,
     header: 0,
     footer: 0
@@ -459,7 +460,7 @@ const productSendDownload = () => {
 
     sheetOne.getRow(1).eachCell((cell,cellNumber) => {
      
-      if(cellNumber !== 1){
+      if(cellNumber !== 1 && cellNumber !== 7){
         cell.alignment = { horizontal: 'center',vertical: 'middle' };
         cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
       }else{
@@ -527,7 +528,7 @@ product_total_data.map((item, index) => {
   item['상품바코드'] = item['상품바코드'].toString(); 
 
   sheetOne.addRow(item);
-  for(let loop = 1; loop <= 6; loop++) {
+  for(let loop = 1; loop <= 7; loop++) {
     const col = sheetOne.getRow(index + 2).getCell(loop);
     if(loop === 2 || loop === 4 || loop === 5){
       col.alignment = { horizontal: 'center',vertical: 'middle' };
@@ -535,7 +536,7 @@ product_total_data.map((item, index) => {
     }else{
       col.alignment = { vertical: 'middle' };
     }
-    if(loop === 1){
+    if(loop === 1 || loop === 7){
       col.border = emptyBorderStyle;
       col.fill = {
         type: 'pattern',
@@ -2591,24 +2592,30 @@ const excelDownload = (type,config) => {
                 let box_in_qty = filtered_coopang_data[i]['확정수량'];
                 
                 for(let a=0; a<box_qty; a++){
-                 
-               
+                  const newItem = { ...filtered_coopang_data[i] }
+                  
                   if(box_in_qty > 0){
                    
     
                     if(box_in_qty > filtered_coopang_data[i]['박스수량']){
                       filtered_coopang_data[i]['수량'] = filtered_coopang_data[i]['박스수량'];
-                    
+                      newItem['수량'] = filtered_coopang_data[i]['박스수량'];
+                      newItem['한진_수량'] =  newItem['수량'] ;
                     }else{
                       let qty = filtered_coopang_data[i]['박스수량'] -  box_in_qty;
                       if(qty === 0){
                         filtered_coopang_data[i]['수량'] = box_in_qty ;
                         filtered_coopang_data[i]['한진_수량'] = box_in_qty ;
+                        newItem['수량'] = box_in_qty;
+                        newItem['한진_수량'] = box_in_qty;
                   
                         
                       }else{
                         filtered_coopang_data[i]['수량'] = box_in_qty + "(" + (filtered_coopang_data[i]['박스수량'] - box_in_qty) + ")";
                         filtered_coopang_data[i]['한진_수량'] = box_in_qty ;
+
+                        newItem['수량'] = box_in_qty + "(" + (filtered_coopang_data[i]['박스수량'] - box_in_qty) + ")";
+                        newItem['한진_수량'] = box_in_qty ;
                       
                       }
                      
@@ -2616,22 +2623,30 @@ const excelDownload = (type,config) => {
 
                   }else{
                     filtered_coopang_data[i]['수량'] = filtered_coopang_data[i]['확정수량'];
+                    newItem['수량'] = filtered_coopang_data[i]['확정수량'];
+                    newItem['한진_수량'] = filtered_coopang_data[i]['확정수량'];
 
                   }
                   filtered_coopang_data[i]['확인사항'] =  filtered_coopang_data[i]['확인사항체크용'] + '-' + filtered_coopang_data[i]['한진_수량'] + '개';
-
+                  newItem['확인사항'] =  newItem['확인사항체크용'] + '-' + newItem['한진_수량'] + '개';
+                  
                   box_in_qty -= filtered_coopang_data[i]['박스수량'];
 
                   filtered_coopang_data[i]['박스'] = "1박스(" + filtered_coopang_data[i]['박스수량'] + ")";
-
-                  filtered_coopang_data[i]['상품명'] = "쿠팡로켓배송C";
+                  newItem['박스'] = "1박스(" + filtered_coopang_data[i]['박스수량'] + ")";
+                  newItem['상품명'] = "쿠팡로켓배송C";
                  
+                  newItem['확정수량(Confirmed Qty)'] = newItem['한진_수량'];
+              
+              
+                  newItem['납품수량(Shipped Qty)'] = newItem['한진_수량'];
                   
+                  standard_coopang_data.push(newItem);
                   
-                  standard_coopang_data.push(filtered_coopang_data[i]);
                   coopang_upload_result_data = standard_coopang_data;
                 }
              
+                console.log('newItem : ', standard_coopang_data);
               
 
               filtered_coopang_data[i]['발주번호(PO ID)'] = filtered_coopang_data[i]['발주번호'];
@@ -2645,10 +2660,10 @@ const excelDownload = (type,config) => {
               
               filtered_coopang_data[i]['송장번호(Invoice Number)'] = '';
 
-              filtered_coopang_data[i]['확정수량(Confirmed Qty)'] = filtered_coopang_data[i]['한진_수량'];
+              // filtered_coopang_data[i]['확정수량(Confirmed Qty)'] = filtered_coopang_data[i]['한진_수량'];
               
               
-              filtered_coopang_data[i]['납품수량(Shipped Qty)'] = filtered_coopang_data[i]['한진_수량'];
+              // filtered_coopang_data[i]['납품수량(Shipped Qty)'] = filtered_coopang_data[i]['한진_수량'];
               
               
           }

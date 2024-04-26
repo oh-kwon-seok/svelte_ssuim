@@ -2732,7 +2732,7 @@ const excelDownload = (type,config) => {
                for(let i=0; i < filtered_coopang_finish_data.length; i++){
                 filtered_coopang_finish_data[i]['상품바코드'] = filtered_coopang_finish_data[i]['상품바코드'].toString();
 
-                if(filtered_coopang_finish_data[i]['발주수량'] < parseInt(standard_data[0]['order_limit_qty'])){
+                if(filtered_coopang_finish_data[i]['발주수량'] <= parseInt(standard_data[0]['order_limit_qty'])){
                   filtered_coopang_finish_data[i]['확정수량'] = 0;
                   filtered_coopang_finish_data[i]['납품부족사유'] = "최소발주량 변경 필요 (MOQ)";
 

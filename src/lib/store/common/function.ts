@@ -15,7 +15,8 @@ import moment from 'moment';
 
 
 import {TabulatorFull as Tabulator} from 'tabulator-tables';
-import type { an } from 'vitest/dist/types-71ccd11d';
+
+
 
 
 const api = import.meta.env.VITE_API_BASE_URL;
@@ -1379,6 +1380,8 @@ const milk_run_result = [];
 // 물류센터별 수량을 더하고, 10 이상인 경우 별도의 배열로 분류
 const centerSums = {};
 
+
+
 filtered_coopang_data.forEach(item => {
   const center = item["물류센터"];
   const quantity = item["실제박스수량"];
@@ -1388,6 +1391,7 @@ filtered_coopang_data.forEach(item => {
   });
 
 
+ 
   filtered_coopang_data.forEach(item => {
     const center = item["물류센터"];
   
@@ -1399,6 +1403,8 @@ filtered_coopang_data.forEach(item => {
     }
 
     });
+
+   
 
 // 각 물류센터별로 발주번호를 겹치지 않게 추출
 const uniqueOrderNumbersByCenter = {};
@@ -1464,6 +1470,9 @@ milk_run_result.forEach((item, index) => {
 
 });
 
+
+
+
 console.log('resul : ',resultArray);
 console.log('orderNumbersByCenter : ',orderNumbersByCenter);
 
@@ -1486,7 +1495,7 @@ uniqueCenters.forEach(center => {
 centerDataMap[center] = resultArray.filter(item => item["물류센터"] === center);
 });
 
-console.log('centerDataMap',centerDataMap);
+
 
 
 
@@ -1499,10 +1508,13 @@ Object.keys(centerDataMap).forEach(center => {
   
   let box_qty = 0;
   
-  console.log('centerDataMap : ',centerData);
+ // console.log('centerDataMap : ',centerData);
   centerData.forEach(item => {
     box_qty += item['실제박스수량'];
   });
+
+
+
 
 
   orderNumbersByCenter[center] = [...new Set(orderNumbersByCenter[center])]
@@ -1572,6 +1584,7 @@ worksheet.mergeCells('A4:C4');
     worksheet.getCell(`B7`).value = '상품명';
     worksheet.getCell(`C7`).value = '수량';
 
+
   centerData.forEach((item, index) => {
 
     item['수량'] = item['확정수량'];
@@ -1584,6 +1597,163 @@ worksheet.mergeCells('A4:C4');
       col.font = {name: 'Arial Black', size: 10};
     }
   });
+
+
+
+});
+
+
+
+
+
+
+
+Object.keys(centerDataMap).forEach(center => {
+  let sheetName = center+"_박스";
+  let worksheet = workbook.addWorksheet(sheetName);
+  worksheet.columns = pallet_config;
+  let centerData = centerDataMap[center];
+  
+  let box_qty = 0;
+  
+ // console.log('centerDataMap : ',centerData);
+  centerData.forEach(item => {
+    box_qty += item['실제박스수량'];
+  });
+
+
+ 
+
+
+
+  orderNumbersByCenter[center] = [...new Set(orderNumbersByCenter[center])]
+
+
+  // A1부터 C8까지의 셀에 공통된 스타일 적용
+const startRow = 1;
+const endRow = 7;
+const startCol = 1;
+const endCol = 3;
+
+for (let row = startRow; row <= endRow; row++) {
+  for (let col = startCol; col <= endCol; col++) {
+    const cell = worksheet.getCell(row, col);
+    cell.font = 
+    
+    
+    {
+      color: {argb:'blue'},
+      family: 4,
+      size: 15,
+      underline: false,
+      bold: true
+    };
+
+
+    cell.alignment = { horizontal: 'center' }; // Horizontally center your text
+    cell.fill = {
+      type: 'pattern',
+      pattern:'solid',
+      fgColor:{argb:'FFFFFF'},
+      bgColor:{argb:'FFFFFF'}
+    };
+   
+    
+    cell.border ={
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' }
+    };
+  }
+}
+
+
+  worksheet.getCell(`A1`).value = '총 파렛트수';
+  worksheet.getCell(`B1`).value = '1';
+  worksheet.getCell(`C1`).value = box_qty + "BOX";
+
+  worksheet.getCell(`A2`).value = '입고예정일자 : ' ;
+  worksheet.mergeCells('A2:B2');
+
+  
+  
+  worksheet.getCell(`C2`).value = center + " 센터";
+
+  
+worksheet.getCell(`A3`).value = '업체명' ;
+worksheet.getCell(`B3`).value = '(주)쓰임받는사람들' ;
+
+worksheet.getCell(`C3`).value = '1P' ;
+
+worksheet.getCell(`A4`).value = '발주번호 : ' + orderNumbersByCenter[center].toString();
+worksheet.mergeCells('A4:C4');
+
+    worksheet.getCell(`A7`).value = 'No';
+    worksheet.getCell(`B7`).value = '상품명';
+    worksheet.getCell(`C7`).value = '수량';
+
+
+   
+    console.log('centerData : ', centerData);
+
+
+
+    let no = 8;
+  centerData.forEach((item, index) => {
+
+    
+
+    if(item['no'] === ''){
+      item['no'] = "";
+      worksheet.addRow(item);
+      for(let loop = 1; loop <= 3; loop++) {
+        const col = worksheet.getRow(no).getCell(loop);
+        col.border = borderStyle;
+        col.font = {name: 'Arial Black', size: 10};
+      }
+  
+     no += 1;
+
+    
+    
+    }else{
+      let 실제박스수량 = item['실제박스수량'];
+      let 확정수량 = item['확정수량'];
+  
+      let 박스수량 = item['박스수량'];
+
+      for(let i =0; i<실제박스수량; i++){
+        item['no'] = i+1;
+        if(확정수량 >= 박스수량){
+          item['수량'] = 박스수량;
+        }else{
+          item['수량'] = 확정수량;
+        }
+        worksheet.addRow(item);
+        for(let loop = 1; loop <= 3; loop++) {
+          const col = worksheet.getRow(no).getCell(loop);
+          col.border = borderStyle;
+          col.font = {name: 'Arial Black', size: 10};
+        }
+       
+        확정수량 -= 박스수량;
+        no += 1;
+      }
+    }
+
+
+
+
+   
+
+ 
+
+
+  });
+
+
+
 });
 
 

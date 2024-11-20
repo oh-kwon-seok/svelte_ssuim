@@ -2026,7 +2026,7 @@ const shipDownload = () => {
     try {
       
          
-            let ship_title : any= '한진택배 업로드양식';
+            let ship_title : any= 'CJ택배 업로드양식';
 
 
 
@@ -2982,22 +2982,51 @@ console.log('empty_result : ', empty_result);
 
   }
   const excelHanjinTransportUpload = (e) => {
-
-   
+    
+    
     const hanjin_transport_upload_config : any = [
-      {header: '고객번호', key: '고객번호', width: 30},
-      {header: '고객명', key: '고객명', width: 30},
-      {header: '배송상태', key: '배송상태', width: 30},
-      {header: '배송내역', key: '배송내역', width: 30},
-      {header: '사유', key: '사유', width: 30},
+      {header: 'No', key: 'No', width: 30},
+      {header: '', key: '', width: 30},
+      {header: '기업고객', key: '기업고객', width: 30},
+      
+      {header: '기업고객전화번호', key: '기업고객전화번호', width: 30},
+      {header: '기업고객주소', key: '기업고객주소', width: 30},
       {header: '운송장번호', key: '운송장번호', width: 30},
-      {header: '수량', key: '수량', width: 30},
+      {header: '보내는분명', key: '보내는분명', width: 30},
+      {header: '보내는전화번호', key: '보내는전화번호', width: 30},
+      {header: '보내는분우편번호', key: '보내는분우편번호', width: 30},
+      {header: '보내는분주소', key: '보내는분주소', width: 30},
+      {header: '받는분명', key: '받는분명', width: 30},
+      {header: '받는분전화번호', key: '받는분전화번호', width: 30},
+      {header: '받는분우편번호', key: '받는분우편번호', width: 30},
+      {header: '받는분주소', key: '받는분주소', width: 30},
+      {header: '접수일자', key: '접수일자', width: 30},
+      {header: '고객주문번호', key: '고객주문번호', width: 30},
+      {header: '집화일자', key: '집화일자', width: 30},
+      {header: '배송일자', key: '배송일자', width: 30},
       {header: '운임', key: '운임', width: 30},
-      {header: '포장료', key: '포장료', width: 30},
-      {header: '할증료', key: '할증료', width: 30},
-      {header: '기타비용', key: '기타비용', width: 30},
-      {header: '고객출고번호', key: '고객출고번호', width: 30},
-      {header: '품목명', key: '품목명', width: 30},
+      {header: '수량', key: '수량', width: 30},
+      {header: '상품코드', key: '상품코드', width: 30},
+      {header: '상품명', key: '상품명', width: 30},
+      {header: '단품명', key: '단품명', width: 30},
+      {header: '배송메세지1', key: '배송메세지1', width: 30}
+     
+      
+      
+      
+      // {header: '고객번호', key: '고객번호', width: 30},
+      // {header: '고객명', key: '고객명', width: 30},
+      // {header: '배송상태', key: '배송상태', width: 30},
+      // {header: '배송내역', key: '배송내역', width: 30},
+      // {header: '사유', key: '사유', width: 30},
+      // {header: '운송장번호', key: '운송장번호', width: 30},
+      // {header: '수량', key: '수량', width: 30},
+      // {header: '운임', key: '운임', width: 30},
+      // {header: '포장료', key: '포장료', width: 30},
+      // {header: '할증료', key: '할증료', width: 30},
+      // {header: '기타비용', key: '기타비용', width: 30},
+      // {header: '고객출고번호', key: '고객출고번호', width: 30},
+      // {header: '품목명', key: '품목명', width: 30},
    
       
      
@@ -3034,8 +3063,9 @@ console.log('empty_result : ', empty_result);
           }
           });
 
+          console.log('chageN_data : ', change_data);
           let filtered_hanjin_transport_data = change_data.filter((item)=> {
-            return item.고객출고번호 !== '' && item.고객출고번호 !== undefined && item.고객출고번호 !== null;
+            return item.배송메세지1 !== '' && item.배송메세지1 !== undefined && item.배송메세지1 !== null;
           });
 
         
@@ -3059,7 +3089,7 @@ console.log('empty_result : ', empty_result);
           for(let i=0; i<filtered_hanjin_transport_data.length; i++){
             
             for(let j=0; j<coopang_data.length; j++){
-              if(filtered_hanjin_transport_data[i]['고객출고번호'] === coopang_data[j]['체결번호']){
+              if(filtered_hanjin_transport_data[i]['배송메세지1'] === coopang_data[j]['체결번호']){
                 coopang_data[j]['송장번호(Invoice Number)'] = filtered_hanjin_transport_data[i]['운송장번호'].toString();
               
                 

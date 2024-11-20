@@ -171,7 +171,7 @@
                       {#if $coopang_upload_result_state.length > 0 && $box_qty_state > 0}
                         <Button  color='green' on:click={(e)=> fileButtonClick('upload1')}>
                           <Icon.UploadSolid class='mr-2' size="20" />
-                            2.한진택배양식 업로드
+                            2.CJ택배양식 업로드
                           <input 
                           hidden  
                           id = 'upload1' 
@@ -184,7 +184,7 @@
                       {#if $hanjin_upload_state.length > 0}
                       <Button  color='green' on:click={(e)=> fileButtonClick('upload2')}>
                         <Icon.UploadSolid class='mr-2' size="20" />
-                          3.한진택배 운송장 업로드
+                          3.CJ택배 운송장 업로드
                         <input 
                         hidden  
                         id = 'upload2' 
@@ -242,7 +242,7 @@
                      {#if $coopang_upload_result_state.length > 0}
                         <Button  color='green' on:click={() => shipDownload()}>
                           <Icon.FileCsvSolid class='mr-2' size="20" />
-                          한진택배송장 다운
+                          CJ택배송장 다운
                         </Button>
                         {/if}
 
